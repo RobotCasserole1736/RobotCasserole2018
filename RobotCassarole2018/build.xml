@@ -25,6 +25,8 @@
   <property file="build.properties"/>
   <property file="${user.home}/wpilib/java/${version}/ant/build.properties"/>
 
-  <import file="${wpilib.ant.dir}/build.xml"/>
+  <!-- Divert to use our custom main build.xml. This was cloned from wpilib 2018 1.1, -->
+  <!-- but modified to enable website file deployment in addition to the normal files -->
+  <import file="casseroleWPI_2018_1_1_build.xml"/>
 
 </project>
