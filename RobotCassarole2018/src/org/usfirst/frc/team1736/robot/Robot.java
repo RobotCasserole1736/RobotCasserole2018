@@ -8,8 +8,10 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /*
@@ -58,6 +60,8 @@ public class Robot extends TimedRobot {
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
 		
+		//Add all visual items to the driver view
+		initDriverView();
 	}
 	
 	/**
@@ -74,6 +78,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
+		updateDriverView();
 		
 	}
 
@@ -92,6 +97,15 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		
 	}
+	
+	/**
+	 * This function is called just before the robot enters teleop
+	 */
+	@Override
+	public void teleopInit() {
+		
+		
+	}
 
 	/**
 	 * This function is called periodically during operator control.
@@ -106,4 +120,16 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 	}
+
+	private void initDriverView() {
+		CasseroleDriverView.newStringBox("Field Ownership");
+		
+	}
+
+	private void updateDriverView() {
+		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
+		
+	}
+
+
 }
