@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="lib/websocket-common-9.3.9.v20160517.jar"/>
 	<classpathentry kind="lib" path="lib/websocket-server-9.3.9.v20160517.jar"/>
 	<classpathentry kind="lib" path="lib/websocket-servlet-9.3.9.v20160517.jar"/>
+	<classpathentry kind="lib" path="lib/CTRE_Phoenix.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

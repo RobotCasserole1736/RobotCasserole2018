@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 public class Drivetrain {
 	private static Drivetrain singularInstance = null;
 	private TalonSRX motorleft1;
