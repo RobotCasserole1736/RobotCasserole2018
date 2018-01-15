@@ -37,40 +37,45 @@ public class OperaterControler {
 	 * @return The continuous motor command from the driver. -1 is full down, 1 is full up, 0 is stop.
 	 */
 	public double getElevCntrlModeCmdSpeed() {
-		double operaterRightJoy = operaterControler.getY(Hand.kRight);
-		return operaterRightJoy;
+		double operaterRightTrigger = operaterControler.getRawAxis(axis.kright);
+		return operaterRightTrigger;
 		
 	}
 	
-	public boolean getintakemode() {
+	public boolean getintakecmd() {
 		boolean operaterAbutton = operaterControler.getAButton();
 		return operaterAbutton;
 	}
 	
-	public boolean getouttakemode() {
+	public boolean getEjectcmd() {
 		boolean operaterXbutton = operaterControler.getXButtonPressed();
 		return operaterXbutton;
 	}
 	
-	public boolean getplatformlatch() {
+	public boolean getintakeoveridecmd() {
+		boolean operaterstart = operaterControler.getStartButton();
+		return operaterstart;
+	}
+	
+	public boolean getPlatformLatch() {
 		boolean operaterL3 = operaterControler.getYButtonPressed();
 		return operaterL3;
 	}
 	
-	public boolean getraisevclimber() {
+	public boolean getRaisecLimber() {
 		boolean operaterLeftbumper = operaterControler.getBumper(Hand.kLeft);
 		return operaterLeftbumper;	
 		
 	}
 	
-	public double getpullleftwinch() {
-		double operaterleftTrigger = operaterControler.getAxisCount();
-		return operaterleftTrigger;
+	public double getPullLeftWinch() {
+		double operaterleftJoy = operaterControler.getY(Hand.kLeft);
+		return operaterleftJoy;
 		
 	}
 	
-	public double getpullRightwinch() {
-		double operaterRightTrigger = operaterControler.getAxisCount();
-		return operaterRightTrigger;	}
+	public double getPullRightWinch() {
+		double operaterRightJoy = operaterControler.getY(Hand.kLeft);
+		return operaterRightJoy;	}
 
 }
