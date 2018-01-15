@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,14 +22,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
 	
+	public Robot() {
+		CrashTracker.logRobotConstruction();
+	}
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
-		
+		try {
+			CrashTracker.logRobotInit();	
+			
+		//Code goes in here
+			
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+			}
 	}
+		
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
@@ -42,6 +57,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		try {
+			CrashTracker.logAutoInit();	
+			
+		
+			
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+			}
 		
 	}
 
@@ -50,6 +75,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		try {
+			CrashTracker.logAutoPeriodic();	
+			
+		
+			
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+			}
 		
 	}
 
@@ -58,6 +93,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		try {
+			CrashTracker.logTeleopPeriodic();
+			
+		
+			
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+			}
 	}
 
 	/**
