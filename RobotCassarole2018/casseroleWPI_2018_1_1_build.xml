@@ -78,7 +78,8 @@
       <fileset file="${cscore.jar}" />
       <fileset file="${wpiutil.jar}" />
       <fileset dir="${userLibs}"
-               erroronmissingdir="false" />
+               erroronmissingdir="false"
+    	       includes="*.jar"/>
     </path>
     <pathconvert property="classpathProp"
                  refid="classpath.path" />
@@ -153,6 +154,15 @@
         </fileset>
       </libs.local>
     </deploy-libs>
+    <deploy-libs libs.name="Versioned_Libraries"
+                 libs.basedir="${src.dir}/../lib/native"
+                 libs.deployDir="${libDeploy.dir}">
+      <libs.local>
+        <fileset dir="${src.dir}/../lib/native">
+          <include name="*.so" />
+        </fileset>
+      </libs.local>
+    </deploy-libs>
     <echo message="[athena-deploy] Copying code over." />
     <webdav username="${adminUsername}"
             password="${adminPassword}">
@@ -199,6 +209,15 @@
       <libs.local>
         <fileset dir="${userLibs.dir}">
           <include name="**/*.so" />
+        </fileset>
+      </libs.local>
+    </deploy-libs>
+    <deploy-libs libs.name="Versioned_Libraries"
+                 libs.basedir="${src.dir}/../lib/native"
+                 libs.deployDir="${libDeploy.dir}">
+      <libs.local>
+        <fileset dir="${src.dir}/../lib/native">
+          <include name="*.so" />
         </fileset>
       </libs.local>
     </deploy-libs>

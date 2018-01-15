@@ -11,6 +11,9 @@ import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 
@@ -45,6 +48,9 @@ public class Robot extends TimedRobot {
 	
 	// Software utilities
 	CasseroleWebServer webServer;
+	
+	//Debug only - delete me soon.
+	TalonSRX test_talon = new TalonSRX(0);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -112,6 +118,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		test_talon.set(ControlMode.PercentOutput, 0.4);
 	}
 
 	/**
