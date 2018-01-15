@@ -7,14 +7,16 @@
 
 package org.usfirst.frc.team1736.robot;
 
+
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.DriverStation;
+
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
+
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /*
@@ -49,9 +51,11 @@ public class Robot extends TimedRobot {
 	// Software utilities
 	CasseroleWebServer webServer;
 	
-	//Debug only - delete me soon.
-	TalonSRX test_talon = new TalonSRX(0);
-	
+
+	public Robot() {
+		CrashTracker.logRobotConstruction();
+	}
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -59,6 +63,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		
+		CrashTracker.logRobotInit();	
+
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
@@ -85,14 +91,36 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledPeriodic() {
 		updateDriverView();
-		
+
+		try {
+			
+			
+			//Code goes in here
+			
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
+
 	}
+		
 
 	/**
 	 * This function is called just before the robot enters autonomous
 	 */
 	@Override
 	public void autonomousInit() {
+		try {
+			CrashTracker.logAutoInit();	
+			
+		
+			
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
 		
 	}
 
@@ -101,6 +129,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		try {
+			CrashTracker.logAutoPeriodic();	
+			
+			//Add code here
+			
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
 		
 	}
 	
@@ -118,7 +156,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		test_talon.set(ControlMode.PercentOutput, 0.4);
+		try {
+			CrashTracker.logTeleopPeriodic();
+			
+		
+			//Add code here
+		}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+			}
 	}
 
 	/**
