@@ -17,19 +17,11 @@ public class DriverController {
 		driveController = new XboxController(0);
 	}
 
-	public double getDriverLeftY() {
+	public double getDriverForwardReverseCommand() {
 		double driverLeftYValue = driveController.getY(Hand.kLeft);
 		return driverLeftYValue;
 	}
-	public double getDriverLeftX() {
-		double driverLeftXValue = driveController.getX(Hand.kLeft);
-		return driverLeftXValue;
-	}
-	public double getDriverRightY() {
-		double driverRightYValue = driveController.getY(Hand.kRight);
-		return driverRightYValue;
-	}
-	public double getDriverRightX() {
+	public double getDriverLeftRightCommand() {
 		double driverRightXValue = driveController.getX(Hand.kRight);
 		return driverRightXValue;
 	}
