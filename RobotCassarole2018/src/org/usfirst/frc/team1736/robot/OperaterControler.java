@@ -39,7 +39,6 @@ public class OperaterControler {
 	public double getElevCntrlModeCmdSpeed() {
 		double operaterRightTrigger = operaterControler.getRawAxis(3);
 		return operaterRightTrigger;
-		
 	}
 	
 	public boolean getintakecmd() {
@@ -62,10 +61,9 @@ public class OperaterControler {
 		return operaterL3;
 	}
 	
-	public boolean getRaisecLimber() {
+	public boolean getClimberEnable() {
 		boolean operaterLeftbumper = operaterControler.getBumper(Hand.kLeft);
 		return operaterLeftbumper;	
-		
 	}
 	
 	public double getPullLeftWinch() {
@@ -76,6 +74,7 @@ public class OperaterControler {
 	
 	public double getPullRightWinch() {
 		double operaterRightJoy = operaterControler.getY(Hand.kLeft);
-		return operaterRightJoy;	}
+		return operaterRightJoy;	
+	}
 
 }

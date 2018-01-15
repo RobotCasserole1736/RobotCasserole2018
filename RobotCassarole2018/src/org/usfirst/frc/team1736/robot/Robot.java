@@ -7,9 +7,6 @@
 
 package org.usfirst.frc.team1736.robot;
 
-
-import java.io.IOException;
-
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
@@ -86,11 +83,13 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logDisabledInit();	
 			
+			//Add Disabled Init code here
+			
 		}
-			catch(Throwable t) {
-				CrashTracker.logThrowableCrash(t);
-				throw t;
-			}
+		catch(Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
 
 		
 	}
@@ -101,19 +100,17 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
-		updateDriverView();
-
 		try {
 			
 			
-			//Code goes in here
+			//Add Disabled Periodic code here
 			
+			updateDriverView();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-
 	}
 		
 
@@ -143,14 +140,13 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logAutoPeriodic();	
 			
-			//Add code here
-			
+			//Add auto periodic code here
+			updateDriverView();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-		
 	}
 	
 	/**
@@ -161,14 +157,13 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logTeleopInit();	
 			
+			//Add Teleop init code here
 
-			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-		
 	}
 	
 
@@ -182,6 +177,7 @@ public class Robot extends TimedRobot {
 			
 		
 			//Add code here
+			updateDriverView();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -194,8 +190,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
 	}
 
+	
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
 		
