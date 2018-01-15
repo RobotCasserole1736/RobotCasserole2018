@@ -125,6 +125,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		try {
 			CrashTracker.logAutoInit();	
+			CrashTracker.logMatchInfo();
 			
 		
 			
@@ -160,6 +161,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		try {
 			CrashTracker.logTeleopInit();	
+			CrashTracker.logMatchInfo();
 			
 			//Add Teleop init code here
 

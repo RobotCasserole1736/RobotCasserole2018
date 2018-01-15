@@ -6,10 +6,35 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.UUID;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 public class CrashTracker {
 	private static final UUID RUN_INSTANCE_UUID = UUID.randomUUID();
 	
 	static boolean hasLogged = false;
+	
+    private static String getMatchString() {
+    	String retval= "";
+        switch (DriverStation.getInstance().getMatchType()) {
+	        case Practice:
+	        	retval += "P";
+	        case Qualification:
+	        	retval += "Q";
+	        case Elimination:
+	        	retval += "E";
+	        default:
+	        	retval += "N";
+        }
+        retval += Integer.toString(DriverStation.getInstance().getMatchNumber());
+        retval += "R";
+        retval += Integer.toString(DriverStation.getInstance().getReplayNumber());
+        
+        return retval;
+    }
+    
+	public static void logMatchInfo() {
+		logMarker("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ START MATCH " + getMatchString() + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	}
 	
 	public static void logRobotConstruction() {
         logMarker("robot construction");
@@ -64,7 +89,7 @@ public class CrashTracker {
 	}
 
 	private static void logMarker(String mark, Throwable nullableException) {
-
+		
 	        try (PrintWriter writer = new PrintWriter(new FileWriter("/home/lvuser/crash_tracking.txt", true))) {
 	            writer.print(RUN_INSTANCE_UUID.toString());
 	            writer.print(", ");
@@ -78,6 +103,7 @@ public class CrashTracker {
 	            }
 
 	            writer.println();
+	            writer.close();
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }

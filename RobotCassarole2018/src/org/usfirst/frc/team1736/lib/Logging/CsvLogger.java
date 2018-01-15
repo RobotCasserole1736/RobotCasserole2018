@@ -152,6 +152,25 @@ public class CsvLogger {
         df.setTimeZone(TimeZone.getTimeZone("US/Central"));
         return df.format(new Date());
     }
+    
+    private static String getMatchString() {
+    	String retval= "";
+        switch (DriverStation.getInstance().getMatchType()) {
+	        case Practice:
+	        	retval += "P";
+	        case Qualification:
+	        	retval += "Q";
+	        case Elimination:
+	        	retval += "E";
+	        default:
+	        	retval += "N";
+        }
+        retval += Integer.toString(DriverStation.getInstance().getMatchNumber());
+        retval += "R";
+        retval += Integer.toString(DriverStation.getInstance().getReplayNumber());
+        
+        return retval;
+    }
 
 
     /**
@@ -172,7 +191,7 @@ public class CsvLogger {
         log_open = false;
 
         // Determine a unique file name
-        log_name = output_dir + "log_" + getDateTimeString() + "_" + getOpModeName() + ".csv";
+        log_name = output_dir + "log_" + getMatchString() + "_" + getDateTimeString() + "_" + getOpModeName() + ".csv";
         System.out.println("Initalizing Log file  " + log_name);
         
         
