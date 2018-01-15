@@ -39,10 +39,38 @@ public class OperaterControler {
 	public double getElevCntrlModeCmdSpeed() {
 		double operaterRightJoy = operaterControler.getY(Hand.kRight);
 		return operaterRightJoy;
+		
 	}
 	
+	public boolean getintakemode() {
+		boolean operaterAbutton = operaterControler.getAButton();
+		return operaterAbutton;
+	}
 	
+	public boolean getouttakemode() {
+		boolean operaterXbutton = operaterControler.getXButtonPressed();
+		return operaterXbutton;
+	}
 	
+	public boolean getplatformlatch() {
+		boolean operaterL3 = operaterControler.getYButtonPressed();
+		return operaterL3;
+	}
 	
+	public boolean getraisevclimber() {
+		boolean operaterLeftbumper = operaterControler.getBumper(Hand.kLeft);
+		return operaterLeftbumper;	
+		
+	}
+	
+	public double getpullleftwinch() {
+		double operaterleftTrigger = operaterControler.getAxisCount();
+		return operaterleftTrigger;
+		
+	}
+	
+	public double getpullRightwinch() {
+		double operaterRightTrigger = operaterControler.getAxisCount();
+		return operaterRightTrigger;	}
 
 }
