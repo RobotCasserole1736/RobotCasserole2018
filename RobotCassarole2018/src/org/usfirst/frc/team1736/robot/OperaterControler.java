@@ -37,7 +37,7 @@ public class OperaterControler {
 	 * @return The continuous motor command from the driver. -1 is full down, 1 is full up, 0 is stop.
 	 */
 	public double getElevCntrlModeCmdSpeed() {
-		double operaterRightTrigger = operaterControler.getRawAxis(axis.kright);
+		double operaterRightTrigger = operaterControler.getRawAxis(3);
 		return operaterRightTrigger;
 		
 	}
