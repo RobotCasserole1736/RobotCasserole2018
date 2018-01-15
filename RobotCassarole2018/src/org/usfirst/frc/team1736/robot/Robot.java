@@ -161,12 +161,12 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logTeleopInit();	
 			
-		throw new IOException();
+
 			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
-			//throw t;
+			throw t;
 		}
 		
 	}
