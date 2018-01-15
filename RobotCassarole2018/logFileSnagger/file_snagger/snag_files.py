@@ -96,7 +96,6 @@ for filename in filenames:
 # and snag the list of files
 ftp.cwd(CRASH_LOG_RIO_FPATH)
 filenames = ftp.nlst() # get filenames within the directory
-print(filenames)
 filenames = [f for f in filenames if re.match(r'.*crash_track.*\.txt', f)] #Filter to just crash tracking
 
 # Inform user what files were found
