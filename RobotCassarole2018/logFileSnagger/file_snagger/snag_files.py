@@ -16,7 +16,7 @@
 ################################################################################
 
 from ftplib import FTP
-import sys, os, time, re
+import sys, os, time, re, datetime
 
 TEAM_NUMBER_STR = '1736'
 RIO_ADDRESS = 'roboRIO-'+TEAM_NUMBER_STR+'-FRC.local'
@@ -108,11 +108,14 @@ if not os.path.isdir(CRASH_LOG_LOCAL_PATH):
 # Copy each file over
 i = 1
 for filename in filenames:
-    print("Copying "+ filename + " (" + str(i) + "/" + str(len(filenames)) + ") ")
-    local_filename = os.path.join(CRASH_LOG_LOCAL_PATH, filename)
+    nowstr = datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
+    name_tmp, ext_temp = os.path.splitext(filename)
+    local_filename = os.path.join(CRASH_LOG_LOCAL_PATH, name_tmp + "_" + nowstr + ext_temp)
+    print("Copying "+ filename + " to " + local_filename + " (" + str(i) + "/" + str(len(filenames)) + ") ")
     file = open(local_filename, 'wb')
     ftp.retrbinary('RETR '+ filename, file.write)
     file.close()
+    ftp.delete(filename)
     i = i+1
 
 
