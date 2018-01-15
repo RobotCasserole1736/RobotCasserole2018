@@ -8,6 +8,8 @@
 package org.usfirst.frc.team1736.robot;
 
 
+import java.io.IOException;
+
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
@@ -159,7 +161,7 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logTeleopInit();	
 			
-		
+		throw new IOException();
 			
 		}
 		catch(Throwable t) {
