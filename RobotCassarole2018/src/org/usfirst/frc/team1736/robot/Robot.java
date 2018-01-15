@@ -14,6 +14,8 @@ import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -50,6 +52,7 @@ public class Robot extends TimedRobot {
 	// Software utilities
 	CasseroleWebServer webServer;
 	
+	PowerDistributionPanel pdp;
 
 	public Robot() {
 		CrashTracker.logRobotConstruction();
@@ -67,6 +70,7 @@ public class Robot extends TimedRobot {
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
+		pdp = new PowerDistributionPanel(0);
 
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
@@ -185,6 +189,11 @@ public class Robot extends TimedRobot {
 			}
 	}
 
+	public void initLoggingChannels() {
+		CsvLogger.addLoggingFieldDouble("PDP_Voltage", "V", "getVoltage", pdp);
+		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
+
+	}
 	/**
 	 * This function is called periodically during test mode.
 	 */
