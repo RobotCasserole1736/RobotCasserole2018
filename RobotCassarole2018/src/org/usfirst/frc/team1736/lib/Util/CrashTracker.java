@@ -8,7 +8,9 @@ import java.util.UUID;
 
 public class CrashTracker {
 	private static final UUID RUN_INSTANCE_UUID = UUID.randomUUID();
-
+	
+	static boolean hasLogged = false;
+	
 	public static void logRobotConstruction() {
         logMarker("robot construction");
     }
@@ -19,26 +21,38 @@ public class CrashTracker {
 	
 	public static void logDisabledInit() {
 		logMarker("disabled init");
+		hasLogged = false;
 	}
 	
 	public static void logDisabledPeriodic() {
-		logMarker("disabled periodic");
+		if(hasLogged = false) {
+			logMarker("disabled periodic");
+			hasLogged = true;
+		}
 	}
 	
 	public static void logAutoInit() {
 		logMarker("auto init");
+		hasLogged = false;
 	}
 	
 	public static void logAutoPeriodic() {
-		logMarker("auto periodic");
+		if(hasLogged = false) {
+			logMarker("auto periodic");
+			hasLogged = true;
+		}
 	}
 	
 	public static void logTeleopInit() {
 		logMarker("teleop init");
+		hasLogged = false; 
 	}
 	
 	public static void logTeleopPeriodic() {
-		logMarker("teleop periodic");
+		if(hasLogged = false) {
+			logMarker("teleop periodic");
+			hasLogged = true;
+		}
 	}
 		
 	 public static void logThrowableCrash(Throwable throwable) {

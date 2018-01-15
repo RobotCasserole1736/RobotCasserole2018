@@ -86,16 +86,16 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logDisabledInit();	
 			
-		
-			
 		}
-		catch(Throwable t) {
-			CrashTracker.logThrowableCrash(t);
-			throw t;
+			catch(Throwable t) {
+				CrashTracker.logThrowableCrash(t);
+				throw t;
 			}
+
 		
 	}
 	
+
 	/**
 	 * This function is called periodically while disabled. 
 	 */
@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
 		updateDriverView();
 
 		try {
-			CrashTracker.logDisabledPeriodic();
+			
 			
 			//Code goes in here
 			
@@ -166,10 +166,11 @@ public class Robot extends TimedRobot {
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
-			throw t;
-			}
+			//throw t;
+		}
 		
 	}
+	
 
 	/**
 	 * This function is called periodically during operator control.
