@@ -175,35 +175,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		if(OperaterControler.getInstance().getElevCntrlModeCmd() == true) {
-			System.out.println("the button works");
-		}
-		if(OperaterControler.getInstance().getElevCntrlModeCmdSpeed() == 0.5) {
-			System.out.println("the trigger works");
-		}
-		if(OperaterControler.getInstance().getintakecmd() == true) {
-			System.out.println("the a button works");
-		}
-		if(OperaterControler.getInstance().getEjectcmd() == true) {
-			System.out.println("the X button works");
-		}
-		if(OperaterControler.getInstance().getintakeoveridecmd() == true) {
-			System.out.println("the start button works");
-		}
-		if(OperaterControler.getInstance().getPlatformLatch() == true) {
-			System.out.println("L3 works");
-		}
-		if(OperaterControler.getInstance().getRaisecLimber() == true) {
-			System.out.println("the left bumper works");
-		}
-		if(OperaterControler.getInstance().getPullLeftWinch() == 0.5) {
-			System.out.println("the left joystick works");
-		}
-		if(OperaterControler.getInstance().getPullRightWinch() == 0.5) {
-			System.out.println("the right joystick works");
-		}
-		
-			System.out.println(OperaterControler.getInstance().getElevaterCmd());
+	OperaterControler.getInstance().getElevCntrlModeCmdSpeed();
 	}
 
 	private void initDriverView() {
