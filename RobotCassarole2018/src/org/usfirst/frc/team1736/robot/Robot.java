@@ -118,7 +118,14 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		test_talon.set(ControlMode.PercentOutput, 0.4);
+		Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
+		
+		
+		Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
+		
+		
+		Drivetrain.getInstance().update();
+	
 	}
 
 	/**
