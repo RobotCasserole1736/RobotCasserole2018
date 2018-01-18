@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 
 /*
  *******************************************************************************************
@@ -66,18 +67,21 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		
+
 		CrashTracker.logRobotInit();	
+		pdp = new PowerDistributionPanel(0);
+
 
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
-		pdp = new PowerDistributionPanel(0);
 
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
 		
 		//Add all visual items to the driver view
 		initDriverView();
+		initLoggingChannels();
 	}
 	
 	/**
@@ -95,6 +99,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledPeriodic() {
 		updateDriverView();
+		CsvLogger.close();
 
 		try {
 			
@@ -115,9 +120,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+
+
 		try {
 			CrashTracker.logAutoInit();	
 			
+
 		
 			
 		}
@@ -135,7 +143,8 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		try {
 			CrashTracker.logAutoPeriodic();	
-			
+			CsvLogger.logData(true);
+
 			//Add code here
 			
 		}
@@ -143,7 +152,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-		
+
 	}
 	
 	/**
@@ -151,8 +160,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
-		
-		
+		CsvLogger.init();
+
 	}
 
 	/**
@@ -162,7 +171,8 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		try {
 			CrashTracker.logTeleopPeriodic();
-			
+			CsvLogger.logData(true);
+
 		
 			//Add code here
 		}
@@ -173,6 +183,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public void initLoggingChannels() {
+		CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
 		CsvLogger.addLoggingFieldDouble("PDP_Voltage", "V", "getVoltage", pdp);
 		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
 
