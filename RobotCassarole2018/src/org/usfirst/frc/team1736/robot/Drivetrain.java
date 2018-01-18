@@ -16,6 +16,9 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		
+		leftGearbox = new Gearbox();
+		rightGearbox = new Gearbox();
+		
 
 	}
 	
