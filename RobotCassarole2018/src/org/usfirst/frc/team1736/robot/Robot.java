@@ -66,25 +66,26 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		
+		//Log that we are starting the robot code
 		CrashTracker.logRobotInit();	
-		
+
+		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
+
 
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
-		
-		
-		
-		
+
 
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
 		
-		//Add all visual items to the driver view
+		//Add all visual items to the website and data logs
 		initDriverView();
 		initRTPlot();
+		initLoggingChannels();
+
 	}
 	
 	/**
@@ -95,7 +96,7 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logDisabledInit();	
 			
-			//Add Disabled Init code here
+			CsvLogger.close();
 			
 		}
 		catch(Throwable t) {
@@ -112,12 +113,14 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
+
 		try {
 			
 			
-			//Add Disabled Periodic code here
-			
 			updateDriverView();
+			
+
+			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -131,10 +134,13 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+
+
 		try {
 			CrashTracker.logAutoInit();	
 			CrashTracker.logMatchInfo();
 			
+
 		
 			
 		}
@@ -152,10 +158,13 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		
 		try {
-			//CrashTracker.logAutoPeriodic();	
+			CrashTracker.logAutoPeriodic();	
+			
+
 			
 			//Add auto periodic code here
 			updateDriverView();
+			CsvLogger.logData(true);
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -174,12 +183,14 @@ public class Robot extends TimedRobot {
 			CrashTracker.logMatchInfo();
 			
 			//Add Teleop init code here
+			CsvLogger.init();
 
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
 	}
 	
 
@@ -199,28 +210,21 @@ public class Robot extends TimedRobot {
 			
 			
 			Drivetrain.getInstance().update();
+
+			
 		
 			updateDriverView();
 			updateRTPlot();
+			CsvLogger.logData(true);
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 			}
 
-
-		
-		
-		
-	
-
 	}
 
-	public void initLoggingChannels() {
-		CsvLogger.addLoggingFieldDouble("PDP_Voltage", "V", "getVoltage", pdp);
-		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
 
-	}
 	/**
 	 * This function is called periodically during test mode.
 	 */
@@ -229,6 +233,16 @@ public class Robot extends TimedRobot {
 
 	}
 
+	
+	
+	
+	//Sets up all data channels to be logged
+	public void initLoggingChannels() {
+		CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
+		CsvLogger.addLoggingFieldDouble("PDP_Voltage", "V", "getVoltage", pdp);
+		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
+
+	}
 	
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
