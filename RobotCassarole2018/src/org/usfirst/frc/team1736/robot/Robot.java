@@ -9,6 +9,7 @@ package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 
 /*
  *******************************************************************************************
@@ -66,17 +68,23 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		
 		CrashTracker.logRobotInit();	
+		
+		pdp = new PowerDistributionPanel(0);
 
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
-		pdp = new PowerDistributionPanel(0);
+		
+		
+		
+		
 
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
 		
 		//Add all visual items to the driver view
 		initDriverView();
+		initRTPlot();
 	}
 	
 	/**
@@ -193,6 +201,7 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().update();
 		
 			updateDriverView();
+			updateRTPlot();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -224,6 +233,17 @@ public class Robot extends TimedRobot {
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
 		
+	}
+	
+	private void initRTPlot() {
+		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
+		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
+	}
+	
+	private void updateRTPlot() {
+		double time = Timer.getFPGATimestamp();
+		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
+		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
 	}
 
 	private void updateDriverView() {
