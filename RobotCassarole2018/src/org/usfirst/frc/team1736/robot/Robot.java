@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logDisabledInit();	
 			
-			CsvLogger.close();
+			
 			
 		}
 		catch(Throwable t) {
@@ -118,8 +118,8 @@ public class Robot extends TimedRobot {
 			
 			
 			updateDriverView();
-			
-
+			updateRTPlot();
+			CsvLogger.close();
 			
 		}
 		catch(Throwable t) {
@@ -164,6 +164,7 @@ public class Robot extends TimedRobot {
 			
 			//Add auto periodic code here
 			updateDriverView();
+			updateRTPlot();
 			CsvLogger.logData(true);
 		}
 		catch(Throwable t) {
