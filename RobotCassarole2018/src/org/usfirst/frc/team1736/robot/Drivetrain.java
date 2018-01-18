@@ -1,24 +1,60 @@
 package org.usfirst.frc.team1736.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 public class Drivetrain {
 	private static Drivetrain singularInstance = null;
-	private TalonSRX motorleft1;
-	private TalonSRX motorleft2;
-	private TalonSRX motorleft3;
-	private TalonSRX motorright1;
-	private TalonSRX motorright2;
-	private TalonSRX motorright3;
-	
+	private Gearbox leftGearbox;
+	private Gearbox rightGearbox;
+	private double curFwdRevCmd;
+	private double curRotCmd;
 	public static synchronized Drivetrain getInstance() {
 		if ( singularInstance == null)
 			singularInstance = new Drivetrain();
 		return singularInstance;
 	}
+
 	
 	
 	private Drivetrain() {
+		
 
+	}
+	
+	public void setForwardReverseCommand(double command) {
+	
+		curFwdRevCmd = command;
+	}
+	
+	public void setRotateCommand(double command) {
+		curRotCmd = command;
+	}
+	
+	public void update() {
+		
+		
+		double left = cap(curFwdRevCmd + curRotCmd);
+		
+		
+		
+		
+		
+		
+		leftGearbox.setMotorCommand(0);
+		
+		rightGearbox.setMotorCommand(0);
+	}
+	public double cap(double x) {
+		double y;	
+		
+		if(x<-1) {
+			y=-1;
+		}
+		else if(x>-1 & x<1 ) {
+			y=x;
+		}
+		else {
+			y=1;
+		}
+		return y;
+		
 	}
 }

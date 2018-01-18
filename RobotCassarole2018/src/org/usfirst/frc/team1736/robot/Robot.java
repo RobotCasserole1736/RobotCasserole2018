@@ -180,17 +180,31 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+
 		try {
 			CrashTracker.logTeleopPeriodic();
 			
+			//Map Driver inputs to drivetrain open-loop commands
+			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
+			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
+			
+			
+			
+			Drivetrain.getInstance().update();
 		
-			//Add code here
 			updateDriverView();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 			}
+
+
+		
+		
+		
+	
+
 	}
 
 	public void initLoggingChannels() {
