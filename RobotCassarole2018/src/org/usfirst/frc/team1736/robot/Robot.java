@@ -142,8 +142,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
 		try {
-			CrashTracker.logAutoPeriodic();	
+			//CrashTracker.logAutoPeriodic();	
 			
 			//Add auto periodic code here
 			updateDriverView();
@@ -152,6 +153,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+
 	}
 	
 	/**
@@ -201,7 +203,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		
+
 	}
 
 	
