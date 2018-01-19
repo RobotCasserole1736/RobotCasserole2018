@@ -37,12 +37,12 @@ public class OperaterControler {
 	 * @return The continuous motor command from the driver. -1 is full down, 1 is full up, 0 is stop.
 	 */
 	public double getElevCntrlModeCmdSpeed() {
+
 		double operaterRightTrigger = operaterControler.getTriggerAxis(Hand.kRight);
 		double operaterLeftTrigger = operaterControler.getTriggerAxis(Hand.kLeft);
 		double out = operaterRightTrigger - operaterLeftTrigger;
-		System.out.println(out);
 		return out;
-		
+
 	}
 	
 	public boolean getIntakeCmd() {
@@ -64,11 +64,12 @@ public class OperaterControler {
 		boolean operaterL3 = operaterControler.getStickButtonPressed(Hand.kLeft);
 		return operaterL3;
 	}
+
 	//still waiting on confirmation that we need this
 	public boolean getRaiseCLimberCmd() {
 		boolean operaterLeftBumper = operaterControler.getBumper(Hand.kLeft);
 		return operaterLeftBumper;	
-		
+
 	}
 	
 	public double getPullLeftWinchCmd() {
@@ -77,10 +78,11 @@ public class OperaterControler {
 		
 	}
 	
+
 	public double getPullRightWinchCmd() {
 		double operaterRightJoy = operaterControler.getY(Hand.kRight);
 		return operaterRightJoy;
-		}
+	}
 	
 	public Elevator_index getElevaterCmd() {
 		int operaterDownArrow = operaterControler.getPOV();
