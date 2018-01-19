@@ -90,6 +90,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
+		
 		updateDriverView();
 
 		try {
@@ -102,6 +103,8 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
+		Field_setup_string.getinstance().
 
 	}
 		
