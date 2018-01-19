@@ -58,10 +58,17 @@ public class Robot extends TimedRobot {
 	
 	PowerDistributionPanel pdp;
 	CasseroleRIOLoadMonitor ecuStats;
+	BatteryParamEstimator bpe;
+	
+	final static int BPE_length = 200; 
+	final static double BPE_confidenceThresh_A = 10.0;
 
 	public Robot() {
 		CrashTracker.logRobotConstruction();
+		
+	
 	}
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -74,6 +81,9 @@ public class Robot extends TimedRobot {
 
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
+		
+		bpe = new BatteryParamEstimator(BPE_length); 
+		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
@@ -175,6 +185,9 @@ public class Robot extends TimedRobot {
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
+			
+			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -227,6 +240,9 @@ public class Robot extends TimedRobot {
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
+			
+			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -257,6 +273,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
 		CsvLogger.addLoggingFieldDouble("RIO_Cpu_Load", "%", "getCpuLoad", this);
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
+		CsvLogger.addLoggingFieldDouble("ESR", "ohms", "getEstESR", bpe);
+		CsvLogger.addLoggingFieldDouble("EstVoc", "V", "getEstVoc", bpe);
 
 	}
 	
@@ -286,6 +304,8 @@ public class Robot extends TimedRobot {
 		CassesroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
 		CassesroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CassesroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
+		CassesroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
+		CassesroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
 	}
 	
 	public double getCpuLoad() {
