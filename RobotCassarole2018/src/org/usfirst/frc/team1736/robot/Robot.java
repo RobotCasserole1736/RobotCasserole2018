@@ -8,9 +8,11 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
+import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
+import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -55,10 +57,18 @@ public class Robot extends TimedRobot {
 	CasseroleWebServer webServer;
 	
 	PowerDistributionPanel pdp;
+	CasseroleRIOLoadMonitor ecuStats;
+	BatteryParamEstimator bpe;
+	
+	final static int BPE_length = 200; 
+	final static double BPE_confidenceThresh_A = 10.0;
 
 	public Robot() {
 		CrashTracker.logRobotConstruction();
+		
+	
 	}
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -71,6 +81,12 @@ public class Robot extends TimedRobot {
 
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
+		
+		bpe = new BatteryParamEstimator(BPE_length); 
+		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
+		
+		//Init Software Helper libraries
+		ecuStats = new CasseroleRIOLoadMonitor();
 
 
 		// Set up and start web server (must be after all other website init functions)
@@ -119,6 +135,7 @@ public class Robot extends TimedRobot {
 			
 			Field_setup_string.getInstance().update();
 			updateDriverView();
+			updateWebStates();
 			updateRTPlot();
 			CsvLogger.close();
 			
@@ -166,12 +183,17 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logAutoPeriodic();	
 			
-
 			
 			//Add auto periodic code here
+			
+			
 			updateDriverView();
+			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
+			
+			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -221,8 +243,12 @@ public class Robot extends TimedRobot {
 			
 		
 			updateDriverView();
+			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
+			
+			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -242,12 +268,19 @@ public class Robot extends TimedRobot {
 
 	
 	
+	///////////////////////////////////////////////////////////////////////
+	// Private helper methods to group things nicely
+    ///////////////////////////////////////////////////////////////////////
 	
 	//Sets up all data channels to be logged
 	public void initLoggingChannels() {
 		CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
 		CsvLogger.addLoggingFieldDouble("PDP_Voltage", "V", "getVoltage", pdp);
 		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
+		CsvLogger.addLoggingFieldDouble("RIO_Cpu_Load", "%", "getCpuLoad", this);
+		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
+		CsvLogger.addLoggingFieldDouble("ESR", "ohms", "getEstESR", bpe);
+		CsvLogger.addLoggingFieldDouble("EstVoc", "V", "getEstVoc", bpe);
 
 	}
 	
@@ -270,6 +303,23 @@ public class Robot extends TimedRobot {
 	private void updateDriverView() {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		
+	}
+	
+	private void updateWebStates() {
+		CassesroleWebStates.putDouble("PDP Voltage (V)", pdp.getVoltage());
+		CassesroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
+		CassesroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
+		CassesroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
+		CassesroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
+		CassesroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
+	}
+	
+	public double getCpuLoad() {
+		return ecuStats.totalCPULoadPct;
+	}
+
+	public double getRAMUsage() {
+		return ecuStats.totalMemUsedPct;
 	}
 
 
