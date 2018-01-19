@@ -268,12 +268,16 @@ public class Robot extends TimedRobot {
 	private void initRTPlot() {
 		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
+		CasseroleWebPlots.addNewSignal("curFwdRevCommand","X");
+		CasseroleWebPlots.addNewSignal("curRotCmd", "Y");
 	}
 	
 	private void updateRTPlot() {
 		double time = Timer.getFPGATimestamp();
 		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
+		CasseroleWebPlots.addSample("curFwdRevCmd", time, );
+		
 	}
 
 	private void updateDriverView() {
