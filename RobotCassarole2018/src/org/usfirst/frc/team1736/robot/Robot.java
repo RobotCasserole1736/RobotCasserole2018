@@ -312,6 +312,10 @@ public class Robot extends TimedRobot {
 		CassesroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
 		CassesroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
 		CassesroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
+		CassesroleWebStates.putBoolean("leftSwitchState", Field_setup_string.getInstance(). left_Switch_Owned);
+		CassesroleWebStates.putBoolean("rightSwitchState", Field_setup_string.getInstance().right_Switch_Owned);
+		CassesroleWebStates.putBoolean("leftScaleState", Field_setup_string.getInstance().left_Scale_Owned);
+		CassesroleWebStates.putBoolean("rightScaleState", Field_setup_string.getInstance().right_Scale_Owned);
 	}
 	
 	public double getCpuLoad() {
