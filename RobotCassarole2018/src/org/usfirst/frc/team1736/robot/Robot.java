@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
 
 		try {
 			
-			Field_setup_string.getinstance();
+			Field_setup_string.getInstance().update();
 			updateDriverView();
 			updateRTPlot();
 			CsvLogger.close();
@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logAutoInit();	
 			CrashTracker.logMatchInfo();
-			
+			Field_setup_string.getInstance().update();
 
 		
 			
