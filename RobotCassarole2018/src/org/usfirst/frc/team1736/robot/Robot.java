@@ -188,10 +188,12 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
 			
+			IntakeControl.getInstance().setIntakeDesired(OperaterControler.getInstance().getIntakeCmd());
+			IntakeControl.getInstance().setEjectDesired(OperaterControler.getInstance().getEjectCmd());
 			
 			
 			Drivetrain.getInstance().update();
-		
+			IntakeControl.getInstance().update();
 			updateDriverView();
 		}
 		catch(Throwable t) {
