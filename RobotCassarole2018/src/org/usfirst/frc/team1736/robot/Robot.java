@@ -8,8 +8,11 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
+import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
+import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -19,6 +22,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 
 /*
  *******************************************************************************************
@@ -53,6 +57,7 @@ public class Robot extends TimedRobot {
 	CasseroleWebServer webServer;
 	
 	PowerDistributionPanel pdp;
+	CasseroleRIOLoadMonitor ecuStats;
 
 	public Robot() {
 		CrashTracker.logRobotConstruction();
@@ -64,19 +69,29 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		
+		//Log that we are starting the robot code
 		CrashTracker.logRobotInit();	
+
+		//Init physical robot devices
+		pdp = new PowerDistributionPanel(0);
+		
+		//Init Software Helper libraries
+		ecuStats = new CasseroleRIOLoadMonitor();
+
 
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
-		pdp = new PowerDistributionPanel(0);
+
 
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
 		
-		//Add all visual items to the driver view
+		//Add all visual items to the website and data logs
 		initDriverView();
+		initRTPlot();
+		initLoggingChannels();
+
 	}
 	
 	/**
@@ -87,7 +102,7 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logDisabledInit();	
 			
-			//Add Disabled Init code here
+			
 			
 		}
 		catch(Throwable t) {
@@ -104,12 +119,15 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
+
 		try {
 			
 			
-			//Add Disabled Periodic code here
-			
 			updateDriverView();
+			updateWebStates();
+			updateRTPlot();
+			CsvLogger.close();
+			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -123,10 +141,13 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+
+
 		try {
 			CrashTracker.logAutoInit();	
 			CrashTracker.logMatchInfo();
 			
+
 		
 			
 		}
@@ -144,10 +165,16 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		
 		try {
-			//CrashTracker.logAutoPeriodic();	
+			CrashTracker.logAutoPeriodic();	
+			
 			
 			//Add auto periodic code here
+			
+			
 			updateDriverView();
+			updateWebStates();
+			updateRTPlot();
+			CsvLogger.logData(true);
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -166,12 +193,14 @@ public class Robot extends TimedRobot {
 			CrashTracker.logMatchInfo();
 			
 			//Add Teleop init code here
+			CsvLogger.init();
 
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
 	}
 	
 
@@ -191,27 +220,22 @@ public class Robot extends TimedRobot {
 			
 			
 			Drivetrain.getInstance().update();
+
+			
 		
 			updateDriverView();
+			updateWebStates();
+			updateRTPlot();
+			CsvLogger.logData(true);
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 			}
 
-
-		
-		
-		
-	
-
 	}
 
-	public void initLoggingChannels() {
-		CsvLogger.addLoggingFieldDouble("PDP_Voltage", "V", "getVoltage", pdp);
-		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
 
-	}
 	/**
 	 * This function is called periodically during test mode.
 	 */
@@ -221,14 +245,55 @@ public class Robot extends TimedRobot {
 	}
 
 	
+	
+	///////////////////////////////////////////////////////////////////////
+	// Private helper methods to group things nicely
+    ///////////////////////////////////////////////////////////////////////
+	
+	//Sets up all data channels to be logged
+	public void initLoggingChannels() {
+		CsvLogger.addLoggingFieldDouble("TIME", "sec", "getFPGATimestamp", Timer.class);
+		CsvLogger.addLoggingFieldDouble("PDP_Voltage", "V", "getVoltage", pdp);
+		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
+		CsvLogger.addLoggingFieldDouble("RIO_Cpu_Load", "%", "getCpuLoad", this);
+		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
+
+	}
+	
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
 		
+	}
+	
+	private void initRTPlot() {
+		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
+		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
+	}
+	
+	private void updateRTPlot() {
+		double time = Timer.getFPGATimestamp();
+		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
+		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
 	}
 
 	private void updateDriverView() {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		
+	}
+	
+	private void updateWebStates() {
+		CassesroleWebStates.putDouble("PDP Voltage (V)", pdp.getVoltage());
+		CassesroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
+		CassesroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
+		CassesroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
+	}
+	
+	public double getCpuLoad() {
+		return ecuStats.totalCPULoadPct;
+	}
+
+	public double getRAMUsage() {
+		return ecuStats.totalMemUsedPct;
 	}
 
 

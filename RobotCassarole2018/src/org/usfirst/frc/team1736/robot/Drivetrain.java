@@ -2,10 +2,14 @@ package org.usfirst.frc.team1736.robot;
 
 public class Drivetrain {
 	private static Drivetrain singularInstance = null;
+	
+	
 	private Gearbox leftGearbox;
 	private Gearbox rightGearbox;
 	private double curFwdRevCmd;
 	private double curRotCmd;
+	
+	
 	public static synchronized Drivetrain getInstance() {
 		if ( singularInstance == null)
 			singularInstance = new Drivetrain();
