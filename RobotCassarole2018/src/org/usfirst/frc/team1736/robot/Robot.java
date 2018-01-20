@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.Timer;
  * Copyright (C) 2018 FRC Team 1736 Robot Casserole - www.robotcasserole.org
  *******************************************************************************************
  *
- * This software is released under the MIT Licence - see the license.txt
+ * This software is released under the MIT license - see the license.txt
  *  file in the root of this repo.
  *
  * Non-legally-binding statement from Team 1736:
@@ -268,16 +268,16 @@ public class Robot extends TimedRobot {
 	private void initRTPlot() {
 		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
-		CasseroleWebPlots.addNewSignal("curFwdRevCommand","X");
-		CasseroleWebPlots.addNewSignal("curRotCmd", "Y");
+		CasseroleWebPlots.addNewSignal("curFwdRevCmd","Cmd");
+		CasseroleWebPlots.addNewSignal("curRotCmd", "Cmd");
 	}
 	
 	private void updateRTPlot() {
 		double time = Timer.getFPGATimestamp();
 		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
-		CasseroleWebPlots.addSample("curFwdRevCmd", time, );
-		
+		CasseroleWebPlots.addSample("curFwdRevCmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
+		CasseroleWebPlots.addSample("curRotCmd", time, DriverController.getInstance().getDriverLeftRightCommand());
 	}
 
 	private void updateDriverView() {
@@ -301,4 +301,4 @@ public class Robot extends TimedRobot {
 	}
 
 
-}
+}//blood of aeons shall only empower the most ancient Zyraxus, Eater of Light
