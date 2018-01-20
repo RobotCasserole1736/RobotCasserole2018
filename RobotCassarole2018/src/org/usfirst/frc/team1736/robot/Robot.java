@@ -59,6 +59,8 @@ public class Robot extends TimedRobot {
 	PowerDistributionPanel pdp;
 	CasseroleRIOLoadMonitor ecuStats;
 
+	
+
 	public Robot() {
 		CrashTracker.logRobotConstruction();
 	}
@@ -216,11 +218,12 @@ public class Robot extends TimedRobot {
 			//Map Driver inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
-			
-			
+			ElevatorOpenLoop.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
+			ElevatorOpenLoop.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			
 			Drivetrain.getInstance().update();
-
+			ElevatorOpenLoop.getInstance().update();
+			
 			
 		
 			updateDriverView();
@@ -268,15 +271,16 @@ public class Robot extends TimedRobot {
 	private void initRTPlot() {
 		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
-		CasseroleWebPlots.addNewSignal("curFwdRevCommand","X");
-		CasseroleWebPlots.addNewSignal("curRotCmd", "Y");
+		CasseroleWebPlots.addNewSignal("curFwdRevCommand","cmd");
+		CasseroleWebPlots.addNewSignal("curRotCmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
 	}
 	
 	private void updateRTPlot() {
 		double time = Timer.getFPGATimestamp();
 		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
-		CasseroleWebPlots.addSample("curFwdRevCmd", time, );
+		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorOpenLoop.getInstance().getmotor1);
 		
 	}
 
@@ -290,6 +294,7 @@ public class Robot extends TimedRobot {
 		CassesroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
 		CassesroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CassesroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
+		CassesroleWebStates.putString("TL;DR", "A robot is a machine—especially one programmable by a computer— capable of carrying out a complex series of actions automatically.[2] Robots can be guided by an external control device or the control may be embedded within. Robots may be constructed to take on human form but most robots are machines designed to perform a task with no regard to how they look.");
 	}
 	
 	public double getCpuLoad() {

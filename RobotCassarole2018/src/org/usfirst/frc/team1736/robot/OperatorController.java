@@ -3,22 +3,22 @@ package org.usfirst.frc.team1736.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-public class OperaterControler {
-	private static OperaterControler clank = null;
+public class OperatorController {
+	private static OperatorController clank = null;
 	
-	private XboxController operaterControler;
+	private XboxController operatorController;
 	
 	//Singelton boilerplate
-	public static synchronized OperaterControler getInstance() {
+	public static synchronized OperatorController getInstance() {
 		if(clank == null)
-			clank = new OperaterControler();
+			clank = new OperatorController();
 		return clank;
 		
 	}
 	
 	//Constructor - private because singleton
-	private OperaterControler() {
-		operaterControler = new XboxController(1);
+	private OperatorController() {
+		operatorController = new XboxController(1);
 	}
 	
 	
@@ -27,7 +27,7 @@ public class OperaterControler {
 	 * @return True if the operator wants the run the elevator in continuous mode, false otherwise
 	 */
 	public boolean getElevCntrlModeCmd() {
-		boolean operaterBumper = operaterControler.getBumper(Hand.kRight);
+		boolean operaterBumper = operatorController.getBumper(Hand.kRight);
 		return operaterBumper;
 	}
 	
@@ -38,54 +38,54 @@ public class OperaterControler {
 	 */
 	public double getElevCntrlModeCmdSpeed() {
 
-		double operaterRightTrigger = operaterControler.getTriggerAxis(Hand.kRight);
-		double operaterLeftTrigger = operaterControler.getTriggerAxis(Hand.kLeft);
+		double operaterRightTrigger = operatorController.getTriggerAxis(Hand.kRight);
+		double operaterLeftTrigger = operatorController.getTriggerAxis(Hand.kLeft);
 		double out = operaterRightTrigger - operaterLeftTrigger;
 		return out;
 
 	}
 	
 	public boolean getIntakeCmd() {
-		boolean operaterAbutton = operaterControler.getAButton();
+		boolean operaterAbutton = operatorController.getAButton();
 		return operaterAbutton;
 	}
 	
 	public boolean getEjectCmd() {
-		boolean operaterXbutton = operaterControler.getXButtonPressed();
+		boolean operaterXbutton = operatorController.getXButtonPressed();
 		return operaterXbutton;
 	}
 	
 	public boolean getIntakeOverideCmd() {
-		boolean operaterStart = operaterControler.getStartButton();
+		boolean operaterStart = operatorController.getStartButton();
 		return operaterStart;
 	}
 	
 	public boolean getPlatformLatchReleaceCmd() {
-		boolean operaterL3 = operaterControler.getStickButtonPressed(Hand.kLeft);
+		boolean operaterL3 = operatorController.getStickButtonPressed(Hand.kLeft);
 		return operaterL3;
 	}
 
 	//still waiting on confirmation that we need this
 	public boolean getRaiseCLimberCmd() {
-		boolean operaterLeftBumper = operaterControler.getBumper(Hand.kLeft);
+		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
 		return operaterLeftBumper;	
 
 	}
 	
 	public double getPullLeftWinchCmd() {
-		double operaterleftJoy = operaterControler.getY(Hand.kLeft);
+		double operaterleftJoy = operatorController.getY(Hand.kLeft);
 		return operaterleftJoy;
 		
 	}
 	
 
 	public double getPullRightWinchCmd() {
-		double operaterRightJoy = operaterControler.getY(Hand.kRight);
+		double operaterRightJoy = operatorController.getY(Hand.kRight);
 		return operaterRightJoy;
 	}
 	
 	public Elevator_index getElevaterCmd() {
-		int operaterDownArrow = operaterControler.getPOV();
+		int operaterDownArrow = operatorController.getPOV();
 		Elevator_index ReturnValue;
 		ReturnValue = Elevator_index.nothingUnderscoreNew;
 		if(operaterDownArrow == 0) {
