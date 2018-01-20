@@ -8,6 +8,7 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
+import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
@@ -62,6 +63,8 @@ public class Robot extends TimedRobot {
 	
 	final static int BPE_length = 200; 
 	final static double BPE_confidenceThresh_A = 10.0;
+	
+	Calibration minAllowableVoltageCal;
 
 	public Robot() {
 		CrashTracker.logRobotConstruction();
@@ -87,6 +90,7 @@ public class Robot extends TimedRobot {
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
+		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
 
 
 		// Set up and start web server (must be after all other website init functions)
@@ -134,6 +138,9 @@ public class Robot extends TimedRobot {
 		try {
 			
 			Field_setup_string.getInstance().update();
+			
+			Drivetrain.getInstance().updatePIDGains();
+			
 			updateDriverView();
 			updateWebStates();
 			updateRTPlot();
@@ -185,6 +192,10 @@ public class Robot extends TimedRobot {
 			CrashTracker.logAutoPeriodic();	
 			GravityIndicator.getInstance().update();
 			
+			//Perform current-limiting calculations
+			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+			Drivetrain.getInstance().setCurrentLimit_A(bpe.getMaxIdraw(minAllowableVoltageCal.get()));
+			
 			//Add auto periodic code here
 			
 			
@@ -193,7 +204,7 @@ public class Robot extends TimedRobot {
 			updateRTPlot();
 			CsvLogger.logData(true);
 			
-			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+			
 			
 		}
 		catch(Throwable t) {
@@ -220,7 +231,6 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-		
 	}
 	
 
@@ -233,6 +243,11 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logTeleopPeriodic();
 			GravityIndicator.getInstance().update();
+			
+			//Perform current-limiting calculations
+			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
+			Drivetrain.getInstance().setCurrentLimit_A(bpe.getMaxIdraw(minAllowableVoltageCal.get()));
+			
 			//Map Driver inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
@@ -282,7 +297,12 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
 		CsvLogger.addLoggingFieldDouble("ESR", "ohms", "getEstESR", bpe);
 		CsvLogger.addLoggingFieldDouble("EstVoc", "V", "getEstVoc", bpe);
-		CsvLogger.addLoggingFieldDouble("Angle_of_Robot","deg", "getRobotGravityAngle", this);
+		CsvLogger.addLoggingFieldDouble("Climb_Angle","deg", "getRobotGravityAngle", this);
+		CsvLogger.addLoggingFieldDouble("Net_Speed","fps","getRobotSpeedFPS",Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Act_RPM", "RPM", "getRightWheelSpeedAct_RPM", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Des_RPM", "RPM", "getRightWheelSpeedDes_RPM", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Act_RPM", "RPM", "getLeftWheelSpeedAct_RPM", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Des_RPM", "RPM", "getLeftWheelSpeedDes_RPM", Drivetrain.getInstance());
 
 
 
@@ -292,31 +312,42 @@ public class Robot extends TimedRobot {
 	
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
-		CasseroleDriverView.newDial("Robot Angle", -90, 90, 15, -10, 10);
+		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
+		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
 		
 		CasseroleDriverView.newAutoSelector("Start Position", new String[]{"Left", "Center", "Right"});
-		CasseroleDriverView.newAutoSelector("Action", new String[]{"Do Nothing", "Drive Fwd", "Scale", "Switch"}); //TODO: Make sure these are actually meaningful
-		
+		CasseroleDriverView.newAutoSelector("Attempt", new String[]{"Anything", "Switch Only", "Scale Only", "Drive Fwd Only", "Do Nothing"}); //TODO: Make sure these are actually meaningful
+	}
+	
+	private void updateDriverView() {
+		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
+		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
+		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
 	}
 	
 	private void initRTPlot() {
 		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
-		CasseroleWebPlots.addNewSignal("curFwdRevCmd","Cmd");
-		CasseroleWebPlots.addNewSignal("curRotCmd", "Cmd");
+		CasseroleWebPlots.addNewSignal("Driver_FwdRev_cmd","cmd");
+		CasseroleWebPlots.addNewSignal("Driver_Rotate_cmd","cmd");
+		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Act_RPM","cmd");
+		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Des_RPM","cmd");
+		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Act_RPM","cmd");
+		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des_RPM","cmd");
 	}
+	
 	
 	private void updateRTPlot() {
 		double time = Timer.getFPGATimestamp();
 		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
-		CasseroleWebPlots.addSample("curFwdRevCmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
-		CasseroleWebPlots.addSample("curRotCmd", time, DriverController.getInstance().getDriverLeftRightCommand());
-	}
-
-	private void updateDriverView() {
-		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
-		CasseroleDriverView.setDialValue("Robot Angle", GravityIndicator.getInstance().getRobotAngle());
+		CasseroleWebPlots.addSample("Driver_FwdRev_cmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
+		CasseroleWebPlots.addSample("Driver_Rotate_cmd", time, DriverController.getInstance().getDriverLeftRightCommand());
+		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Act_RPM", time, Drivetrain.getInstance().getRightWheelSpeedAct_RPM());
+		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Des_RPM", time,Drivetrain.getInstance().getRightWheelSpeedDes_RPM());
+		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Act_RPM", time,Drivetrain.getInstance().getLeftWheelSpeedAct_RPM());
+		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Des_RPM", time,Drivetrain.getInstance().getLeftWheelSpeedDes_RPM());
+				
 	}
 	
 	private void updateWebStates() {
@@ -342,6 +373,6 @@ public class Robot extends TimedRobot {
 	public double getRobotGravityAngle() {
 		return GravityIndicator.getInstance().getRobotAngle();
 	}
-
+	
 
 }//blood of aeons shall only empower the most ancient Zyraxus, Eater of Light

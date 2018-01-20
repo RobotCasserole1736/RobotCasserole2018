@@ -1,14 +1,26 @@
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.Calibration.Calibration;
+
 public class Drivetrain {
 	private static Drivetrain singularInstance = null;
 	
 	
 	private Gearbox leftGearbox;
 	private Gearbox rightGearbox;
-	private double curFwdRevCmd;
-	private double curRotCmd;
+	private double curFwdRevCmd = 0; 
+	private double curRotCmd = 0;
+	private double curLeftSpeedCmd_RPM = 0;
+	private double curRightSpeedCmd_RPM = 0;
+	private boolean isClosedLoop = false;
+	private double speedFtpS = 0;
+	double leftWheelRPM = 0;
+	double rightWheelRPM = 0;
 	
+	private final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
+	private final double WHEEL_ROLLING_RADIUS_FT = 0.45; //6 inch pneumatic wheels with a bit of squish
+	
+	Calibration curLimitEnable;
 	
 	public static synchronized Drivetrain getInstance() {
 		if ( singularInstance == null)
@@ -20,35 +32,119 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		
-		leftGearbox = new Gearbox(0, 1, 2);
-		rightGearbox = new Gearbox(3, 4, 5);
+		leftGearbox = new Gearbox(0, 1, 2, "left");
+		rightGearbox = new Gearbox(3, 4, 5, "right");
 		
-
+		rightGearbox.setInverted(true);
+		
+		curLimitEnable = new Calibration("Enable DT Current Limit", 0, 0, 1.0);
+		
 	}
 	
 	public void setForwardReverseCommand(double command) {
-	
 		curFwdRevCmd = command;
+		isClosedLoop = false;
 	}
 	
 	public void setRotateCommand(double command) {
 		curRotCmd = command;
+		isClosedLoop = false;
+	}
+	
+	public void setLeftWheelSpeed(double speed_RPM) {
+		curLeftSpeedCmd_RPM = speed_RPM/SPROCKET_RATIO;
+		isClosedLoop = true;
+	}
+	
+	public void setRightWheelSpeed(double speed_RPM) {
+		curRightSpeedCmd_RPM = speed_RPM/SPROCKET_RATIO;
+		isClosedLoop = true;
 	}
 	
 	public void update() {
 		
-		
 		double left = cap(curFwdRevCmd + curRotCmd);
 		double right = cap(curFwdRevCmd - curRotCmd);
 		
+		if(isClosedLoop) {
+			leftGearbox.setMotorCommand(left);
+			rightGearbox.setMotorCommand(right);
+		} else {
+			leftGearbox.setMotorSpeed(curLeftSpeedCmd_RPM);
+			rightGearbox.setMotorSpeed(curRightSpeedCmd_RPM);
+		}
 		
+		leftWheelRPM = leftGearbox.getSpeedRPM()*SPROCKET_RATIO;
+		rightWheelRPM = rightGearbox.getSpeedRPM()*SPROCKET_RATIO;
 		
+		//ft/sec = rev/min * ft/rev * min/sec
+		double leftSpeedFtpS = leftWheelRPM*(2*Math.PI*WHEEL_ROLLING_RADIUS_FT)/60.0;
+		double rightSpeedFtpS = rightWheelRPM*(2*Math.PI*WHEEL_ROLLING_RADIUS_FT)/60.0;
 		
+		speedFtpS = (leftSpeedFtpS + rightSpeedFtpS / 2.0);
 		
-		leftGearbox.setMotorCommand(left);
-		
-		rightGearbox.setMotorCommand(right);
 	}
+	
+	public void updatePIDGains() {
+		leftGearbox.updateCalibrations();
+		rightGearbox.updateCalibrations();
+	}
+	
+	public double getSpeedFtpS() {
+		return speedFtpS;
+	}
+	
+	public double getRightWheelSpeedAct_RPM() {
+		return rightWheelRPM;
+	}
+	
+	public double getLeftWheelSpeedAct_RPM() {
+		return leftWheelRPM;
+	}
+	
+	public double getRightWheelSpeedDes_RPM() {
+		if(isClosedLoop) {
+			return curRightSpeedCmd_RPM;
+		} else {
+			return 0;
+		}
+	}
+	
+	public double getLeftWheelSpeedDes_RPM() {
+		if(isClosedLoop) {
+			return curLeftSpeedCmd_RPM;
+		} else {
+			return 0;
+		}
+	}
+	
+	public double getLeftMotorCommand() {
+		return leftGearbox.getMotorCommand();
+	}
+	
+	public double getRightMotorCommand() {
+		return rightGearbox.getMotorCommand();
+	}
+	
+	/**
+	 * Sets the current limit
+	 * @param limit_A
+	 */
+	public void setCurrentLimit_A(double limit_A) {
+		if(curLimitEnable.get() == 1) {
+			leftGearbox.setCurrentLimit_A(limit_A/2.0);
+			rightGearbox.setCurrentLimit_A(limit_A/2.0);
+		} else {
+			leftGearbox.setCurrentLimit_A(1000); //Effectively remove any reasonable limit
+			rightGearbox.setCurrentLimit_A(1000);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param x Input value
+	 * @return x, but limited to the range [-1,1]
+	 */
 	public double cap(double x) {
 		double y;	
 		
