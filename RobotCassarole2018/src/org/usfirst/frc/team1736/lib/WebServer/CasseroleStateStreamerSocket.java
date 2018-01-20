@@ -88,8 +88,8 @@ public class CasseroleStateStreamerSocket extends WebSocketAdapter {
                 JSONArray data_array = new JSONArray();
 
                 // Package all data array elements into a JSON array
-                for (String name : CassesroleWebStates.ordered_state_name_list) {
-                    data_array.add(CassesroleWebStates.data_array_elements.get(name));
+                for (String name : CasseroleWebStates.ordered_state_name_list) {
+                    data_array.add(CasseroleWebStates.data_array_elements.get(name));
                 }
 
                 // package array into object

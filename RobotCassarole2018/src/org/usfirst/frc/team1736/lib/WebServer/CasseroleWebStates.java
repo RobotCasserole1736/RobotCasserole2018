@@ -43,7 +43,7 @@ import org.json.simple.JSONObject;
  * 
  *
  */
-public class CassesroleWebStates {
+public class CasseroleWebStates {
     /** The set of objects which are broadcast. Must be volatile to ensure atomic accesses */
     static volatile Hashtable<String, JSONObject> data_array_elements = new Hashtable<String, JSONObject>();
     static volatile List<String> ordered_state_name_list = new ArrayList<String>(); // Used to help
