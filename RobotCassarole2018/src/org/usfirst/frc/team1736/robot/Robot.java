@@ -127,7 +127,7 @@ public class Robot extends TimedRobot {
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.close();
-			
+			GravityIndicator.getInstance().update();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -166,7 +166,7 @@ public class Robot extends TimedRobot {
 		
 		try {
 			CrashTracker.logAutoPeriodic();	
-			
+			GravityIndicator.getInstance().update();
 			
 			//Add auto periodic code here
 			
@@ -212,7 +212,7 @@ public class Robot extends TimedRobot {
 
 		try {
 			CrashTracker.logTeleopPeriodic();
-			
+			GravityIndicator.getInstance().update();
 			//Map Driver inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
@@ -241,7 +241,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-
+		GravityIndicator.getInstance().update();
 	}
 
 	
@@ -257,11 +257,16 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
 		CsvLogger.addLoggingFieldDouble("RIO_Cpu_Load", "%", "getCpuLoad", this);
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
+		CsvLogger.addLoggingFieldDouble("Angle_of_Robot","deg", "getRobotGravityAngle", this);
+
 
 	}
 	
+	
+	
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
+		CasseroleDriverView.newDial("Robot Angle", -90, 90, 15, -10, 10);
 		
 	}
 	
@@ -278,7 +283,7 @@ public class Robot extends TimedRobot {
 
 	private void updateDriverView() {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
-		
+		CasseroleDriverView.setDialValue("Robot Angle", GravityIndicator.getInstance().getRobotAngle());
 	}
 	
 	private void updateWebStates() {
@@ -294,6 +299,9 @@ public class Robot extends TimedRobot {
 
 	public double getRAMUsage() {
 		return ecuStats.totalMemUsedPct;
+	}
+	public double getRobotGravityAngle() {
+		return GravityIndicator.getInstance().getRobotAngle();
 	}
 
 
