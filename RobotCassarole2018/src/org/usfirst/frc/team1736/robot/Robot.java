@@ -137,7 +137,7 @@ public class Robot extends TimedRobot {
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.close();
-			
+			GravityIndicator.getInstance().update();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -176,7 +176,7 @@ public class Robot extends TimedRobot {
 		
 		try {
 			CrashTracker.logAutoPeriodic();	
-			
+			GravityIndicator.getInstance().update();
 			
 			//Add auto periodic code here
 			
@@ -225,7 +225,7 @@ public class Robot extends TimedRobot {
 
 		try {
 			CrashTracker.logTeleopPeriodic();
-			
+			GravityIndicator.getInstance().update();
 			//Map Driver inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
@@ -257,7 +257,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-
+		GravityIndicator.getInstance().update();
 	}
 
 	
@@ -275,11 +275,17 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
 		CsvLogger.addLoggingFieldDouble("ESR", "ohms", "getEstESR", bpe);
 		CsvLogger.addLoggingFieldDouble("EstVoc", "V", "getEstVoc", bpe);
+		CsvLogger.addLoggingFieldDouble("Angle_of_Robot","deg", "getRobotGravityAngle", this);
+
+
 
 	}
 	
+	
+	
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
+		CasseroleDriverView.newDial("Robot Angle", -90, 90, 15, -10, 10);
 		
 		CasseroleDriverView.newAutoSelector("Start Position", new String[]{"Left", "Center", "Right"});
 		CasseroleDriverView.newAutoSelector("Action", new String[]{"Do Nothing", "Drive Fwd", "Scale", "Switch"}); //TODO: Make sure these are actually meaningful
@@ -303,7 +309,7 @@ public class Robot extends TimedRobot {
 
 	private void updateDriverView() {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
-		
+		CasseroleDriverView.setDialValue("Robot Angle", GravityIndicator.getInstance().getRobotAngle());
 	}
 	
 	private void updateWebStates() {
@@ -321,6 +327,9 @@ public class Robot extends TimedRobot {
 
 	public double getRAMUsage() {
 		return ecuStats.totalMemUsedPct;
+	}
+	public double getRobotGravityAngle() {
+		return GravityIndicator.getInstance().getRobotAngle();
 	}
 
 
