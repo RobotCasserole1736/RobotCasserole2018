@@ -26,6 +26,9 @@ public class ElevatorOpenLoop {
 		if (contMode == true) {
 		motor1.set(contModeCmd);
 		motor2.set(contModeCmd);
+		} else {
+		motor1.set(0);
+		motor2.set(0);
 		}
 	}
 	
@@ -37,5 +40,7 @@ public class ElevatorOpenLoop {
 	public void setContModeCmd (double cmd) {
 		contModeCmd = cmd;
 	}
-	public double getmotor1;
+	public double getcontModeCmd() {
+		return contModeCmd;
+	};
 }

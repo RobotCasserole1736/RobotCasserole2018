@@ -280,7 +280,7 @@ public class Robot extends TimedRobot {
 		double time = Timer.getFPGATimestamp();
 		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
-		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorOpenLoop.getInstance().getmotor1);
+		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorOpenLoop.getInstance().getcontModeCmd());
 		
 	}
 
@@ -294,7 +294,6 @@ public class Robot extends TimedRobot {
 		CassesroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
 		CassesroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CassesroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
-		CassesroleWebStates.putString("TL;DR", "A robot is a machine—especially one programmable by a computer— capable of carrying out a complex series of actions automatically.[2] Robots can be guided by an external control device or the control may be embedded within. Robots may be constructed to take on human form but most robots are machines designed to perform a task with no regard to how they look.");
 	}
 	
 	public double getCpuLoad() {
