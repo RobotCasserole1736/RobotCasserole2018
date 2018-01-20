@@ -80,6 +80,10 @@ public class CrashTracker {
 		}
 	}
 		
+	public static void logGenericMessage(String message) {
+			logMarker(message);
+	}
+	
 	 public static void logThrowableCrash(Throwable throwable) {
 	        logMarker("Exception", throwable);
 	}

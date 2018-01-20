@@ -12,7 +12,7 @@ import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
-import org.usfirst.frc.team1736.lib.WebServer.CassesroleWebStates;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -130,9 +130,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledPeriodic() {
 
+
 		try {
 			
-			
+			Field_setup_string.getInstance().update();
 			updateDriverView();
 			updateWebStates();
 			updateRTPlot();
@@ -143,6 +144,11 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+
+		
+		
+
+
 	}
 		
 
@@ -156,7 +162,7 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logAutoInit();	
 			CrashTracker.logMatchInfo();
-			
+			Field_setup_string.getInstance().update();
 
 		
 			
@@ -313,12 +319,16 @@ public class Robot extends TimedRobot {
 	}
 	
 	private void updateWebStates() {
-		CassesroleWebStates.putDouble("PDP Voltage (V)", pdp.getVoltage());
-		CassesroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
-		CassesroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
-		CassesroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
-		CassesroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
-		CassesroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
+		CasseroleWebStates.putDouble("PDP Voltage (V)", pdp.getVoltage());
+		CasseroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
+		CasseroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
+		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
+		CasseroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
+		CasseroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
+		CasseroleWebStates.putBoolean("leftSwitchState", Field_setup_string.getInstance(). left_Switch_Owned);
+		CasseroleWebStates.putBoolean("rightSwitchState", Field_setup_string.getInstance().right_Switch_Owned);
+		CasseroleWebStates.putBoolean("leftScaleState", Field_setup_string.getInstance().left_Scale_Owned);
+		CasseroleWebStates.putBoolean("RightScaleState", Field_setup_string.getInstance().right_Scale_Owned);
 	}
 	
 	public double getCpuLoad() {
