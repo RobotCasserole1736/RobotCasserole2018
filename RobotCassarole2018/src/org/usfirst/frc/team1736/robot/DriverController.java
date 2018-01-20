@@ -19,11 +19,19 @@ public class DriverController {
 
 	public double getDriverForwardReverseCommand() {
 		double driverLeftYValue = driveController.getY(Hand.kLeft);
-		return driverLeftYValue;
+		if (driverLeftYValue > -0.15 & driverLeftYValue < 0.15) {
+			driverLeftYValue = 0;
+		}
+		return (driverLeftYValue*driverLeftYValue*driverLeftYValue);
 	}
 	public double getDriverLeftRightCommand() {
 		double driverRightXValue = driveController.getX(Hand.kRight);
-		return driverRightXValue;
+		if (driverRightXValue > -0.15 & driverRightXValue <0.15) {
+		    driverRightXValue = 0;
+		}
+		return (driverRightXValue*driverRightXValue*driverRightXValue);
+		
 	}
+	
 	
 }
