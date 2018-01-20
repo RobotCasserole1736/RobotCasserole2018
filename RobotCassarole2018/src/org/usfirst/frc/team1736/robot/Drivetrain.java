@@ -20,8 +20,8 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		
-		leftGearbox = new Gearbox();
-		rightGearbox = new Gearbox();
+		leftGearbox = new Gearbox(0, 1, 2);
+		rightGearbox = new Gearbox(3, 4, 5);
 		
 
 	}
@@ -39,15 +39,15 @@ public class Drivetrain {
 		
 		
 		double left = cap(curFwdRevCmd + curRotCmd);
+		double right = cap(curFwdRevCmd - curRotCmd);
 		
 		
 		
 		
 		
+		leftGearbox.setMotorCommand(left);
 		
-		leftGearbox.setMotorCommand(0);
-		
-		rightGearbox.setMotorCommand(0);
+		rightGearbox.setMotorCommand(right);
 	}
 	public double cap(double x) {
 		double y;	
