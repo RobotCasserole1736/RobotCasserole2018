@@ -270,6 +270,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
 		CasseroleWebPlots.addNewSignal("curFwdRevCmd","Cmd");
 		CasseroleWebPlots.addNewSignal("curRotCmd", "Cmd");
+		CasseroleWebPlots.addNewSignal("curLeftMotorCmd", "MTCD");
+		CasseroleWebPlots.addNewSignal("curRightMotorCmd", "MTCD");
 	}
 	
 	private void updateRTPlot() {
@@ -278,6 +280,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
 		CasseroleWebPlots.addSample("curFwdRevCmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
 		CasseroleWebPlots.addSample("curRotCmd", time, DriverController.getInstance().getDriverLeftRightCommand());
+		CasseroleWebPlots.addSample("curLeftMotorCmd", time, Drivetrain.getInstance().getLeftMotorCommand());
+		CasseroleWebPlots.addSample("curRigtMotorCmd", time, Drivetrain.getInstance().getRightMotorCoommand());
 	}
 
 	private void updateDriverView() {
@@ -301,4 +305,4 @@ public class Robot extends TimedRobot {
 	}
 
 
-}//blood of aeons shall only empower the most ancient Zyraxus, Eater of Light
+}//blood of The Aeons shall only empower the most ancient and noble Zyraxus, Eater of Light

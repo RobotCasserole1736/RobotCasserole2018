@@ -26,6 +26,16 @@ public class Drivetrain {
 
 	}
 	
+	public double getLeftMotorCommand() {
+		return (cap(curFwdRevCmd + curRotCmd));
+		
+	}
+	
+	public double getRightMotorCoommand() {
+		return (cap(curFwdRevCmd - curRotCmd));
+	}
+	
+		
 	public void setForwardReverseCommand(double command) {
 	
 		curFwdRevCmd = command;
@@ -64,4 +74,5 @@ public class Drivetrain {
 		return y;
 		
 	}
+	
 }
