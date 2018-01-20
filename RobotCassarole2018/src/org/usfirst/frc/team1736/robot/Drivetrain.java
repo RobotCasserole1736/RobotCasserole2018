@@ -8,8 +8,8 @@ public class Drivetrain {
 	private Gearbox rightGearbox;
 	private double curFwdRevCmd;
 	private double curRotCmd;
-	
-	
+	private double rightMotorCommand;
+	private double leftMotorCommand;
 	public static synchronized Drivetrain getInstance() {
 		if ( singularInstance == null)
 			singularInstance = new Drivetrain();
@@ -27,12 +27,12 @@ public class Drivetrain {
 	}
 	
 	public double getLeftMotorCommand() {
-		return (cap(curFwdRevCmd + curRotCmd));
+		return (leftMotorCommand);
 		
 	}
 	
 	public double getRightMotorCoommand() {
-		return (cap(curFwdRevCmd - curRotCmd));
+		return (rightMotorCommand);
 	}
 	
 		
@@ -48,16 +48,16 @@ public class Drivetrain {
 	public void update() {
 		
 		
-		double left = cap(curFwdRevCmd + curRotCmd);
-		double right = cap(curFwdRevCmd - curRotCmd);
+		leftMotorCommand = cap(curFwdRevCmd + curRotCmd);
+		rightMotorCommand = cap(curFwdRevCmd - curRotCmd);
 		
 		
 		
 		
 		
-		leftGearbox.setMotorCommand(left);
+		leftGearbox.setMotorCommand(leftMotorCommand);
 		
-		rightGearbox.setMotorCommand(right);
+		rightGearbox.setMotorCommand(rightMotorCommand);
 	}
 	public double cap(double x) {
 		double y;	

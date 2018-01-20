@@ -281,7 +281,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("curFwdRevCmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
 		CasseroleWebPlots.addSample("curRotCmd", time, DriverController.getInstance().getDriverLeftRightCommand());
 		CasseroleWebPlots.addSample("curLeftMotorCmd", time, Drivetrain.getInstance().getLeftMotorCommand());
-		CasseroleWebPlots.addSample("curRigtMotorCmd", time, Drivetrain.getInstance().getRightMotorCoommand());
+		CasseroleWebPlots.addSample("curRightMotorCmd", time, Drivetrain.getInstance().getRightMotorCoommand());
 	}
 
 	private void updateDriverView() {
