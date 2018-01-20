@@ -77,6 +77,8 @@ public class Robot extends TimedRobot {
 		
 		//Add all visual items to the driver view
 		initDriverView();
+		
+		
 	}
 	
 	/**
@@ -153,7 +155,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-
+		
 	}
 	
 	/**
@@ -190,7 +192,8 @@ public class Robot extends TimedRobot {
 			
 			IntakeControl.getInstance().setIntakeDesired(OperaterControler.getInstance().getIntakeCmd());
 			IntakeControl.getInstance().setEjectDesired(OperaterControler.getInstance().getEjectCmd());
-			
+			IntakeControl.getInstance().setIntakeOvrdDesired(OperaterControler.getInstance().getIntakeOverideCmd());
+			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(0), pdp.getCurrent(1));
 			
 			Drivetrain.getInstance().update();
 			IntakeControl.getInstance().update();

@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1736.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Spark;
 
 public class IntakeControl {
 	private static IntakeControl singularInstance = null;
@@ -19,6 +22,7 @@ public class IntakeControl {
 	
 	private IntakeControl () {
 		sensor = new DigitalInput(4);
+		
 	}
 	
 	public void setIntakeDesired(boolean Cmd ) {
@@ -39,19 +43,24 @@ public class IntakeControl {
 			
 			intakeOvrdDesired = Cmd;
 		
-		
+	
+	
+	}
+	public  void setMotorCurrents(double leftCurrent, double rightCurrent) {
 		
 	}
-	
 	
 	
 	public boolean intakeSensorState() {
 		
 		boolean sensorState = sensor.get();
+		 
 		
 		return sensorState;
-		
+			
 	}
+	
+	
 			
 		
 			
