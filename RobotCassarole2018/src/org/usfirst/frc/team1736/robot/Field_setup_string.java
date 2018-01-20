@@ -47,11 +47,17 @@ public class Field_setup_string {
 					right_Scale_Owned = false;
 					left_Scale_Owned = false;
 				}
+				
 				if(gameData.compareTo(prevGameData) != 0 ) {
 					CrashTracker.logGenericMessage("got new game data:" + gameData);
 				}
+				
+				prevGameData = gameData;
+				
 			} catch (Throwable t){
-				CrashTracker.logGenericMessage("error parsing string data" + t.getMessage() + t.getStackTrace());
+				String msg = "Error parsing string data\n" + t.getMessage() + "\n" + t.getStackTrace();
+				CrashTracker.logGenericMessage(msg);
+				DriverStation.reportError(msg, false);
 				right_Switch_Owned = false;
 				left_Switch_Owned = false;
 				left_Scale_Owned = false;

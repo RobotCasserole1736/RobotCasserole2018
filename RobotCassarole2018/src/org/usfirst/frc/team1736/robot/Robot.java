@@ -165,6 +165,7 @@ public class Robot extends TimedRobot {
 			Field_setup_string.getInstance().update();
 
 		
+			CsvLogger.init();
 			
 		}
 		catch(Throwable t) {
