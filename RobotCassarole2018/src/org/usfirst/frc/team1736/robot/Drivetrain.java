@@ -6,8 +6,8 @@ public class Drivetrain {
 	private static Drivetrain singularInstance = null;
 	
 	
-	private Gearbox leftGearbox;
-	private Gearbox rightGearbox;
+	public Gearbox leftGearbox;
+	public Gearbox rightGearbox;
 	private double curFwdRevCmd = 0; 
 	private double curRotCmd = 0;
 	private double curLeftSpeedCmd_RPM = 0;
@@ -125,6 +125,7 @@ public class Drivetrain {
 	public double getRightMotorCommand() {
 		return rightGearbox.getMotorCommand();
 	}
+
 	
 	/**
 	 * Sets the current limit

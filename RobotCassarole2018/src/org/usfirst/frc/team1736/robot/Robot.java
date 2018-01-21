@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
 	
 	Calibration minAllowableVoltageCal;
 
+
 	public Robot() {
 		CrashTracker.logRobotConstruction();
 		
@@ -246,7 +247,7 @@ public class Robot extends TimedRobot {
 			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
-			Drivetrain.getInstance().setCurrentLimit_A(bpe.getMaxIdraw(minAllowableVoltageCal.get()));
+			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
 			
 			//Map Driver inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
@@ -262,8 +263,6 @@ public class Robot extends TimedRobot {
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
-			
-			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			
 		}
 		catch(Throwable t) {
@@ -297,12 +296,19 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
 		CsvLogger.addLoggingFieldDouble("ESR", "ohms", "getEstESR", bpe);
 		CsvLogger.addLoggingFieldDouble("EstVoc", "V", "getEstVoc", bpe);
+		CsvLogger.addLoggingFieldDouble("CurrentDrawLimit", "A", "getMaxAllowableCurrent_A", this);
 		CsvLogger.addLoggingFieldDouble("Climb_Angle","deg", "getRobotGravityAngle", this);
 		CsvLogger.addLoggingFieldDouble("Net_Speed","fps","getRobotSpeedFPS",Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Act_RPM", "RPM", "getRightWheelSpeedAct_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Des_RPM", "RPM", "getRightWheelSpeedDes_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Act_RPM", "RPM", "getLeftWheelSpeedAct_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Des_RPM", "RPM", "getLeftWheelSpeedDes_RPM", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor1);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_L2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor2);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_L3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor3);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
 
 
 
@@ -372,6 +378,14 @@ public class Robot extends TimedRobot {
 	}
 	public double getRobotGravityAngle() {
 		return GravityIndicator.getInstance().getRobotAngle();
+	}
+	
+	public double getMaxAllowableCurrent_A() {
+		if(bpe != null) {
+			return bpe.getMaxIdraw(minAllowableVoltageCal.get());
+		} else {
+			return -1;
+		}
 	}
 	
 
