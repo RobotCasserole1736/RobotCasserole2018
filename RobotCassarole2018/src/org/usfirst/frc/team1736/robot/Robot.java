@@ -67,10 +67,9 @@ public class Robot extends TimedRobot {
 	Calibration minAllowableVoltageCal;
 
 
+	//Hook the constructor to catch the overall class construction event.
 	public Robot() {
 		CrashTracker.logRobotConstruction();
-		
-	
 	}
 	
 
@@ -83,11 +82,13 @@ public class Robot extends TimedRobot {
 		//Log that we are starting the robot code
 		CrashTracker.logRobotInit();	
 
+		
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
 		
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
+		
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
@@ -124,8 +125,6 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-
-		
 	}
 	
 
@@ -134,29 +133,29 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
-
-
 		try {
+			//Close out whatever log may have been being recorded
+			CsvLogger.close();
 			
-			Field_setup_string.getInstance().update();
 			
+			//Allow for drivetrain PID gains to be changed
 			Drivetrain.getInstance().updatePIDGains();
 			
+			
+			//Update approprate subsystems
+			GravityIndicator.getInstance().update();
+			Field_setup_string.getInstance().update();
+			
+			
+			//Update data viewers only
 			updateDriverView();
 			updateWebStates();
 			updateRTPlot();
-			CsvLogger.close();
-			GravityIndicator.getInstance().update();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-
-		
-		
-
-
 	}
 		
 
@@ -165,22 +164,21 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-
-
 		try {
 			CrashTracker.logAutoInit();	
 			CrashTracker.logMatchInfo();
-			Field_setup_string.getInstance().update();
-
-		
-			CsvLogger.init();
 			
+			//Poll the FMS one last time to see who owns which field pieces
+			Field_setup_string.getInstance().update();
+			
+			
+			//Start up a new data log
+			CsvLogger.init();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-		
 	}
 
 	/**
@@ -188,7 +186,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		
 		try {
 			CrashTracker.logAutoPeriodic();	
 			GravityIndicator.getInstance().update();
@@ -197,22 +194,19 @@ public class Robot extends TimedRobot {
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			Drivetrain.getInstance().setCurrentLimit_A(bpe.getMaxIdraw(minAllowableVoltageCal.get()));
 			
-			//Add auto periodic code here
+
 			
 			
+			//Update data logs and data viewers
 			updateDriverView();
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
-			
-			
-			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-
 	}
 	
 	/**
@@ -224,9 +218,9 @@ public class Robot extends TimedRobot {
 			CrashTracker.logTeleopInit();	
 			CrashTracker.logMatchInfo();
 			
-			//Add Teleop init code here
+			
+			//Start up a new data log
 			CsvLogger.init();
-
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -240,10 +234,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-
 		try {
 			CrashTracker.logTeleopPeriodic();
-			GravityIndicator.getInstance().update();
+			
 			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
@@ -254,22 +247,23 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
 			
 			
-			
+			//Update all subsystems
+			GravityIndicator.getInstance().update();
 			Drivetrain.getInstance().update();
+			
 
 			
-		
+			
+			//Update data logs and data viewers
 			updateDriverView();
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
-			
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 			}
-
 	}
 
 
@@ -310,17 +304,14 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
 
-
-
 	}
 	
 	
-	
+	//Website init & update methods
 	private void initDriverView() {
 		CasseroleDriverView.newStringBox("Field Ownership");
 		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
 		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
-		
 		CasseroleDriverView.newAutoSelector("Start Position", new String[]{"Left", "Center", "Right"});
 		CasseroleDriverView.newAutoSelector("Attempt", new String[]{"Anything", "Switch Only", "Scale Only", "Drive Fwd Only", "Do Nothing"}); //TODO: Make sure these are actually meaningful
 	}
@@ -342,7 +333,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des_RPM","RPM");
 		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
-
 	}
 	
 	
@@ -373,6 +363,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putBoolean("RightScaleState", Field_setup_string.getInstance().right_Scale_Owned);
 	}
 	
+	
+	//Other local getters for helping logging and data and stuff
 	public double getCpuLoad() {
 		return ecuStats.totalCPULoadPct;
 	}
@@ -380,6 +372,7 @@ public class Robot extends TimedRobot {
 	public double getRAMUsage() {
 		return ecuStats.totalMemUsedPct;
 	}
+	
 	public double getRobotGravityAngle() {
 		return GravityIndicator.getInstance().getRobotAngle();
 	}
