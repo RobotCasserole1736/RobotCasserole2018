@@ -336,10 +336,13 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
 		CasseroleWebPlots.addNewSignal("Driver_FwdRev_cmd","cmd");
 		CasseroleWebPlots.addNewSignal("Driver_Rotate_cmd","cmd");
-		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Act_RPM","cmd");
-		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Des_RPM","cmd");
-		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Act_RPM","cmd");
-		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des_RPM","cmd");
+		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Act_RPM","RPM");
+		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Des_RPM","RPM");
+		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Act_RPM","RPM");
+		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des_RPM","RPM");
+		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
+
 	}
 	
 	
@@ -353,7 +356,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Des_RPM", time,Drivetrain.getInstance().getRightWheelSpeedDes_RPM());
 		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Act_RPM", time,Drivetrain.getInstance().getLeftWheelSpeedAct_RPM());
 		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Des_RPM", time,Drivetrain.getInstance().getLeftWheelSpeedDes_RPM());
-				
+		CasseroleWebPlots.addSample("DT_Left_Motor_Cmd", time, Drivetrain.getInstance().getLeftMotorCommand());
+		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
 	}
 	
 	private void updateWebStates() {
@@ -389,4 +393,4 @@ public class Robot extends TimedRobot {
 	}
 	
 
-}//blood of aeons shall only empower the most ancient Zyraxus, Eater of Light
+}//blood of The Aeons shall only empower the most ancient and noble Zyraxus, Eater of Light

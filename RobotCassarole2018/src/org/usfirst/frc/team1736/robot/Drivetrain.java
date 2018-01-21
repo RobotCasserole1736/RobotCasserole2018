@@ -10,6 +10,8 @@ public class Drivetrain {
 	public Gearbox rightGearbox;
 	private double curFwdRevCmd = 0; 
 	private double curRotCmd = 0;
+	private double rightMotorCommand;
+	private double leftMotorCommand;
 	private double curLeftSpeedCmd_RPM = 0;
 	private double curRightSpeedCmd_RPM = 0;
 	private boolean isClosedLoop = false;
@@ -22,6 +24,7 @@ public class Drivetrain {
 	
 	Calibration curLimitEnable;
 	
+
 	public static synchronized Drivetrain getInstance() {
 		if ( singularInstance == null)
 			singularInstance = new Drivetrain();
@@ -40,7 +43,7 @@ public class Drivetrain {
 		curLimitEnable = new Calibration("Enable DT Current Limit", 0, 0, 1.0);
 		
 	}
-	
+		
 	public void setForwardReverseCommand(double command) {
 		curFwdRevCmd = command;
 		isClosedLoop = false;
@@ -62,13 +65,13 @@ public class Drivetrain {
 	}
 	
 	public void update() {
-		
-		double left = cap(curFwdRevCmd + curRotCmd);
-		double right = cap(curFwdRevCmd - curRotCmd);
+
+		leftMotorCommand = cap(curFwdRevCmd + curRotCmd);
+		rightMotorCommand = cap(curFwdRevCmd - curRotCmd);
 		
 		if(isClosedLoop) {
-			leftGearbox.setMotorCommand(left);
-			rightGearbox.setMotorCommand(right);
+			leftGearbox.setMotorCommand(leftMotorCommand);
+			rightGearbox.setMotorCommand(rightMotorCommand);
 		} else {
 			leftGearbox.setMotorSpeed(curLeftSpeedCmd_RPM);
 			rightGearbox.setMotorSpeed(curRightSpeedCmd_RPM);
@@ -161,4 +164,5 @@ public class Drivetrain {
 		return y;
 		
 	}
+	
 }
