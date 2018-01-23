@@ -17,8 +17,8 @@ public class ElevatorOpenLoop {
 	}
 	
 	private ElevatorOpenLoop() {
-		motor1 = new Spark(0);
-		motor2 = new Spark(1);
+		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
+		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
 	}
 	
 	

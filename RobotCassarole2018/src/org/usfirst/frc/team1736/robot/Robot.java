@@ -254,7 +254,7 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setEjectDesired(OperatorController.getInstance().getEjectCmd());
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
 			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
-			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(0), pdp.getCurrent(1));
+			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			ElevatorOpenLoop.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorOpenLoop.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
@@ -335,6 +335,13 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldBoolean("Intake_Throw_Desired", "cmd", "getThrowCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Continuous_Mode_Desired", "cmd", "getElevCntrlModeCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Continuous_Mode_Cmd", "cmd", "getElevCntrlModeCmdSpeed", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Intake_Left", "A", "getCurrent", pdp, RobotConstants.PDP_INTAKE_LEFT);
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Intake_Right", "A", "getCurrent", pdp, RobotConstants.PDP_INTAKE_RIGHT);
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Left_One", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_LEFT_ONE);
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Left_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_LEFT_TWO);
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_One", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_ONE);
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 
 	}
 	

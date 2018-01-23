@@ -35,8 +35,14 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		
-		leftGearbox = new Gearbox(0, 1, 2, "left");
-		rightGearbox = new Gearbox(3, 4, 5, "right");
+		leftGearbox = new Gearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
+				                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE1_SRX, 
+				                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE2_SRX,
+				                  "left");
+		rightGearbox = new Gearbox(RobotConstants.CANID_DRIVETRAIN_RIGHT_MASTER_SRX, 
+				                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX,
+				                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX,
+				                   "right");
 		
 		rightGearbox.setInverted(true);
 		
@@ -131,7 +137,7 @@ public class Drivetrain {
 
 	
 	/**
-	 * Sets the current limit
+	 * Sets the current limit for the whole drivetrain.
 	 * @param limit_A
 	 */
 	public void setCurrentLimit_A(double limit_A) {

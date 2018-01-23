@@ -33,9 +33,9 @@ public class ElbowControl {
 	}
 	
 	private ElbowControl() {
-		elbowMotor = new Spark(RobotConstants.ELBOW_SPARK);
-		upperLimitSw = new DigitalInput(RobotConstants.ELBOW_UP_LIMIT_SW);
-		lowerLimitSw = new DigitalInput(RobotConstants.ELBOW_DOWN_LIMIT_SW);
+		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
+		upperLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_UP_LIMIT_SW);
+		lowerLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_DOWN_LIMIT_SW);
 		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.5, 0.0, 1.0);
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
 	}
