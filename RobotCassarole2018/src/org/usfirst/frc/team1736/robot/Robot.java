@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
 	Calibration minAllowableVoltageCal;
 
 
+
 	//Hook the constructor to catch the overall class construction event.
 	public Robot() {
 		CrashTracker.logRobotConstruction();
@@ -197,7 +198,7 @@ public class Robot extends TimedRobot {
 			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
-			Drivetrain.getInstance().setCurrentLimit_A(bpe.getMaxIdraw(minAllowableVoltageCal.get()));
+			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
 			
 
 			
@@ -244,7 +245,6 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logTeleopPeriodic();
 			
-			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
@@ -254,11 +254,19 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
 			ElbowControl.getInstance().setLowerDesired(DriverController.getInstance().getDriverElbowLowerCmd());
 			ElbowControl.getInstance().setRaiseDesired(DriverController.getInstance().getDriverElbowRaiseCmd());
-			IntakeControl.getInstance().setIntakeDesired(OperaterControler.getInstance().getIntakeCmd());
-			IntakeControl.getInstance().setEjectDesired(OperaterControler.getInstance().getEjectCmd());
-			IntakeControl.getInstance().setIntakeOvrdDesired(OperaterControler.getInstance().getIntakeOverideCmd());
-			IntakeControl.getInstance().setThrowDesired(OperaterControler.getInstance().getThrowCmd());
+			IntakeControl.getInstance().setIntakeDesired(OperatorController.getInstance().getIntakeCmd());
+			IntakeControl.getInstance().setEjectDesired(OperatorController.getInstance().getEjectCmd());
+			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
+			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(0), pdp.getCurrent(1));
+			ElevatorOpenLoop.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
+			ElevatorOpenLoop.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
+			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
+			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
+			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
+			Climb.getInstance().setHookReleaseCmd(OperatorController.getInstance().getHookReleaseCmd());
+
+
 
 			
 			//Update all subsystems
@@ -266,6 +274,9 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().update();
 			ElbowControl.getInstance().update();
 			IntakeControl.getInstance().update();
+			ElevatorOpenLoop.getInstance().update();
+			Climb.getInstance().update();
+			
 			
 
 			//Update data logs and data viewer
@@ -353,6 +364,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
+		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
 	}
 	
 	
@@ -369,7 +381,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Left_Motor_Cmd", time, Drivetrain.getInstance().getLeftMotorCommand());
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
+		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorOpenLoop.getInstance().getcontModeCmd());
 	}
+
 	
 	private void updateWebStates() {
 		CasseroleWebStates.putDouble("PDP Voltage (V)", pdp.getVoltage());
