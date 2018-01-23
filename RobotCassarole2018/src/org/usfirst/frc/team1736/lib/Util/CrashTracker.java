@@ -37,7 +37,7 @@ public class CrashTracker {
 	}
 	
 	public static void logRobotConstruction() {
-        logMarker("robot construction");
+        logMarker("robot construction - " + RUN_INSTANCE_UUID.toString());
     }
 	
 	public static void logRobotInit() {
@@ -95,11 +95,10 @@ public class CrashTracker {
 	private static void logMarker(String mark, Throwable nullableException) {
 		
 	        try (PrintWriter writer = new PrintWriter(new FileWriter("/home/lvuser/crash_tracking.txt", true))) {
-	            writer.print(RUN_INSTANCE_UUID.toString());
-	            writer.print(", ");
+	        	writer.print("[" + new Date().toString() + "]");
+	            writer.print(" ");
 	            writer.print(mark);
-	            writer.print(", ");
-	            writer.print(new Date().toString());
+	            
 
 	            if (nullableException != null) {
 	                writer.print(", ");
