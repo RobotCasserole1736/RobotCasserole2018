@@ -26,4 +26,12 @@ public class DriverController {
 		return driverRightXValue;
 	}
 	
+	public boolean getDriverElbowRaiseCmd() {
+		return driveController.getYButton();
+	}
+	
+	public boolean getDriverElbowLowerCmd() {
+		return driveController.getAButton();
+	}
+	
 }

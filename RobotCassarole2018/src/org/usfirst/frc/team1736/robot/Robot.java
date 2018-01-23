@@ -242,14 +242,16 @@ public class Robot extends TimedRobot {
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
 			
-			//Map Driver inputs to drivetrain open-loop commands
+			//Map Driver & Operator inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
-			
+			ElbowControl.getInstance().setLowerDesired(DriverController.getInstance().getDriverElbowLowerCmd());
+			ElbowControl.getInstance().setRaiseDesired(DriverController.getInstance().getDriverElbowRaiseCmd());
 			
 			//Update all subsystems
 			GravityIndicator.getInstance().update();
 			Drivetrain.getInstance().update();
+			ElbowControl.getInstance().update();
 			
 
 			
@@ -303,6 +305,11 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
+		CsvLogger.addLoggingFieldBoolean("Elbow_Raise_Command", "cmd", "getDriverElbowRaiseCmd", DriverController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Command", "cmd", "getDriverElbowLowerCmd", DriverController.getInstance());
+		CsvLogger.addLoggingFieldDouble("Elbow_Motor_Command", "cmd", "getMotorCmd", ElbowControl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elbow_Upper_Limit_Reached", "cmd", "isUpperLimitReached", ElbowControl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Limit_Reached", "cmd", "isLowerLimitReached", ElbowControl.getInstance());
 
 	}
 	
@@ -333,6 +340,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des_RPM","RPM");
 		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
 	}
 	
 	
@@ -348,6 +356,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Des_RPM", time,Drivetrain.getInstance().getLeftWheelSpeedDes_RPM());
 		CasseroleWebPlots.addSample("DT_Left_Motor_Cmd", time, Drivetrain.getInstance().getLeftMotorCommand());
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
+		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
 	}
 	
 	private void updateWebStates() {
@@ -361,6 +370,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putBoolean("rightSwitchState", Field_setup_string.getInstance().right_Switch_Owned);
 		CasseroleWebStates.putBoolean("leftScaleState", Field_setup_string.getInstance().left_Scale_Owned);
 		CasseroleWebStates.putBoolean("RightScaleState", Field_setup_string.getInstance().right_Scale_Owned);
+		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
+		CasseroleWebStates.putBoolean("Elbow_Lower_Limit_Reached", ElbowControl.getInstance().isLowerLimitReached());
+		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
 	}
 	
 	
