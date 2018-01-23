@@ -110,10 +110,6 @@ public class Robot extends TimedRobot {
 		initRTPlot();
 		initLoggingChannels();
 
-
-		
-		
-
 	}
 	
 	/**
@@ -148,7 +144,7 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().updatePIDGains();
 			
 			
-			//Update approprate subsystems
+			//Update appropriate subsystems
 			GravityIndicator.getInstance().update();
 			Field_setup_string.getInstance().update();
 			
@@ -333,6 +329,13 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("Elbow_Motor_Command", "cmd", "getMotorCmd", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Upper_Limit_Reached", "cmd", "isUpperLimitReached", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Limit_Reached", "cmd", "isLowerLimitReached", ElbowControl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Intake_Intake_Desired", "cmd", "getIntakeCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Intake_Eject_Desired", "cmd", "getEjectCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Intake_IntakeOvrd_Desired", "cmd", "getIntakeOverideCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Intake_Throw_Desired", "cmd", "getThrowCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Continuous_Mode_Desired", "cmd", "getElevCntrlModeCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldDouble("Elev_Continuous_Mode_Cmd", "cmd", "getElevCntrlModeCmdSpeed", OperatorController.getInstance());
+		
 
 	}
 	

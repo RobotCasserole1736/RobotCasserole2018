@@ -56,7 +56,7 @@ public class OperatorController {
 	}
 	
 	public boolean getThrowCmd() {
-		boolean operaterBbutton = operaterControler.getBButton();
+		boolean operaterBbutton = operatorController.getBButton();
 		return operaterBbutton;
 	}
 	
@@ -74,8 +74,8 @@ public class OperatorController {
 		return operatorR3;
 	}
 	public boolean getClimbEnabledCmd() {
-		operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
-		return operaterLeftBumber;
+		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
+		return operaterLeftBumper;
 		
 	}
 	//still waiting on confirmation that we need this
