@@ -69,10 +69,12 @@ public class OperatorController {
 		boolean operaterL3 = operatorController.getStickButtonPressed(Hand.kLeft);
 		return operaterL3;
 	}
+	
 	public boolean getHookReleaseCmd() {
 		boolean operatorR3 = operatorController.getStickButtonPressed(Hand.kRight);
 		return operatorR3;
 	}
+	
 	public boolean getClimbEnabledCmd() {
 		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
 		return operaterLeftBumper;

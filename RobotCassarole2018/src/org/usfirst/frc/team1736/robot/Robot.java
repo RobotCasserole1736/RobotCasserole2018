@@ -284,7 +284,7 @@ public class Robot extends TimedRobot {
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
-			}
+		}
 	}
 
 
@@ -335,7 +335,6 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldBoolean("Intake_Throw_Desired", "cmd", "getThrowCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Continuous_Mode_Desired", "cmd", "getElevCntrlModeCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Continuous_Mode_Cmd", "cmd", "getElevCntrlModeCmdSpeed", OperatorController.getInstance());
-		
 
 	}
 	
