@@ -55,6 +55,11 @@ public class OperaterControler {
 		return operaterXbutton;
 	}
 	
+	public boolean getThrowCmd() {
+		boolean operaterBbutton = operaterControler.getBButton();
+		return operaterBbutton;
+	}
+	
 	public boolean getIntakeOverideCmd() {
 		boolean operaterStart = operaterControler.getStartButton();
 		return operaterStart;

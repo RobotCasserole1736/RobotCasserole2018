@@ -105,8 +105,13 @@ public class Robot extends TimedRobot {
 		
 		//Add all visual items to the website and data logs
 		initDriverView();
+
 		initRTPlot();
 		initLoggingChannels();
+
+
+		
+		
 
 	}
 	
@@ -208,6 +213,8 @@ public class Robot extends TimedRobot {
 			throw t;
 		}
 	}
+
+	
 	
 	/**
 	 * This function is called just before the robot enters teleop
@@ -247,16 +254,21 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
 			ElbowControl.getInstance().setLowerDesired(DriverController.getInstance().getDriverElbowLowerCmd());
 			ElbowControl.getInstance().setRaiseDesired(DriverController.getInstance().getDriverElbowRaiseCmd());
+			IntakeControl.getInstance().setIntakeDesired(OperaterControler.getInstance().getIntakeCmd());
+			IntakeControl.getInstance().setEjectDesired(OperaterControler.getInstance().getEjectCmd());
+			IntakeControl.getInstance().setIntakeOvrdDesired(OperaterControler.getInstance().getIntakeOverideCmd());
+			IntakeControl.getInstance().setThrowDesired(OperaterControler.getInstance().getThrowCmd());
+			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(0), pdp.getCurrent(1));
+
 			
 			//Update all subsystems
 			GravityIndicator.getInstance().update();
 			Drivetrain.getInstance().update();
 			ElbowControl.getInstance().update();
+			IntakeControl.getInstance().update();
 			
 
-			
-			
-			//Update data logs and data viewers
+			//Update data logs and data viewer
 			updateDriverView();
 			updateWebStates();
 			updateRTPlot();
