@@ -60,11 +60,19 @@ public class OperatorController {
 		return operaterStart;
 	}
 	
-	public boolean getPlatformLatchReleaceCmd() {
+	public boolean getPlatformLatchReleaseCmd() {
 		boolean operaterL3 = operatorController.getStickButtonPressed(Hand.kLeft);
 		return operaterL3;
 	}
-
+	public boolean getHookReleaseCmd() {
+		boolean operatorR3 = operatorController.getStickButtonPressed(Hand.kRight);
+		return operatorR3;
+	}
+	public boolean getClimbEnabledCmd() {
+		operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
+		return operaterLeftBumber;
+		
+	}
 	//still waiting on confirmation that we need this
 	public boolean getRaiseCLimberCmd() {
 		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);

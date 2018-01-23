@@ -220,9 +220,14 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().setRotateCommand(DriverController.getInstance().getDriverLeftRightCommand());
 			ElevatorOpenLoop.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorOpenLoop.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
+			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
+			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
+			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
+			Climb.getInstance().setHookReleaseCmd(OperatorController.getInstance().getHookReleaseCmd());
 			
 			Drivetrain.getInstance().update();
 			ElevatorOpenLoop.getInstance().update();
+			Climb.getInstance().update();
 			
 			
 		
