@@ -10,6 +10,7 @@ public class IntakeControl {
 	private boolean intakeDesired;
 	private boolean ejectDesired;
 	private boolean intakeOvrdDesired;
+	private boolean throwDesired;
 	private DigitalInput sensor;
 	
 	
@@ -46,6 +47,14 @@ public class IntakeControl {
 	
 	
 	}
+	
+	public void setThrowDesired(boolean Cmd) {
+		
+			throwDesired = Cmd;
+		
+	}
+	
+	
 	public  void setMotorCurrents(double leftCurrent, double rightCurrent) {
 		
 	}

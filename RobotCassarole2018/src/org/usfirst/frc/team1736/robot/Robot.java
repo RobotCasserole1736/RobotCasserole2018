@@ -193,6 +193,7 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setIntakeDesired(OperaterControler.getInstance().getIntakeCmd());
 			IntakeControl.getInstance().setEjectDesired(OperaterControler.getInstance().getEjectCmd());
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperaterControler.getInstance().getIntakeOverideCmd());
+			ItakeeControl.getInstance().setThrowDesired(OperaterControler.getInstance().getThrowCmd())
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(0), pdp.getCurrent(1));
 			
 			Drivetrain.getInstance().update();
