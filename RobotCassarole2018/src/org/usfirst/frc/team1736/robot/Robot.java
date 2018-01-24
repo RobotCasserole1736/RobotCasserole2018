@@ -351,14 +351,16 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newStringBox("Field Ownership");
 		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
 		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
+		
 		CasseroleDriverView.newAutoSelector("Start Position", new String[]{"Left", "Center", "Right"});
-		CasseroleDriverView.newAutoSelector("Attempt", new String[]{"Anything", "Switch Only", "Scale Only", "Drive Fwd Only", "Do Nothing"}); //TODO: Make sure these are actually meaningful
+		CasseroleDriverView.newAutoSelector("Attempt", new String[]{"Anything", "Switch Only", "Scale Only", "Drive Fwd Only", "Do Nothing", "TEST MODE 1", "TEST MODE 2"}); //TODO: Make sure these are actually meaningful
 	}
 	
 	private void updateDriverView() {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
+		
 	}
 	
 	private void initRTPlot() {
