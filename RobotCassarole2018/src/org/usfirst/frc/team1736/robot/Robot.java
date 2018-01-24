@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
 			
 			//Update appropriate subsystems
 			GravityIndicator.getInstance().update();
-			Field_setup_string.getInstance().update();
+			FieldSetupString.getInstance().update();
 			
 			
 			//Update data viewers only
@@ -171,7 +171,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logMatchInfo();
 			
 			//Poll the FMS one last time to see who owns which field pieces
-			Field_setup_string.getInstance().update();
+			FieldSetupString.getInstance().update();
 			
 			
 			//Start up a new data log
@@ -261,6 +261,7 @@ public class Robot extends TimedRobot {
 			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
 			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
 			Climb.getInstance().setHookReleaseCmd(OperatorController.getInstance().getHookReleaseCmd());
+			ElevatorCtrl.getInstance().setIndexDesired(OperatorController.getInstance().getElevaterCmd());
 
 
 
@@ -401,10 +402,10 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
 		CasseroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
 		CasseroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
-		CasseroleWebStates.putBoolean("leftSwitchState", Field_setup_string.getInstance(). left_Switch_Owned);
-		CasseroleWebStates.putBoolean("rightSwitchState", Field_setup_string.getInstance().right_Switch_Owned);
-		CasseroleWebStates.putBoolean("leftScaleState", Field_setup_string.getInstance().left_Scale_Owned);
-		CasseroleWebStates.putBoolean("RightScaleState", Field_setup_string.getInstance().right_Scale_Owned);
+		CasseroleWebStates.putBoolean("leftSwitchState", FieldSetupString.getInstance(). left_Switch_Owned);
+		CasseroleWebStates.putBoolean("rightSwitchState", FieldSetupString.getInstance().right_Switch_Owned);
+		CasseroleWebStates.putBoolean("leftScaleState", FieldSetupString.getInstance().left_Scale_Owned);
+		CasseroleWebStates.putBoolean("RightScaleState", FieldSetupString.getInstance().right_Scale_Owned);
 		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleWebStates.putBoolean("Elbow_Lower_Limit_Reached", ElbowControl.getInstance().isLowerLimitReached());
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());

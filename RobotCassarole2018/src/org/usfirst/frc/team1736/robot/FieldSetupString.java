@@ -4,17 +4,17 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class Field_setup_string {
-	private static Field_setup_string singularInstance = null;
+public class FieldSetupString {
+	private static FieldSetupString singularInstance = null;
 		boolean left_Switch_Owned;
 		boolean right_Switch_Owned;
 		boolean left_Scale_Owned;
 		boolean right_Scale_Owned;
 		String prevGameData = "";
 		
-		public static synchronized Field_setup_string getInstance() {
+		public static synchronized FieldSetupString getInstance() {
 			if ( singularInstance == null)
-				singularInstance = new Field_setup_string();
+				singularInstance = new FieldSetupString();
 			return singularInstance;
 		}
 		
