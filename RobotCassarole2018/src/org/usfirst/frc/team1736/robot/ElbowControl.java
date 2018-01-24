@@ -59,7 +59,7 @@ public class ElbowControl {
 		if(upperLimitReached == false && curRaiseCmd == true) {
 			curMotorCmd = raiseSpeedCal.get();
 		} else if(lowerLimitReached == false && curLowerCmd == true) {
-			curMotorCmd = lowerSpeedCal.get();
+			curMotorCmd = -1*lowerSpeedCal.get();
 		} else {
 			curMotorCmd = 0;
 		}

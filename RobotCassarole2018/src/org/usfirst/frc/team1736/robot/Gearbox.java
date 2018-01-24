@@ -22,7 +22,7 @@ public class Gearbox {
 	private static final double ENCODER_CYCLES_PER_REV = 1024;
 	
 	// TALON Can Bus Read timeouts
-	private static final int TIMEOUT_MS = 1000;
+	private static final int TIMEOUT_MS = 0;
 	
 	public Gearbox(int canid1, int canid2, int canid3, String name) {
 		
