@@ -255,8 +255,8 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
 			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
-			ElevatorOpenLoop.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
-			ElevatorOpenLoop.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
+			ElevatorCtrl.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
+			ElevatorCtrl.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
 			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
 			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
@@ -270,7 +270,7 @@ public class Robot extends TimedRobot {
 			Drivetrain.getInstance().update();
 			ElbowControl.getInstance().update();
 			IntakeControl.getInstance().update();
-			ElevatorOpenLoop.getInstance().update();
+			ElevatorCtrl.getInstance().update();
 			Climb.getInstance().update();
 			
 			
@@ -390,7 +390,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Left_Motor_Cmd", time, Drivetrain.getInstance().getLeftMotorCommand());
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
-		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorOpenLoop.getInstance().getcontModeCmd());
+		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
 	}
 
 	
