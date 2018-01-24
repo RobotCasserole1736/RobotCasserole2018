@@ -296,6 +296,7 @@ public class Robot extends TimedRobot {
 		
 		CasseroleDriverView.newAutoSelector("Start Position", new String[]{"Left", "Center", "Right"});
 		CasseroleDriverView.newAutoSelector("Action", new String[]{"Do Nothing", "Drive Fwd", "Scale", "Switch"}); //TODO: Make sure these are actually meaningful
+		String result = CasseroleDriverView.getAutoSelectorVal("Start Position");
 		
 	}
 	
