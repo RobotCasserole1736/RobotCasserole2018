@@ -40,14 +40,14 @@ public class Gearbox {
 		//Enable current limits on all motors, with very large limits to start
 		// We'll only use the continuous limiting for now
 		motor1.enableCurrentLimit(true);
-		//motor2.enableCurrentLimit(true);
-		//motor3.enableCurrentLimit(true);
+		motor2.enableCurrentLimit(true);
+		motor3.enableCurrentLimit(true);
 		motor1.configPeakCurrentDuration(0,TIMEOUT_MS);
-		//motor2.configPeakCurrentDuration(0,TIMEOUT_MS);
-		//motor3.configPeakCurrentDuration(0,TIMEOUT_MS);
+		motor2.configPeakCurrentDuration(0,TIMEOUT_MS);
+		motor3.configPeakCurrentDuration(0,TIMEOUT_MS);
 		motor1.configPeakCurrentLimit(0,TIMEOUT_MS);
-		//motor2.configPeakCurrentLimit(0,TIMEOUT_MS);
-		//motor3.configPeakCurrentLimit(0,TIMEOUT_MS);
+		motor2.configPeakCurrentLimit(0,TIMEOUT_MS);
+		motor3.configPeakCurrentLimit(0,TIMEOUT_MS);
 		
 		//Config Min/Max output values. Not 100% sure if this is needed, but
 		// CTRE put it in their example...
@@ -55,14 +55,14 @@ public class Gearbox {
 		motor1.configNominalOutputReverse(0, TIMEOUT_MS);
 		motor1.configPeakOutputForward(1,TIMEOUT_MS);
 		motor1.configPeakOutputReverse(-1, TIMEOUT_MS);
-		//motor2.configNominalOutputForward(0, TIMEOUT_MS);
-		//motor2.configNominalOutputReverse(0, TIMEOUT_MS);
-		//motor2.configPeakOutputForward(1,TIMEOUT_MS);
-		//motor2.configPeakOutputReverse(-1, TIMEOUT_MS);
-		//motor3.configNominalOutputForward(0, TIMEOUT_MS);
-		//motor3.configNominalOutputReverse(0, TIMEOUT_MS);
-		//motor3.configPeakOutputForward(1,TIMEOUT_MS);
-		//motor3.configPeakOutputReverse(-1, TIMEOUT_MS);
+		motor2.configNominalOutputForward(0, TIMEOUT_MS);
+		motor2.configNominalOutputReverse(0, TIMEOUT_MS);
+		motor2.configPeakOutputForward(1,TIMEOUT_MS);
+		motor2.configPeakOutputReverse(-1, TIMEOUT_MS);
+		motor3.configNominalOutputForward(0, TIMEOUT_MS);
+		motor3.configNominalOutputReverse(0, TIMEOUT_MS);
+		motor3.configPeakOutputForward(1,TIMEOUT_MS);
+		motor3.configPeakOutputReverse(-1, TIMEOUT_MS);
 		
 		//Motor 1 is presumed to be the one with a sensor hooked up to it.
 		motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT_MS);
@@ -77,8 +77,8 @@ public class Gearbox {
 		motor1.setSensorPhase(false); 
 		
 		//Configure motors 2 and 3 to be followers of the primary
-		//motor2.follow(motor1);
-		//motor3.follow(motor1);
+		motor2.follow(motor1);
+		motor3.follow(motor1);
 	}
 	
 	public void updateCalibrations() {
@@ -105,14 +105,20 @@ public class Gearbox {
 	
 	public void setInverted(boolean invert) {
 		motor1.setInverted(invert);
-		//motor2.setInverted(invert);
-		//motor3.setInverted(invert);
+		motor2.setInverted(invert);
+		motor3.setInverted(invert);
 	}
 	
 	public void setCurrentLimit_A(double limit_A) {
 		motor1.configContinuousCurrentLimit((int)Math.round(limit_A/3.0), TIMEOUT_MS);
-		//motor2.configContinuousCurrentLimit((int)Math.round(limit_A/3.0), TIMEOUT_MS);
-		//motor3.configContinuousCurrentLimit((int)Math.round(limit_A/3.0), TIMEOUT_MS);
+		motor2.configContinuousCurrentLimit((int)Math.round(limit_A/3.0), TIMEOUT_MS);
+		motor3.configContinuousCurrentLimit((int)Math.round(limit_A/3.0), TIMEOUT_MS);
+	}
+	
+	public double getTotalCurrent() {
+		return motor1.getOutputCurrent() + 
+			   motor2.getOutputCurrent() + 
+			   motor3.getOutputCurrent();
 	}
 	
 	public double getMotorCommand() {

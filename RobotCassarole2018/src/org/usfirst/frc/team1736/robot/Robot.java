@@ -370,6 +370,9 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newStringBox("Field Ownership");
 		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
 		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
+		CasseroleDriverView.newBoolean("DT Current High", "yellow");
+		CasseroleDriverView.newBoolean("Intake Current High", "red");
+		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
 		
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES); 
@@ -379,6 +382,9 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
+		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
+		CasseroleDriverView.setBoolean("Intake Current High", false); //Todo - fill me in
+		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
 		
 	}
 	
