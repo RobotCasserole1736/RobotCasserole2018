@@ -7,19 +7,19 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 import org.usfirst.frc.team1736.robot.Drivetrain;
 
 /**
- * drive straight and stuff.
+ * go to scale on left.
  */
-public class AutoEventCrossBaseLine extends AutoEvent {
+public class AutoEventScaleLeft extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
 	private static final double[][] waypoints = new double[][] {
 		{0, 0},
-		{-5, 27}
+		{-10, 27}
 	};
 	
-	private static final double time = 4.0;
+	private static final double time = 12.0;
 
-	public AutoEventCrossBaseLine() {
+	public AutoEventScaleLeft() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
 	}
 
