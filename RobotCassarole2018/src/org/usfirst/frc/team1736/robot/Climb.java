@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1736.robot;
 
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Spark;
 
 public class Climb {
 	private static Climb singularInstance = null;
@@ -9,12 +11,17 @@ public class Climb {
 	private boolean currClimbEnabledCmd = false;
 	private boolean currReleaseLatchCmd = false;
 	private boolean currHookReleaseCmd = false;
-	private final Servo releaseLatch;
-	private final Servo hookRelease;
+	private Servo releaseLatch;
+	private Relay hookRelease;
 	private double latchAngleReleased = 90; 
 	private double latchAngleClosed = 0;
 	private double hookAngleReleased = 90;
 	private double hookAngleClosed = 0;
+	private Spark leftWinchMotor1;
+	private Spark leftWinchMotor2;
+	private Spark rightWinchMotor1;
+	private Spark rightWinchMotor2;
+	
 	
 	public static synchronized Climb getInstance() {
 		if ( singularInstance == null)
@@ -23,11 +30,18 @@ public class Climb {
 	}
 	private Climb() {
 		releaseLatch = new Servo(0); 
-		hookRelease = new Servo(1);
+		hookRelease = new Relay(0);
 		releaseLatch.set(latchAngleClosed);
 		hookRelease.set(hookAngleClosed);
 		
-		
+		leftWinchMotor1 = new Spark (0);
+		leftWinchMotor2 = new Spark (1);
+		rightWinchMotor1 = new Spark (2);
+		rightWinchMotor2 = new Spark (3);
+		leftWinchMotor1.set(0);
+		leftWinchMotor2.set(0);
+		rightWinchMotor1.set(0);
+		rightWinchMotor2.set(0);
 	}
 	public void update(){
 		
@@ -44,7 +58,15 @@ public class Climb {
 		}
 		
 		if(currClimbEnabledCmd) {
-			
+			leftWinchMotor1.set(Math.abs(currLeftWinchCmd));
+			leftWinchMotor2.set(Math.abs(currLeftWinchCmd));
+			rightWinchMotor1.set(Math.abs(currRightWinchCmd));
+			rightWinchMotor2.set(Math.abs(currRightWinchCmd));
+		}else {
+			leftWinchMotor1.set(0);
+			leftWinchMotor2.set(0);
+			rightWinchMotor1.set(0);
+			rightWinchMotor2.set(0);
 		}
 		
 	}
