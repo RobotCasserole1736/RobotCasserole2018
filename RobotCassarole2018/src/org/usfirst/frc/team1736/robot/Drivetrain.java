@@ -19,8 +19,8 @@ public class Drivetrain {
 	double leftWheelRPM = 0;
 	double rightWheelRPM = 0;
 	
-	private final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
-	private final double WHEEL_ROLLING_RADIUS_FT = 0.45; //6 inch pneumatic wheels with a bit of squish
+	public static final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
+	public static final double WHEEL_ROLLING_RADIUS_FT = 0.45; //6 inch pneumatic wheels with a bit of squish
 	
 	Calibration curLimitEnable;
 	

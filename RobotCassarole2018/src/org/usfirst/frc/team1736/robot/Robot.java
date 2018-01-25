@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
 	PowerDistributionPanel pdp;
 	CasseroleRIOLoadMonitor ecuStats;
 	BatteryParamEstimator bpe;
+	Autonomous auto;
 	
 	final static int BPE_length = 200; 
 	final static double BPE_confidenceThresh_A = 10.0;
@@ -90,6 +91,7 @@ public class Robot extends TimedRobot {
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		
+		auto = new Autonomous();
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
@@ -120,6 +122,9 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logDisabledInit();	
 			
+			//Ensure Auto is not running
+			auto.stop();
+			auto.update();
 			
 			
 		}
@@ -147,6 +152,7 @@ public class Robot extends TimedRobot {
 			//Update appropriate subsystems
 			GravityIndicator.getInstance().update();
 			Field_setup_string.getInstance().update();
+			auto.updateAutoSelection();
 			
 			
 			//Update data viewers only
@@ -173,6 +179,10 @@ public class Robot extends TimedRobot {
 			//Poll the FMS one last time to see who owns which field pieces
 			Field_setup_string.getInstance().update();
 			
+			// Update autonomous selection and start
+			auto.updateAutoSelection();
+			auto.executeAutonomus();
+			
 			
 			//Start up a new data log
 			CsvLogger.init();
@@ -196,8 +206,17 @@ public class Robot extends TimedRobot {
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
 			
-
+			//Update autonomous sequencer
+			auto.update();
 			
+			//Update all subsystems
+			GravityIndicator.getInstance().update();
+			Drivetrain.getInstance().update();
+			ElbowControl.getInstance().update();
+			IntakeControl.getInstance().update();
+			ElevatorCtrl.getInstance().update();
+			Climb.getInstance().update();
+
 			
 			//Update data logs and data viewers
 			updateDriverView();

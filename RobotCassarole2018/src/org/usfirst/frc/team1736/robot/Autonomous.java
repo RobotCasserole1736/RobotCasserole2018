@@ -1,8 +1,10 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoSequencer;
+import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
+import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
 
 public class Autonomous {
 
@@ -17,7 +19,6 @@ public class Autonomous {
 	public static final String[] START_POS_MODES = new String[]{"Left", 
 			                                                    "Center", 
 			                                                    "Right"};
-	
 	
 	String autoModeName = "Not Initalized";
 	
@@ -38,22 +39,25 @@ public class Autonomous {
 		} else if(action.compareTo(ACTION_MODES[5])==0) { //Testmode 1
 			mode = 5;
 		} else {
-			CrashTracker.logGenericMessage("[Auto] ERR: Unimplemented mode selected! " + autoModeName);
+			String msg = "[Auto] ERR: Unimplemented mode selected! " + autoModeName;
+			CrashTracker.logGenericMessage(msg);
+			System.out.print(msg);
 		}
 
 		
 	}
 
 	public void executeAutonomus() {
-		CrashTracker.logGenericMessage("[Auto] Initalizing " + autoModeName + " auton routine.");
+		String msg = "[Auto] Initalizing " + autoModeName + " auton routine.";
+		CrashTracker.logGenericMessage(msg);
+		System.out.print(msg);
 
 		AutoSequencer.clearAllEvents();
 		
 		switch(mode) {
-		case 1: //Test Mode 1
-			AutoEventTestName driveForward = new AutoEventTestName();
-			AutoSequencer.addEvent();//Event in parenthesis
-			break;
+			case 5: //Test Mode 1
+				AutoSequencer.addEvent(new AutoEventCrossBaseLine());//Event in parenthesis
+				break;
 			
 			default: // Do nothing
 				break;
@@ -61,9 +65,11 @@ public class Autonomous {
 
 		AutoSequencer.start();
 	}
+	
 	public void update() {
 		AutoSequencer.update();
 	}
+	
 	public void stop() {
 		AutoSequencer.stop();
 	}
