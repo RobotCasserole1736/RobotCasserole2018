@@ -68,9 +68,10 @@ public class OperatorController {
 		boolean operatorR3 = operatorController.getStickButtonPressed(Hand.kRight);
 		return operatorR3;
 	}
+	//Right now this both getClimbEnabledCmd and getRaiseClimberCmd are on the Left Bumper. This will probably change later.
 	public boolean getClimbEnabledCmd() {
-		operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
-		return operaterLeftBumber;
+		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
+		return operaterLeftBumper;
 		
 	}
 	//still waiting on confirmation that we need this
