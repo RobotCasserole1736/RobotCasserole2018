@@ -437,6 +437,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleWebStates.putBoolean("Elbow_Lower_Limit_Reached", ElbowControl.getInstance().isLowerLimitReached());
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
+		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
 	}
 	
 	
