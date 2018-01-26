@@ -15,8 +15,8 @@ public class Climb {
 	private Relay hookRelease;
 	private double latchAngleReleased = 90; 
 	private double latchAngleClosed = 0;
-	private double hookAngleReleased = 90;
-	private double hookAngleClosed = 0;
+	private Relay.Value hookAngleReleased = Relay.Value.kOff;
+	private Relay.Value hookAngleClosed = Relay.Value.kOff;
 	private Spark leftWinchMotor1;
 	private Spark leftWinchMotor2;
 	private Spark rightWinchMotor1;
