@@ -11,6 +11,9 @@ public class IntakeControl {
 	private boolean ejectDesired;
 	private boolean intakeOvrdDesired;
 	private boolean throwDesired;
+	private double leftCurrent;
+	private double rightCurrent;
+	private boolean sensorState;
 	private DigitalInput sensor;
 	
 	
@@ -55,8 +58,9 @@ public class IntakeControl {
 	}
 	
 	
-	public  void setMotorCurrents(double leftCurrent, double rightCurrent) {
-		
+	public  void setMotorCurrents(double leftCurrent_in, double rightCurrent_in) {
+		leftCurrent_in = leftCurrent;
+		rightCurrent_in = rightCurrent;
 	}
 	
 	
@@ -68,7 +72,24 @@ public class IntakeControl {
 		return sensorState;
 			
 	}
-	
+	public boolean intakeFlag() {
+		//intake cap = 30
+		boolean intakeCapReached = false;
+		if(leftCurrent > 30 || rightCurrent >30) {
+			intakeCapReached = true;
+		}
+			else if(sensorState == true) {
+				intakeCapReached = true;
+			}
+			else {
+				intakeCapReached = false;
+			}
+			
+			 {
+				intakeCapReached = false;		
+			}
+		return intakeCapReached;
+	}
 	
 			
 		
