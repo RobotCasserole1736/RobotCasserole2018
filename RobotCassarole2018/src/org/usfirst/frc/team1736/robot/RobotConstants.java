@@ -42,5 +42,8 @@ public class RobotConstants {
 	public static final int PDP_CLIMBER_RIGHT_ONE = 4;
 	public static final int PDP_CLIMBER_RIGHT_TWO = 5;
 	public static final int PDP_ELBOW = 6;
+	
+	//Other Constants
+	public static final String DRIVER_CAMERA_URL = "http://roborio-1736-frc.local:1182/stream.mjpg";
 }
 

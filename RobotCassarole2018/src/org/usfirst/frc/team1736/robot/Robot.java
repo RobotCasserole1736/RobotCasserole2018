@@ -15,6 +15,8 @@ import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
 
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
@@ -62,6 +64,10 @@ public class Robot extends TimedRobot {
 	BatteryParamEstimator bpe;
 	Autonomous auto;
 	
+	//Camera stream objects
+	UsbCamera driverAssistCam;
+	MjpegServer driverStream;
+	
 	final static int BPE_length = 200; 
 	final static double BPE_confidenceThresh_A = 10.0;
 	
@@ -97,7 +103,14 @@ public class Robot extends TimedRobot {
 		ecuStats = new CasseroleRIOLoadMonitor();
 		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
 
-
+		//Set up and start webcam stream
+		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
+		driverAssistCam.setResolution(320, 240);
+		driverAssistCam.setFPS(15);
+		driverStream = new MjpegServer("DriverCamServer", 1182);
+		
+		
+		
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
@@ -152,10 +165,9 @@ public class Robot extends TimedRobot {
 			//Update appropriate subsystems
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
-			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
 			
-			
+
 			//Update data viewers only
 			updateDriverView();
 			updateWebStates();
@@ -376,6 +388,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Intake Current High", "red");
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
 		
+		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES); 
 	}
