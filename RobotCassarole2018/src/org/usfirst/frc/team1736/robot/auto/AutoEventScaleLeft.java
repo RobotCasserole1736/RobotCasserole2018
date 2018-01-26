@@ -28,7 +28,6 @@ public class AutoEventScaleLeft extends AutoEvent {
 		driveForward.userUpdate();
 		// shotCTRL.setDesiredShooterState(ShooterStates.PREP_TO_SHOOT);
 	}
-
 	@Override
 	public void userForceStop() {
 		driveForward.userForceStop();

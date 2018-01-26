@@ -60,6 +60,18 @@ public class Autonomous {
 		AutoSequencer.clearAllEvents();
 		
 		switch(mode) {
+			case 1:
+			break;
+			
+			case 2:
+				break;
+			
+			case 3:
+				break;
+				
+			case 4:
+				break;
+				
 			case 5: //Test Mode 1
 				AutoSequencer.addEvent(new AutoEventCrossBaseLine());//Event in parenthesis
 				break;
