@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
 	PowerDistributionPanel pdp;
 	CasseroleRIOLoadMonitor ecuStats;
 	BatteryParamEstimator bpe;
+	Autonomous auto;
 	
 	final static int BPE_length = 200; 
 	final static double BPE_confidenceThresh_A = 10.0;
@@ -90,6 +91,7 @@ public class Robot extends TimedRobot {
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		
+		auto = new Autonomous();
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
@@ -120,6 +122,9 @@ public class Robot extends TimedRobot {
 		try {
 			CrashTracker.logDisabledInit();	
 			
+			//Ensure Auto is not running
+			auto.stop();
+			auto.update();
 			
 			
 		}
@@ -147,6 +152,8 @@ public class Robot extends TimedRobot {
 			//Update appropriate subsystems
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
+			FieldSetupString.getInstance().update();
+			auto.updateAutoSelection();
 			
 			
 			//Update data viewers only
@@ -173,6 +180,10 @@ public class Robot extends TimedRobot {
 			//Poll the FMS one last time to see who owns which field pieces
 			FieldSetupString.getInstance().update();
 			
+			// Update autonomous selection and start
+			auto.updateAutoSelection();
+			auto.executeAutonomus();
+			
 			
 			//Start up a new data log
 			CsvLogger.init();
@@ -196,8 +207,17 @@ public class Robot extends TimedRobot {
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
 			
-
+			//Update autonomous sequencer
+			auto.update();
 			
+			//Update all subsystems
+			GravityIndicator.getInstance().update();
+			Drivetrain.getInstance().update();
+			ElbowControl.getInstance().update();
+			IntakeControl.getInstance().update();
+			ElevatorCtrl.getInstance().update();
+			Climb.getInstance().update();
+
 			
 			//Update data logs and data viewers
 			updateDriverView();
@@ -352,14 +372,22 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newStringBox("Field Ownership");
 		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
 		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
-		CasseroleDriverView.newAutoSelector("Start Position", new String[]{"Left", "Center", "Right"});
-		CasseroleDriverView.newAutoSelector("Attempt", new String[]{"Anything", "Switch Only", "Scale Only", "Drive Fwd Only", "Do Nothing"}); //TODO: Make sure these are actually meaningful
+		CasseroleDriverView.newBoolean("DT Current High", "yellow");
+		CasseroleDriverView.newBoolean("Intake Current High", "red");
+		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
+		
+		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
+		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES); 
 	}
 	
 	private void updateDriverView() {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
+		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
+		CasseroleDriverView.setBoolean("Intake Current High", false); //Todo - fill me in
+		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
+		
 	}
 	
 	private void initRTPlot() {

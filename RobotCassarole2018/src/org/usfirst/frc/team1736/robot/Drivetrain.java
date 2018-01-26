@@ -18,9 +18,10 @@ public class Drivetrain {
 	private double speedFtpS = 0;
 	double leftWheelRPM = 0;
 	double rightWheelRPM = 0;
+	double perGearboxCurrentLimit = 1000;
 	
-	private final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
-	private final double WHEEL_ROLLING_RADIUS_FT = 0.45; //6 inch pneumatic wheels with a bit of squish
+	public static final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
+	public static final double WHEEL_ROLLING_RADIUS_FT = 0.45; //6 inch pneumatic wheels with a bit of squish
 	
 	Calibration curLimitEnable;
 	
@@ -75,7 +76,7 @@ public class Drivetrain {
 		leftMotorCommand = cap(curFwdRevCmd + curRotCmd);
 		rightMotorCommand = cap(curFwdRevCmd - curRotCmd);
 		
-		if(isClosedLoop) {
+		if(!isClosedLoop) {
 			leftGearbox.setMotorCommand(leftMotorCommand);
 			rightGearbox.setMotorCommand(rightMotorCommand);
 		} else {
@@ -134,6 +135,18 @@ public class Drivetrain {
 	public double getRightMotorCommand() {
 		return rightGearbox.getMotorCommand();
 	}
+	
+	public boolean getCurrentHigh() {
+		if(
+		   leftGearbox.getTotalCurrent() > perGearboxCurrentLimit*0.9
+		    ||
+		   rightGearbox.getTotalCurrent() > perGearboxCurrentLimit*0.9 	
+		  ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	
 	/**
@@ -142,12 +155,12 @@ public class Drivetrain {
 	 */
 	public void setCurrentLimit_A(double limit_A) {
 		if(curLimitEnable.get() == 1) {
-			leftGearbox.setCurrentLimit_A(limit_A/2.0);
-			rightGearbox.setCurrentLimit_A(limit_A/2.0);
+			perGearboxCurrentLimit = limit_A/2.0;
 		} else {
-			leftGearbox.setCurrentLimit_A(1000); //Effectively remove any reasonable limit
-			rightGearbox.setCurrentLimit_A(1000);
+			perGearboxCurrentLimit = 1000; //Effectively remove any reasonable limit
 		}
+		leftGearbox.setCurrentLimit_A(perGearboxCurrentLimit);
+		rightGearbox.setCurrentLimit_A(perGearboxCurrentLimit);
 	}
 	
 	/**

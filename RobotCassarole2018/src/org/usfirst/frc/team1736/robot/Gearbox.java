@@ -115,6 +115,12 @@ public class Gearbox {
 		motor3.configContinuousCurrentLimit((int)Math.round(limit_A/3.0), TIMEOUT_MS);
 	}
 	
+	public double getTotalCurrent() {
+		return motor1.getOutputCurrent() + 
+			   motor2.getOutputCurrent() + 
+			   motor3.getOutputCurrent();
+	}
+	
 	public double getMotorCommand() {
 		return motor1.getMotorOutputPercent();
 	}
