@@ -15,8 +15,6 @@ public class Climb {
 	private Relay hookRelease;
 	private double latchAngleReleased = 90; 
 	private double latchAngleClosed = 0;
-	private Relay.Value hookAngleReleased = Relay.Value.kOff;
-	private Relay.Value hookAngleClosed = Relay.Value.kOff;
 	private Spark leftWinchMotor1;
 	private Spark leftWinchMotor2;
 	private Spark rightWinchMotor1;
@@ -32,7 +30,7 @@ public class Climb {
 		releaseLatch = new Servo(0); 
 		hookRelease = new Relay(0);
 		releaseLatch.set(latchAngleClosed);
-		hookRelease.set(hookAngleClosed);
+		hookRelease.set(Relay.Value.kOff);
 		
 		leftWinchMotor1 = new Spark (0);
 		leftWinchMotor2 = new Spark (1);
@@ -52,9 +50,9 @@ public class Climb {
 		}
 		
 		if(currHookReleaseCmd = true) {
-			hookRelease.set(hookAngleReleased);
+			hookRelease.set(Relay.Value.kOn);
 		}else {
-			hookRelease.set(hookAngleClosed);
+			hookRelease.set(Relay.Value.kOff);
 		}
 		
 		if(currClimbEnabledCmd) {
