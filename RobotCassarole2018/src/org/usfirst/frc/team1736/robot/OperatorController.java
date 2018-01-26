@@ -74,11 +74,8 @@ public class OperatorController {
 		boolean operatorR3 = operatorController.getStickButtonPressed(Hand.kRight);
 		return operatorR3;
 	}
-<<<<<<< HEAD
 	
-=======
 	//Right now this both getClimbEnabledCmd and getRaiseClimberCmd are on the Left Bumper. This will probably change later.
->>>>>>> origin/Zoe_climber
 	public boolean getClimbEnabledCmd() {
 		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
 		return operaterLeftBumper;
