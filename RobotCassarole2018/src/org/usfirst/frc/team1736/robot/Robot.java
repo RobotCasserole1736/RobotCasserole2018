@@ -282,6 +282,7 @@ public class Robot extends TimedRobot {
 			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
 			Climb.getInstance().setHookReleaseCmd(OperatorController.getInstance().getHookReleaseCmd());
 			ElevatorCtrl.getInstance().setIndexDesired(OperatorController.getInstance().getElevaterCmd());
+			
 
 
 

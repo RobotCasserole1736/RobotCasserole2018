@@ -37,12 +37,12 @@ public class ElevatorCtrl {
 		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
 		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_LOWER_LIMIT_SW);	
-		FloorPos = new Calibration("Floor position", 0.0, 0.0, 84.0);
-		SwitchPos = new Calibration("Switch position", 0.0, 20.0,84.0);
-		ScaleDownPos = new Calibration("Scale down Position", 0.0, 55.0, 84.0);
-		ScaleBalancedPos = new Calibration("Scale balanced postion", 0.0, 66.0, 84.0);
-		ScaleUpPos = new Calibration ("Scale up position", 0.0, 77.0, 84.0);
-		ExchangePos = new Calibration("Exchange position", 0.0, 4.0, 84.0);
+		FloorPos = new Calibration("Floor position", 0.0, 84.0, 0.0);
+		SwitchPos = new Calibration("Switch position", 0.0, 84.0,20.0);
+		ScaleDownPos = new Calibration("Scale down Position", 0.0, 84.0, 55.0);
+		ScaleBalancedPos = new Calibration("Scale balanced postion", 0.0, 84.0, 66.0);
+		ScaleUpPos = new Calibration ("Scale up position", 0.0, 84.0, 77.0);
+		ExchangePos = new Calibration("Exchange position", 0.0, 84.0, 4.0);
 		
 		
 		
@@ -126,11 +126,30 @@ public class ElevatorCtrl {
 		else {
 			return 0;
 		}
+	}
+		
+		Elevator_index desiredHightToEmun(double height) {
+			if(height <= 1.9) {
+				return Elevator_index.Bottom;
+			}
+			else if(height >= 2.0 && height >= 9.9) {
+				return Elevator_index.Exchange;
+			}
+			else if(height >= 10.0 && height >= 33.0) {
+				return Elevator_index.Switch1;
+			}
+			else if(height >= 33.1 && height >= 59.9) {
+				return Elevator_index.ScaleUnderscoreDown;
+			}
+			else if(height >= 60.0 && height >= 70.9) {
+				return Elevator_index.ScaleUnderscoreBalanced;
+			}
+			else if(height >= 71.0) {
+				return Elevator_index.ScaleUnderscoreUp;
+			}
+			return indexModeDesired;
+		}
 		
 	}
 	
-	
-	
-	
-	
-}
+
