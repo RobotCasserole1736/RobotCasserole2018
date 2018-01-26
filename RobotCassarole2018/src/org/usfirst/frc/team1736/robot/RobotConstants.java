@@ -16,11 +16,19 @@ public class RobotConstants {
 	
 	//CAN ID's
 	public static final int CANID_DRIVETRAIN_LEFT_MASTER_SRX = 0;
+<<<<<<< HEAD
 	public static final int CANID_DRIVETRAIN_LEFT_SLAVE1_SRX = 1;
 	public static final int CANID_DRIVETRAIN_LEFT_SLAVE2_SRX = 2;
 	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 3;
 	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX = 4;
 	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 4; //TODO FIX
+=======
+	public static final int CANID_DRIVETRAIN_LEFT_SLAVE1_SRX = 0;
+	public static final int CANID_DRIVETRAIN_LEFT_SLAVE2_SRX = 0;
+	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 1;
+	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX = 1;
+	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 1;
+>>>>>>> origin/Shondiin_drivetrainAlgorithm
 	
 	
 	//Digital Inputs

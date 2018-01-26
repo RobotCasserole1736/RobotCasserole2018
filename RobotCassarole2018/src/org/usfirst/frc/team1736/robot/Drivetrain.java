@@ -72,9 +72,25 @@ public class Drivetrain {
 	}
 	
 	public void update() {
+	
+		if (curFwdRevCmd > 0.0) {
+			  if (curRotCmd > 0.0) {
+				  leftMotorCommand = curFwdRevCmd - curRotCmd;
+				  rightMotorCommand = Math.max(curFwdRevCmd, curRotCmd);
+				 } else {
+				    leftMotorCommand = Math.max(curFwdRevCmd, -curRotCmd);
+				    rightMotorCommand = curFwdRevCmd + curRotCmd;
+				  }
+				} else {
+				  if (curRotCmd > 0.0) {
+				    leftMotorCommand = -Math.max(-curFwdRevCmd, curRotCmd);
+				    rightMotorCommand = curFwdRevCmd + curRotCmd;
+				  } else {
+				    leftMotorCommand = curFwdRevCmd - curRotCmd;
+				    rightMotorCommand = -Math.max(-curFwdRevCmd, -curRotCmd);
+				  }
+				}
 
-		leftMotorCommand = cap(curFwdRevCmd + curRotCmd);
-		rightMotorCommand = cap(curFwdRevCmd - curRotCmd);
 		
 		if(!isClosedLoop) {
 			leftGearbox.setMotorCommand(leftMotorCommand);
