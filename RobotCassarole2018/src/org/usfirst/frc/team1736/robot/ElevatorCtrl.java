@@ -26,6 +26,7 @@ public class ElevatorCtrl {
 	Calibration ExchangePos = null;
 	
 	
+	
 	public static synchronized ElevatorCtrl getInstance() {
 		if ( singularInstance == null)
 			singularInstance = new ElevatorCtrl();
@@ -33,6 +34,8 @@ public class ElevatorCtrl {
 	}
 	
 	private ElevatorCtrl() {
+		public encoder(DigitalSource DI_ELEVATER_ENCODER_A = 5,
+				DigitalSource DI_ELEVATER_ENCODER_B = 6)
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
 		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
@@ -129,27 +132,39 @@ public class ElevatorCtrl {
 	}
 		
 		Elevator_index desiredHightToEmun(double height) {
-			if(height <= 1.9) {
-				return Elevator_index.Bottom;
+			Elevator_index returnValue = (Elevator_index.Bottom);
+			double mindist = 100;
+			Double calculation1 = FloorPos.get() - height;
+			if(calculation1 < mindist) {
+				returnValue = Elevator_index.Bottom;
 			}
-			else if(height >= 2.0 && height >= 9.9) {
+			Double calculation2 = ExchangePos.get() - height;
+			 if(calculation2 < mindist) {
 				return Elevator_index.Exchange;
 			}
-			else if(height >= 10.0 && height >= 33.0) {
+			 Double calculation3 = SwitchPos.get() - height;
+			 if(calculation3 > mindist) {
 				return Elevator_index.Switch1;
 			}
-			else if(height >= 33.1 && height >= 59.9) {
+			 Double calculation4 = ScaleDownPos.get() - height;
+			 if(calculation4 > mindist) {
 				return Elevator_index.ScaleUnderscoreDown;
 			}
-			else if(height >= 60.0 && height >= 70.9) {
+			 Double calculation5 = ScaleBalancedPos.get() - height;
+			 if(calculation5 > mindist) {
 				return Elevator_index.ScaleUnderscoreBalanced;
 			}
-			else if(height >= 71.0) {
+			 Double calculation6 = ScaleUpPos.get() - height;
+			 if(calculation6 > mindist) {
 				return Elevator_index.ScaleUnderscoreUp;
 			}
 			return indexModeDesired;
 		}
 		
+		public double getElevHeight_in() {
+			DI_ELEVATER_ENCODER_A.get();
+			DI_ELEVATER_ENCODER_B.get();
+		}
 	}
 	
 
