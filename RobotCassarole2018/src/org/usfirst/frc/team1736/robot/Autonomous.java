@@ -5,6 +5,9 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
+import org.usfirst.frc.team1736.robot.auto.AutoEventScaleLeft;
+import org.usfirst.frc.team1736.robot.auto.AutoEventScaleRight;
+
 
 public class Autonomous {
 
@@ -38,6 +41,8 @@ public class Autonomous {
 			mode = 0;
 		} else if(action.compareTo(ACTION_MODES[5])==0) { //Testmode 1
 			mode = 5;
+		} else if(action.compareTo(ACTION_MODES[6])==0) { //Testmode 2
+				mode = 6;
 		} else {
 			String msg = "[Auto] ERR: Unimplemented mode selected! " + autoModeName;
 			CrashTracker.logGenericMessage(msg);
@@ -55,8 +60,29 @@ public class Autonomous {
 		AutoSequencer.clearAllEvents();
 		
 		switch(mode) {
+			case 1:
+			break;
+			
+			case 2:
+				break;
+			
+			case 3:
+				break;
+				
+			case 4:
+				break;
+				
 			case 5: //Test Mode 1
 				AutoSequencer.addEvent(new AutoEventCrossBaseLine());//Event in parenthesis
+				break;
+				
+			case 6: //Test Mode 2
+				if (Field_setup_string.getInstance().leftSwitchOwned()){
+				AutoSequencer.addEvent(new AutoEventScaleLeft());//Event in parenthesis
+				}
+				else if(Field_setup_string.getInstance().rightSwitchOwned()){
+				AutoSequencer.addEvent(new AutoEventScaleRight());//Event in parenthesis
+				}
 				break;
 			
 			default: // Do nothing
