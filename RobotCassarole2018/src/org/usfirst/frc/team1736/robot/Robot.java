@@ -380,6 +380,8 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
 		CasseroleDriverView.setBoolean("Intake Motors Over Current Limit", false);
+		CasseroleDriverView.newBoolean("Upper limit switch reached", "yellow");
+		CasseroleDriverView.newBoolean("Lower limit switch reached", "yellow");
 	}
 	
 	private void updateDriverView() {
@@ -389,6 +391,8 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("DT Current High", IntakeControl.getInstance().intakeFlag());
 		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().intakeFlag());
 		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
+		CasseroleDriverView.setBoolean("Upper limit switch reached", ElevatorCtrl.getInstance().getUpperlimitSwitch());
+		CasseroleDriverView.setBoolean("Lower limit switch reached", ElevatorCtrl.getInstance().getLowerLimitSwitch());
 
 	}
 	
@@ -425,7 +429,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());
-		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().getMotorCmd());
+		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().desiredHeight);
 	}
 
 	
