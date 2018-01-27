@@ -39,7 +39,7 @@ public class Gyro {
 		return gyro;
 	}
 
-	private Gyro() {
+	Gyro() {
 		adxrs453 = new ADXRS453_Gyro();
 		angleOffset = 0;
 	}

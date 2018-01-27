@@ -89,9 +89,9 @@ public class Autonomous {
 		} else if(action.compareTo(ACTION_MODES[6])==0) { //Testmode 2
 				mode = 6;
 		} else {
-			String msg = "[Auto] ERR: Unimplemented mode selected! " + autoModeName;
-			CrashTracker.logGenericMessage(msg);
-			System.out.print(msg);
+			//String msg = "[Auto] ERR: Unimplemented mode selected! " + autoModeName;
+			//CrashTracker.logGenericMessage(msg);
+			//System.out.print(msg);
 		}
 
 		

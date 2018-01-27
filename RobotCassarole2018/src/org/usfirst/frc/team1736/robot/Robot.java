@@ -75,7 +75,6 @@ public class Robot extends TimedRobot {
 	Calibration minAllowableVoltageCal;
 
 
-
 	//Hook the constructor to catch the overall class construction event.
 	public Robot() {
 		CrashTracker.logRobotConstruction();
@@ -110,11 +109,11 @@ public class Robot extends TimedRobot {
 		driverStream = new MjpegServer("DriverCamServer", 1182);
 		driverStream.setSource(driverAssistCam);
 		
-		
-		
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
+		
+		Gyro.getInstance().reset();
 
 
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
@@ -378,6 +377,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_One", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_ONE);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
+		CsvLogger.addLoggingFieldDouble("DT_Pose_Angle", "deg", "getAngle", Gyro.getInstance());
 
 	}
 	
@@ -426,6 +426,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
 		CasseroleWebPlots.addNewSignal("Elevator_Height", "inchres");
 		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "inches");
+		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
 	}
 	
 	
@@ -445,6 +446,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());
 		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().desiredHeight);
+		CasseroleWebPlots.addSample("Pose_Angle", time, Gyro.getInstance().getAngle());
 	}
 
 	
