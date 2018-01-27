@@ -38,7 +38,7 @@ public class LEDSequencer {
 	private static final boolean desktop_sim = true;
 
 	public enum LEDSwitchCase {
-		OFF, SMOOTH_SWEEP, SMOOTH_RAINBOW, SMOOTH_RED_WHITE, SPARKLE_WHITE, SPARKLE_RED_WHITE, SPARKLE_RAIN, CYLON, COMET_RED, COMET_RAIN, BOUNCE, GEAR, FUEL, CAPN, TEST, SMOOTH_GREEN, SMOOTH_BLUE, BLUE_GREEN_SWEEP
+		OFF, SMOOTH_SWEEP, SMOOTH_RAINBOW, SMOOTH_RED_WHITE, SPARKLE_WHITE, SPARKLE_RED_WHITE, SPARKLE_RAIN, CYLON, COMET_RED, COMET_RAIN, BOUNCE, GEAR, FUEL, CAPN, TEST, SMOOTH_GREEN, SMOOTH_BLUE, BLUE_GREEN_SWEEP, FIRE_RENDER
 	}
 
 	static CasseroleLEDInterface ledstrip; // interface so that we can swap between desktop and robot
@@ -142,6 +142,10 @@ public class LEDSequencer {
 
 		case SMOOTH_BLUE:
 			smoothBlueCycle();
+			break;
+		
+		case FIRE_RENDER:
+			fireRender();
 			break;
 		}
 
@@ -444,6 +448,16 @@ public class LEDSequencer {
 			double not_green_comp = Math.min(1, Math.max(0, (0.3 + edgeSharpness * Math.sin((led_idx / width + loop_counter / period)))));
 			ledstrip.setLEDColor(led_idx, 0.1, 1, not_green_comp);
 		}
+	}
+	
+	private void fireRender() {
+		final double width = 1.0;
+		
+		
+			double 
+		
+		
+		ledstrip.setLEDColor(led_idx, red_val, green_val, blue_val);
 	}
 	
 
