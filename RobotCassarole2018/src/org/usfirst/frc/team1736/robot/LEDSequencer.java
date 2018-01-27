@@ -454,10 +454,10 @@ public class LEDSequencer {
 		final double width = 1.0;
 		
 		
-			double 
+			//double 
 		
 		
-		ledstrip.setLEDColor(led_idx, red_val, green_val, blue_val);
+		//ledstrip.setLEDColor(led_idx, red_val, green_val, blue_val);
 	}
 	
 
