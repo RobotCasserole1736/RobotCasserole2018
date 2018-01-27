@@ -77,10 +77,10 @@ public class Autonomous {
 				break;
 				
 			case 6: //Test Mode 2
-				if (Field_setup_string.getInstance().leftSwitchOwned()){
+				if (FieldSetupString.getInstance().leftSwitchOwned()){
 				AutoSequencer.addEvent(new AutoEventScaleLeft());//Event in parenthesis
 				}
-				else if(Field_setup_string.getInstance().rightSwitchOwned()){
+				else if(FieldSetupString.getInstance().rightSwitchOwned()){
 				AutoSequencer.addEvent(new AutoEventScaleRight());//Event in parenthesis
 				}
 				break;
