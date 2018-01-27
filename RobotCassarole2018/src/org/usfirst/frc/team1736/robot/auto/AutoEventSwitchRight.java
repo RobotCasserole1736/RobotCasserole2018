@@ -7,19 +7,19 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 import org.usfirst.frc.team1736.robot.Drivetrain;
 
 /**
- * go to scale on right.
+ * go to switch on right.
  */
-public class AutoEventScaleRight extends AutoEvent {
-	PathPlannerAutoEvent driveForward; 
+public class AutoEventSwitchRight extends AutoEvent {
+	PathPlannerAutoEvent driveForward;
 
 	private static final double[][] waypoints = new double[][] {
 		{0, 0},
-		{10, 27}
+		{-4, 14}
 	};
 	
-	private static final double time = 12.0;
+	private static final double time = 6.0;
 
-	public AutoEventScaleRight() {
+	public AutoEventSwitchRight() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
 	}
 
