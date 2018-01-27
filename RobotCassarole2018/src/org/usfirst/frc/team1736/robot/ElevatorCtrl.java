@@ -3,6 +3,7 @@ package org.usfirst.frc.team1736.robot;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 
 public class ElevatorCtrl {
@@ -11,6 +12,8 @@ public class ElevatorCtrl {
 	private Elevator_index indexModeDesired;
 	private boolean continuousModeDesired;
 	private double continuousModeCmd;
+	private boolean enumModeDesiesd;
+	private double enumModeCmd;
 	private double curMotorCmd;
 	private Spark motor1;
 	private Spark motor2;
@@ -24,6 +27,9 @@ public class ElevatorCtrl {
 	Calibration ScaleBalancedPos = null;
 	Calibration ScaleUpPos = null;
 	Calibration ExchangePos = null;
+	private Encoder elevatorEncoder;
+	public final double Encoder_Pulse_Pur_Rev = 1024;
+	public final double Elevator_Inches_Pur_Rev = 2;
 	
 	
 	
@@ -34,8 +40,7 @@ public class ElevatorCtrl {
 	}
 	
 	private ElevatorCtrl() {
-		public encoder(DigitalSource DI_ELEVATER_ENCODER_A = 5,
-				DigitalSource DI_ELEVATER_ENCODER_B = 6)
+		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
 		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
@@ -58,7 +63,7 @@ public class ElevatorCtrl {
 			curMotorCmd = continuousModeCmd;
 
 		} else {
-			//Todo - Add Indexed mode (closed-loop). Assign curMotorCmd here.
+			curMotorCmd = enumModeCmd;
 		}
 		
 		if(upperLimitSwitch.get()) {
@@ -101,6 +106,14 @@ public class ElevatorCtrl {
 	
 	public void setContModeCmd (double cmd) {
 		continuousModeCmd = cmd;
+	}
+	
+	public void setEnumMode (boolean modecommand) {
+		enumModeDesiesd = modecommand;
+	}
+	
+	public void setEnumModeCmd (double cmd) {
+		enumModeCmd = cmd;
 	}
 	
 	public double getMotorCmd() {
@@ -162,8 +175,8 @@ public class ElevatorCtrl {
 		}
 		
 		public double getElevHeight_in() {
-			DI_ELEVATER_ENCODER_A.get();
-			DI_ELEVATER_ENCODER_B.get();
+			elevatorEncoder.get();
+			return elevatorEncoder.get() * Encoder_Pulse_Pur_Rev * Elevator_Inches_Pur_Rev;
 		}
 	}
 	
