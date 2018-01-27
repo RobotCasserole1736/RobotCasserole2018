@@ -404,6 +404,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
+		CasseroleWebPlots.addNewSignal("Elevator_Height", "inchres");
+		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "inches");
 	}
 	
 	
@@ -421,6 +423,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
+		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());
+		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().getMotorCmd());
 	}
 
 	

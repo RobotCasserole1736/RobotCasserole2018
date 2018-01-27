@@ -12,8 +12,7 @@ public class ElevatorCtrl {
 	private Elevator_index indexModeDesired;
 	private boolean continuousModeDesired;
 	private double continuousModeCmd;
-	private boolean enumModeDesiesd;
-	private double enumModeCmd;
+	private Elevator_index enumModeCmd;
 	private double curMotorCmd;
 	private Spark motor1;
 	private Spark motor2;
@@ -30,6 +29,8 @@ public class ElevatorCtrl {
 	private Encoder elevatorEncoder;
 	public final double Encoder_Pulse_Pur_Rev = 1024;
 	public final double Elevator_Inches_Pur_Rev = 2;
+	Calibration UpSpeed = null;
+	Calibration DownSpeed = null;
 	
 	
 	
@@ -51,7 +52,8 @@ public class ElevatorCtrl {
 		ScaleBalancedPos = new Calibration("Scale balanced postion", 0.0, 84.0, 66.0);
 		ScaleUpPos = new Calibration ("Scale up position", 0.0, 84.0, 77.0);
 		ExchangePos = new Calibration("Exchange position", 0.0, 84.0, 4.0);
-		
+		UpSpeed = new Calibration("up speed", 10);
+		DownSpeed = new Calibration("down speed", -10);
 		
 		
 		
@@ -63,7 +65,13 @@ public class ElevatorCtrl {
 			curMotorCmd = continuousModeCmd;
 
 		} else {
-			curMotorCmd = enumModeCmd;
+			double desiredHeight = enumToDesiredHeight(enumModeCmd);
+			double actualHeight = getElevHeight_in();
+			if(desiredHeight >= actualHeight) {
+				curMotorCmd = UpSpeed.get();
+			}else if(desiredHeight <= actualHeight) {
+				curMotorCmd = DownSpeed.get();
+			}
 		}
 		
 		if(upperLimitSwitch.get()) {
@@ -77,7 +85,7 @@ public class ElevatorCtrl {
 		} else {
 			lowerLimitSwitchReached = false;
 		}
-		
+		;
 		if(upperLimitSwitchReached = true) {
 			if(curMotorCmd >= 0) {
 				curMotorCmd = 0;
@@ -108,11 +116,9 @@ public class ElevatorCtrl {
 		continuousModeCmd = cmd;
 	}
 	
-	public void setEnumMode (boolean modecommand) {
-		enumModeDesiesd = modecommand;
-	}
+
 	
-	public void setEnumModeCmd (double cmd) {
+	public void setEnumModeCmd (Elevator_index cmd) {
 		enumModeCmd = cmd;
 	}
 	
