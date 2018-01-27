@@ -25,7 +25,7 @@ public class IntakeControl {
 	}
 	
 	private IntakeControl () {
-		sensor = new DigitalInput(4);
+		sensor = new DigitalInput(RobotConstants.DI_INTAKE_CUBE_PRESENT_SENSOR);
 		
 	}
 	
