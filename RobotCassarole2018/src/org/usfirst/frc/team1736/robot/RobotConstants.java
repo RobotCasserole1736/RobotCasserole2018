@@ -49,7 +49,12 @@ public class RobotConstants {
 	public static final int PDP_CLIMBER_RIGHT_TWO = 5;
 	public static final int PDP_ELBOW = 6;
 	
+
 	//Relay
 	public static final int RELAY_HOOK_RELEASE = 0;
+
+	//Other Constants
+	public static final String DRIVER_CAMERA_URL = "http://10.17.36.2:1182/stream.mjpg";
+
 }
 
