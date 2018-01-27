@@ -21,6 +21,7 @@ public class RobotConstants {
 	
 
 	public static final int CANID_DRIVETRAIN_LEFT_MASTER_SRX = 0;
+
 	public static final int CANID_DRIVETRAIN_LEFT_SLAVE1_SRX = 1;
 	public static final int CANID_DRIVETRAIN_LEFT_SLAVE2_SRX = 2;
 	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 3;
@@ -49,7 +50,10 @@ public class RobotConstants {
 	public static final int PDP_CLIMBER_RIGHT_TWO = 5;
 	public static final int PDP_ELBOW = 6;
 	
-	//Relay
+	//Rela
 	public static final int RELAY_HOOK_RELEASE = 0;
+	//LED Stuff
+	public static final int NUM_LEDS_TOTAL = 50;
+
 }
 
