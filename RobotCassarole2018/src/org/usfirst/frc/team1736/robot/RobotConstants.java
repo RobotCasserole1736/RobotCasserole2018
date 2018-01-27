@@ -45,5 +45,6 @@ public class RobotConstants {
 	
 	//Other Constants
 	public static final String DRIVER_CAMERA_URL = "http://roborio-1736-frc.local:1182/stream.mjpg";
+	public static final int NUM_LEDS_TOTAL = 50;
 }
 
