@@ -17,6 +17,7 @@ import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
 
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
@@ -105,9 +106,9 @@ public class Robot extends TimedRobot {
 
 		//Set up and start webcam stream
 		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
-		driverAssistCam.setResolution(320, 240);
-		driverAssistCam.setFPS(15);
+		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
 		driverStream = new MjpegServer("DriverCamServer", 1182);
+		driverStream.setSource(driverAssistCam);
 		
 		
 		

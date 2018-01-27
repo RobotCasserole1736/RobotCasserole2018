@@ -44,6 +44,6 @@ public class RobotConstants {
 	public static final int PDP_ELBOW = 6;
 	
 	//Other Constants
-	public static final String DRIVER_CAMERA_URL = "http://roborio-1736-frc.local:1182/stream.mjpg";
+	public static final String DRIVER_CAMERA_URL = "http://10.17.36.2:1182/stream.mjpg";
 }
 
