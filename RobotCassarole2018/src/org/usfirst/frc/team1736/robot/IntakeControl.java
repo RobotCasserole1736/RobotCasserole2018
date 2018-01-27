@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Spark;
-
+import edu.wpi.first.wpilibj.PWMSpeedController;
+import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 public class IntakeControl {
 	private static IntakeControl singularInstance = null;
 	private boolean intakeDesired;
@@ -12,6 +13,15 @@ public class IntakeControl {
 	private boolean intakeOvrdDesired;
 	private boolean throwDesired;
 	private DigitalInput sensor;
+	Spark leftMotor;
+	Spark rightMotor;
+	Calibration leftIntakeMotorCal;
+	Calibration rightIntakeMotorCal;
+	Calibration leftEjectMotorCal;
+	Calibration rightEjectMotorCal;
+	Calibration leftThrowMotorCal;
+	Calibration rightThrowMotorCal;
+
 	
 	
 	public static synchronized IntakeControl getInstance() {
@@ -76,6 +86,18 @@ public class IntakeControl {
 			
 			
 	public void update() {
-		
+		if(intakeDesired) {
+		leftMotor.set(leftIntakeMotorCal.get());
+		rightMotor.set(leftIntakeMotorCal.get())
+		}
+		if(ejectDesired) {
+			
+		}
+		if(intakeOvrdDesired) {
+			
+		}
+		if(throwDesired) {
+			
+		}
 	}
 }
