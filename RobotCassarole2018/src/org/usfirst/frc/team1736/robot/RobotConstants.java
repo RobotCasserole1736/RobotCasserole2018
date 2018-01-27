@@ -12,6 +12,7 @@ public class RobotConstants {
 	public static final int PWM_CLIMBER_RIGHT_ONE = 6;
 	public static final int PWM_CLIMBER_RIGHT_TWO = 7;
 	public static final int PWM_ELBOW = 8;
+	public static final int PWM_RELEASE_LATCH = 9;
 	
 	
 	//CAN ID's
@@ -47,5 +48,8 @@ public class RobotConstants {
 	public static final int PDP_CLIMBER_RIGHT_ONE = 4;
 	public static final int PDP_CLIMBER_RIGHT_TWO = 5;
 	public static final int PDP_ELBOW = 6;
+	
+	//Relay
+	public static final int RELAY_HOOK_RELEASE = 0;
 }
 
