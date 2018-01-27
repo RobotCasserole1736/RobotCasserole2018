@@ -452,12 +452,7 @@ public class LEDSequencer {
 	
 	private void fireRender() {
 		final double width = 1.0;
-		
-		
-			double 
-		
-		
-		ledstrip.setLEDColor(led_idx, red_val, green_val, blue_val);
+
 	}
 	
 
