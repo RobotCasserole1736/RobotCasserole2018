@@ -3,6 +3,7 @@ package org.usfirst.frc.team1736.robot;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 
 public class ElevatorCtrl {
@@ -11,6 +12,8 @@ public class ElevatorCtrl {
 	private Elevator_index indexModeDesired;
 	private boolean continuousModeDesired;
 	private double continuousModeCmd;
+	private boolean enumModeDesiesd;
+	private double enumModeCmd;
 	private double curMotorCmd;
 	private Spark motor1;
 	private Spark motor2;
@@ -24,6 +27,10 @@ public class ElevatorCtrl {
 	Calibration ScaleBalancedPos = null;
 	Calibration ScaleUpPos = null;
 	Calibration ExchangePos = null;
+	private Encoder elevatorEncoder;
+	public final double Encoder_Pulse_Pur_Rev = 1024;
+	public final double Elevator_Inches_Pur_Rev = 2;
+	
 	
 	
 	public static synchronized ElevatorCtrl getInstance() {
@@ -33,16 +40,17 @@ public class ElevatorCtrl {
 	}
 	
 	private ElevatorCtrl() {
+		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
 		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
 		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_LOWER_LIMIT_SW);	
-		FloorPos = new Calibration("Floor position", 0.0, 0.0, 84.0);
-		SwitchPos = new Calibration("Switch position", 0.0, 20.0,84.0);
-		ScaleDownPos = new Calibration("Scale down Position", 0.0, 55.0, 84.0);
-		ScaleBalancedPos = new Calibration("Scale balanced postion", 0.0, 66.0, 84.0);
-		ScaleUpPos = new Calibration ("Scale up position", 0.0, 77.0, 84.0);
-		ExchangePos = new Calibration("Exchange position", 0.0, 4.0, 84.0);
+		FloorPos = new Calibration("Floor position", 0.0, 84.0, 0.0);
+		SwitchPos = new Calibration("Switch position", 0.0, 84.0,20.0);
+		ScaleDownPos = new Calibration("Scale down Position", 0.0, 84.0, 55.0);
+		ScaleBalancedPos = new Calibration("Scale balanced postion", 0.0, 84.0, 66.0);
+		ScaleUpPos = new Calibration ("Scale up position", 0.0, 84.0, 77.0);
+		ExchangePos = new Calibration("Exchange position", 0.0, 84.0, 4.0);
 		
 		
 		
@@ -55,7 +63,7 @@ public class ElevatorCtrl {
 			curMotorCmd = continuousModeCmd;
 
 		} else {
-			//Todo - Add Indexed mode (closed-loop). Assign curMotorCmd here.
+			curMotorCmd = enumModeCmd;
 		}
 		
 		if(upperLimitSwitch.get()) {
@@ -100,6 +108,14 @@ public class ElevatorCtrl {
 		continuousModeCmd = cmd;
 	}
 	
+	public void setEnumMode (boolean modecommand) {
+		enumModeDesiesd = modecommand;
+	}
+	
+	public void setEnumModeCmd (double cmd) {
+		enumModeCmd = cmd;
+	}
+	
 	public double getMotorCmd() {
 		return curMotorCmd;
 	};
@@ -126,11 +142,42 @@ public class ElevatorCtrl {
 		else {
 			return 0;
 		}
+	}
 		
+		Elevator_index desiredHightToEmun(double height) {
+			Elevator_index returnValue = (Elevator_index.Bottom);
+			double mindist = 100;
+			Double calculation1 = FloorPos.get() - height;
+			if(calculation1 < mindist) {
+				returnValue = Elevator_index.Bottom;
+			}
+			Double calculation2 = ExchangePos.get() - height;
+			 if(calculation2 < mindist) {
+				return Elevator_index.Exchange;
+			}
+			 Double calculation3 = SwitchPos.get() - height;
+			 if(calculation3 > mindist) {
+				return Elevator_index.Switch1;
+			}
+			 Double calculation4 = ScaleDownPos.get() - height;
+			 if(calculation4 > mindist) {
+				return Elevator_index.ScaleUnderscoreDown;
+			}
+			 Double calculation5 = ScaleBalancedPos.get() - height;
+			 if(calculation5 > mindist) {
+				return Elevator_index.ScaleUnderscoreBalanced;
+			}
+			 Double calculation6 = ScaleUpPos.get() - height;
+			 if(calculation6 > mindist) {
+				return Elevator_index.ScaleUnderscoreUp;
+			}
+			return indexModeDesired;
+		}
+		
+		public double getElevHeight_in() {
+			elevatorEncoder.get();
+			return elevatorEncoder.get() * Encoder_Pulse_Pur_Rev * Elevator_Inches_Pur_Rev;
+		}
 	}
 	
-	
-	
-	
-	
-}
+
