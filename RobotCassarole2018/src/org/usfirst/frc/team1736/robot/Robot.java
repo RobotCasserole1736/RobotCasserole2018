@@ -275,6 +275,7 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
 			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
+			IntakeControl.getInstance().intakeFlag();
 			ElevatorCtrl.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorCtrl.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
@@ -376,19 +377,19 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("DT Current High", "yellow");
 		CasseroleDriverView.newBoolean("Intake Current High", "red");
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
-		
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
-		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES); 
+		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
+		CasseroleDriverView.setBoolean("Intake Motors Over Current Limit", false);
 	}
 	
 	private void updateDriverView() {
 		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
-		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
-		CasseroleDriverView.setBoolean("Intake Current High", false); //Todo - fill me in
+		CasseroleDriverView.setBoolean("DT Current High", IntakeControl.getInstance().intakeFlag());
+		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().intakeFlag());
 		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
-		
+
 	}
 	
 	private void initRTPlot() {
@@ -438,6 +439,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleWebStates.putBoolean("Elbow_Lower_Limit_Reached", ElbowControl.getInstance().isLowerLimitReached());
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
+		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
+		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().intakeSensorState());
 	}
 	
 	
