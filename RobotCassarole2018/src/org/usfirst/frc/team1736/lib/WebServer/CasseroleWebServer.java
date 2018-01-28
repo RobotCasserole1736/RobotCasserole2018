@@ -115,6 +115,7 @@ public class CasseroleWebServer {
         });
         serverThread.setName("CasseroleWebServerThread");
         serverThread.setPriority(Thread.MIN_PRIORITY);
+        serverThread.setDaemon(true);
         serverThread.start();
 
     }

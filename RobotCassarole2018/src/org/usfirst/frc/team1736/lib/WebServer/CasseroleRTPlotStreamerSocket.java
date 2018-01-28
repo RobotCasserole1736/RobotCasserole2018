@@ -188,6 +188,8 @@ public class CasseroleRTPlotStreamerSocket extends WebSocketAdapter {
         	signal_array.add(signal_info);
         }
         
+        signal_array.sort(???);
+        
         tx_obj.put("type", "signal_list");
         tx_obj.put("signals", signal_array);
         
