@@ -75,6 +75,10 @@ public class Robot extends TimedRobot {
 	//Camera stream objects
 	UsbCamera driverAssistCam;
 	MjpegServer driverStream;
+	
+	//Loop execution time metrics
+	double loopStartTime_s = 0;
+	double loopExecTime_ms = 20; //starting guess
 
 
 	//Hook the constructor to catch the overall class construction event.
@@ -154,6 +158,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
+		
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		try {
 			//Close out whatever log may have been being recorded
 			CsvLogger.close();
@@ -178,6 +186,8 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 		
 
@@ -212,6 +222,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		try {
 			//Log a new periodic loop
 			CrashTracker.logAutoPeriodic();
@@ -245,6 +259,8 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 
 	
@@ -258,6 +274,9 @@ public class Robot extends TimedRobot {
 			CrashTracker.logTeleopInit();	
 			CrashTracker.logMatchInfo();
 			
+			
+			//Ensure Auto is not running
+			auto.stop();
 			
 			//Start up a new data log
 			CsvLogger.init();
@@ -274,6 +293,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		try {
 			//Log the start of a new teleop loop
 			CrashTracker.logTeleopPeriodic();
@@ -323,6 +346,8 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 
 
@@ -331,7 +356,13 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		GravityIndicator.getInstance().update();
+		
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 
 	
@@ -347,9 +378,10 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
 		CsvLogger.addLoggingFieldDouble("RIO_Cpu_Load", "%", "getCpuLoad", this);
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
-		CsvLogger.addLoggingFieldDouble("ESR", "ohms", "getEstESR", bpe);
-		CsvLogger.addLoggingFieldDouble("EstVoc", "V", "getEstVoc", bpe);
-		CsvLogger.addLoggingFieldDouble("CurrentDrawLimit", "A", "getMaxAllowableCurrent_A", this);
+		CsvLogger.addLoggingFieldDouble("RIO_Main_Loop_Exec_Time", "ms", "getLoopExeTime_ms", this);
+		CsvLogger.addLoggingFieldDouble("Bat_ESR", "ohms", "getEstESR", bpe);
+		CsvLogger.addLoggingFieldDouble("Bat_EstVoc", "V", "getEstVoc", bpe);
+		CsvLogger.addLoggingFieldDouble("Bat_CurrentDrawLimit", "A", "getMaxAllowableCurrent_A", this);
 		CsvLogger.addLoggingFieldDouble("Climb_Angle","deg", "getRobotGravityAngle", this);
 		CsvLogger.addLoggingFieldDouble("Net_Speed","fps","getSpeedFtpS",Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Act_RPM", "RPM", "getRightWheelSpeedAct_RPM", Drivetrain.getInstance());
@@ -362,6 +394,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
 		//CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
 		//CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
+		CsvLogger.addLoggingFieldDouble("DT_Pose_Angle", "deg", "getAngle", Gyro.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Raise_Command", "cmd", "getDriverElbowRaiseCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Command", "cmd", "getDriverElbowLowerCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elbow_Motor_Command", "cmd", "getMotorCmd", ElbowControl.getInstance());
@@ -380,7 +413,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_One", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_ONE);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
-		CsvLogger.addLoggingFieldDouble("DT_Pose_Angle", "deg", "getAngle", Gyro.getInstance());
+
 
 	}
 	
@@ -458,6 +491,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
 		CasseroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
+		CasseroleWebStates.putDouble("RIO Main Loop Exec Time (ms)", getLoopExeTime_ms());
 		CasseroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
 		CasseroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
 		CasseroleWebStates.putBoolean("leftSwitchState", FieldSetupString.getInstance(). left_Switch_Owned);
@@ -491,6 +525,10 @@ public class Robot extends TimedRobot {
 		} else {
 			return -1;
 		}
+	}
+	
+	public double getLoopExeTime_ms() {
+		return loopExecTime_ms;
 	}
 	
 
