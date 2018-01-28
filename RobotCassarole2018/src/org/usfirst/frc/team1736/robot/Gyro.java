@@ -2,7 +2,7 @@ package org.usfirst.frc.team1736.robot;
 
 /*
  *******************************************************************************************
- * Copyright (C) 2017 FRC Team 1736 Robot Casserole - www.robotcasserole.org
+ * Copyright (C) 2017-2018 FRC Team 1736 Robot Casserole - www.robotcasserole.org
  *******************************************************************************************
  *
  * This software is released under the MIT Licence - see the license.txt
@@ -61,7 +61,7 @@ public class Gyro {
 	}
 
 	public boolean isOnline() {
-		// return adxrs453.isOnline();
-		return true; // Temp, for bench debugging
+		return adxrs453.isOnline();
+		//return true; // Temp, for bench debugging
 	}
 }

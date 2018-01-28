@@ -134,6 +134,13 @@ public class ElevatorCtrl {
 		return curMotorCmd;
 	}
 	
+	
+	/**
+	 * Conversion between an elevator height (from an enum value) to the
+	 * presently configured height (in inches)
+	 * @param cmd enum height command
+	 * @return height, in inches.
+	 */
 	private double enumToDesiredHeight(Elevator_index cmd) {
 		if(cmd == Elevator_index.Bottom) {
 			currentHeightCmd = FloorPos.get();
@@ -162,9 +169,14 @@ public class ElevatorCtrl {
 		return currentHeightCmd;
 	}
 		
+	/**
+	 * takes in a given height and returns the nearest enum height
+	 * @param height height in inches
+	 * @return the enum of the nearest level to the given height
+	 */
 	Elevator_index desiredHightToEmun(double height) {
 		Elevator_index returnValue = (Elevator_index.Bottom);
-		double mindist = 100; //a sufficently large number
+		double mindist = 100; //a sufficiently large number
 		
 		//Check every possible height to see which one the 
 		// current height is closes to.
@@ -207,6 +219,10 @@ public class ElevatorCtrl {
 		 
 		return returnValue;
 	}
+	
+	
+	
+	// Public getters and setters
 	
 	public double getElevHeight_in() {
 		elevatorEncoder.get();

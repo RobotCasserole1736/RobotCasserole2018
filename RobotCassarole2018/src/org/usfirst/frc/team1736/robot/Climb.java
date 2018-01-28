@@ -39,6 +39,7 @@ public class Climb {
 		return singularInstance;
 	}
 	
+	
 	private Climb() {
 		releaseLatch = new Servo(RobotConstants.PWM_RELEASE_LATCH); 
 		hookRelease = new Relay(RobotConstants.RELAY_HOOK_RELEASE, Relay.Direction.kForward);
@@ -58,6 +59,8 @@ public class Climb {
 		rightWinchMotor1.set(0);
 		rightWinchMotor2.set(0);
 	}
+	
+	
 	public void update(){
 		
 		
