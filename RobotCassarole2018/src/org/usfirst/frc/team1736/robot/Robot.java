@@ -59,20 +59,20 @@ public class Robot extends TimedRobot {
 	
 	// Software utilities
 	CasseroleWebServer webServer;
-	
-	PowerDistributionPanel pdp;
 	CasseroleRIOLoadMonitor ecuStats;
 	BatteryParamEstimator bpe;
+	final static int BPE_length = 200; 
+	final static double BPE_confidenceThresh_A = 10.0;
+	Calibration minAllowableVoltageCal;
+	
+	PowerDistributionPanel pdp;
+	
+	//Auto Routine objects
 	Autonomous auto;
 	
 	//Camera stream objects
 	UsbCamera driverAssistCam;
 	MjpegServer driverStream;
-	
-	final static int BPE_length = 200; 
-	final static double BPE_confidenceThresh_A = 10.0;
-	
-	Calibration minAllowableVoltageCal;
 
 
 	//Hook the constructor to catch the overall class construction event.
@@ -93,10 +93,13 @@ public class Robot extends TimedRobot {
 		
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
+		Gyro.getInstance().reset();
 		
+		//Set up battery parameter estimation
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		
+		//Set up autonomous routine control
 		auto = new Autonomous();
 		
 		//Init Software Helper libraries
@@ -113,15 +116,11 @@ public class Robot extends TimedRobot {
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
 		
-		Gyro.getInstance().reset();
-
-
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
 		
 		//Add all visual items to the website and data logs
 		initDriverView();
-
 		initRTPlot();
 		initLoggingChannels();
 
@@ -212,7 +211,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		try {
-			CrashTracker.logAutoPeriodic();	
+			//Log a new periodic loop
+			CrashTracker.logAutoPeriodic();
+			
+			//Sample sensors
 			GravityIndicator.getInstance().update();
 			
 			//Perform current-limiting calculations
@@ -221,9 +223,9 @@ public class Robot extends TimedRobot {
 			
 			//Update autonomous sequencer
 			auto.update();
-			
+
+
 			//Update all subsystems
-			GravityIndicator.getInstance().update();
 			Drivetrain.getInstance().update();
 			ElbowControl.getInstance().update();
 			IntakeControl.getInstance().update();
@@ -271,11 +273,17 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		try {
+			//Log the start of a new teleop loop
 			CrashTracker.logTeleopPeriodic();
 			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
+			
+			//Sample Sensors
+			GravityIndicator.getInstance().update();
+			IntakeControl.getInstance().intakeFlag();
+			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			
 			//Map Driver & Operator inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
@@ -286,8 +294,6 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setEjectDesired(OperatorController.getInstance().getEjectCmd());
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
 			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
-			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
-			IntakeControl.getInstance().intakeFlag();
 			ElevatorCtrl.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorCtrl.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
@@ -297,11 +303,7 @@ public class Robot extends TimedRobot {
 			ElevatorCtrl.getInstance().setIndexDesired(OperatorController.getInstance().getElevaterCmd());
 			
 
-
-
-			
 			//Update all subsystems
-			GravityIndicator.getInstance().update();
 			Drivetrain.getInstance().update();
 			ElbowControl.getInstance().update();
 			IntakeControl.getInstance().update();
@@ -309,7 +311,6 @@ public class Robot extends TimedRobot {
 			Climb.getInstance().update();
 			
 			
-
 			//Update data logs and data viewer
 			updateDriverView();
 			updateWebStates();
@@ -390,13 +391,13 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("DT Current High", "yellow");
 		CasseroleDriverView.newBoolean("Intake Current High", "red");
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
-		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
-
-		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
-		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
-		CasseroleDriverView.setBoolean("Intake Motors Over Current Limit", false);
 		CasseroleDriverView.newBoolean("Upper limit switch reached", "yellow");
 		CasseroleDriverView.newBoolean("Lower limit switch reached", "yellow");
+
+		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
+		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
+		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
+
 	}
 	
 	private void updateDriverView() {

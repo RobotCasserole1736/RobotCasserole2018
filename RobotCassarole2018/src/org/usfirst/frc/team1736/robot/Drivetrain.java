@@ -73,40 +73,42 @@ public class Drivetrain {
 	
 	public void update() {
 	
-		if (curFwdRevCmd > 0.0) {
-			  if (curRotCmd > 0.0) {
-				  leftMotorCommand = curFwdRevCmd - curRotCmd;
-				  rightMotorCommand = Math.max(curFwdRevCmd, curRotCmd);
-				 } else {
-				    leftMotorCommand = Math.max(curFwdRevCmd, -curRotCmd);
-				    rightMotorCommand = curFwdRevCmd + curRotCmd;
-				  }
+		if(!isClosedLoop) {
+			//Open loop logic - calculate motor commands from driver inputs
+			if (curFwdRevCmd > 0.0) {
+				if (curRotCmd > 0.0) {
+					leftMotorCommand = curFwdRevCmd - curRotCmd;
+		            rightMotorCommand = Math.max(curFwdRevCmd, curRotCmd);
 				} else {
-				  if (curRotCmd > 0.0) {
-				    leftMotorCommand = -Math.max(-curFwdRevCmd, curRotCmd);
+					leftMotorCommand = Math.max(curFwdRevCmd, -curRotCmd);
+		            rightMotorCommand = curFwdRevCmd + curRotCmd;
+				}
+			} else {
+				if (curRotCmd > 0.0) {
+					leftMotorCommand = -Math.max(-curFwdRevCmd, curRotCmd);
 				    rightMotorCommand = curFwdRevCmd + curRotCmd;
 				  } else {
 				    leftMotorCommand = curFwdRevCmd - curRotCmd;
 				    rightMotorCommand = -Math.max(-curFwdRevCmd, -curRotCmd);
 				  }
-				}
-
-		
-		if(!isClosedLoop) {
+			}
 			leftGearbox.setMotorCommand(leftMotorCommand);
 			rightGearbox.setMotorCommand(rightMotorCommand);
+			
 		} else {
+			//Closed loop logic - set closed loop speed commands
 			leftGearbox.setMotorSpeed(curLeftSpeedCmd_RPM);
 			rightGearbox.setMotorSpeed(curRightSpeedCmd_RPM);
 		}
 		
+		//Update present wheel speeds
 		leftWheelRPM = leftGearbox.getSpeedRPM()*SPROCKET_RATIO;
 		rightWheelRPM = rightGearbox.getSpeedRPM()*SPROCKET_RATIO;
 		
+		//Update net robot speed calculation.
 		//ft/sec = rev/min * ft/rev * min/sec
 		double leftSpeedFtpS = leftWheelRPM*(2*Math.PI*WHEEL_ROLLING_RADIUS_FT)/60.0;
 		double rightSpeedFtpS = rightWheelRPM*(2*Math.PI*WHEEL_ROLLING_RADIUS_FT)/60.0;
-		
 		speedFtpS = (leftSpeedFtpS + rightSpeedFtpS / 2.0);
 		
 	}
