@@ -39,7 +39,6 @@ import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode.PixelFormat;
-import edu.wpi.first.wpilibj.DriverStation;
 
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
@@ -114,8 +113,8 @@ public class Robot extends TimedRobot {
 
 		//Set up and start webcam stream
 		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
-		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
-		driverStream = new MjpegServer("DriverCamServer", 1182);
+		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 640, 480, 10);
+		driverStream = new MjpegServer("DriverCamServer", 1180);
 		driverStream.setSource(driverAssistCam);
 		
 		// Set up and start web server (must be after all other website init functions)
@@ -388,10 +387,10 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Des_RPM", "RPM", "getRightWheelSpeedDes_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Act_RPM", "RPM", "getLeftWheelSpeedAct_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Des_RPM", "RPM", "getLeftWheelSpeedDes_RPM", Drivetrain.getInstance());
-		CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor1);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor1);
 		//CsvLogger.addLoggingFieldDouble("DT_Motor_L2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor2);
 		//CsvLogger.addLoggingFieldDouble("DT_Motor_L3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor3);
-		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
 		//CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
 		//CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
 		CsvLogger.addLoggingFieldDouble("DT_Pose_Angle", "deg", "getAngle", Gyro.getInstance());
@@ -420,7 +419,6 @@ public class Robot extends TimedRobot {
 	
 	//Website init & update methods
 	private void initDriverView() {
-		CasseroleDriverView.newStringBox("Field Ownership");
 		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
 		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
 		CasseroleDriverView.newBoolean("DT Current High", "yellow");
@@ -436,7 +434,6 @@ public class Robot extends TimedRobot {
 	}
 	
 	private void updateDriverView() {
-		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
 		CasseroleDriverView.setBoolean("DT Current High", IntakeControl.getInstance().intakeFlag());

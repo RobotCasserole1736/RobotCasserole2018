@@ -36,14 +36,21 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		
-		leftGearbox = new Gearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
-				                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE1_SRX, 
-				                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE2_SRX,
-				                  "left");
-		rightGearbox = new Gearbox(RobotConstants.CANID_DRIVETRAIN_RIGHT_MASTER_SRX, 
-				                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX,
-				                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX,
-				                   "right");
+		boolean useRealGearbox = false;
+		
+		if(useRealGearbox) {
+			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
+					                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE1_SRX, 
+					                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE2_SRX,
+					                  "left");
+			rightGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_RIGHT_MASTER_SRX, 
+					                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX,
+					                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX,
+					                   "right");
+		} else {
+			leftGearbox  = new SimGearbox();
+			rightGearbox = new SimGearbox();
+		}
 		
 		rightGearbox.setInverted(true);
 		
