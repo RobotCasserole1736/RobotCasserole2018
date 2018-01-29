@@ -40,6 +40,24 @@ public class SimGearbox implements Gearbox {
 	public double getMotorCommand() {
 		return 0;
 	}
+
+	@Override
+	public double getMasterMotorCurrent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getSlave1MotorCurrent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getSlave2MotorCurrent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
 

@@ -17,6 +17,9 @@ public interface Gearbox {
 	public abstract void setCurrentLimit_A(double limit_A);
 	
 	public abstract double getTotalCurrent();
+	public abstract double getMasterMotorCurrent();
+	public abstract double getSlave1MotorCurrent();
+	public abstract double getSlave2MotorCurrent();
 	
 	public abstract double getMotorCommand();
 

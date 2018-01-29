@@ -36,7 +36,7 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		
-		boolean useRealGearbox = false;
+		boolean useRealGearbox = true;
 		
 		if(useRealGearbox) {
 			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
