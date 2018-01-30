@@ -48,7 +48,7 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
     private static final long serialVersionUID = 3205256608145459434L;
     private final int yPAD = 60; // controls how far the X- and Y- axis lines are away from the
                                  // window edge
-    private final int xPAD = 70; // controls how far the X- and Y- axis lines are away from the
+    private final int xPAD = 60; // controls how far the X- and Y- axis lines are away from the
                                  // window edge
 
     private double upperXtic;
@@ -186,7 +186,7 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
         JFrame g = new JFrame("Figure " + count);
         g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         g.add(this);
-        g.setSize(600, 400);
+        g.setSize(800, 400);
         g.setLocationByPlatform(true);
         g.setVisible(true);
 
@@ -336,6 +336,8 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
             // Draw lines.
             double xScale = (double) (w - 2 * xPAD) / (upperXtic - lowerXtic);
             double yScale = (double) (h - 2 * yPAD) / (upperYtic - lowerYtic);
+            
+            double xOffset = (double)(lowerXtic);
 
             for (int j = 0; j < link.get(i).y.length - 1; j++) {
                 double x1;
@@ -345,8 +347,8 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
                     x1 = xPAD + j * xScale;
                     x2 = xPAD + (j + 1) * xScale;
                 } else {
-                    x1 = xPAD + xScale * link.get(i).x[j] + lowerXtic * xScale;
-                    x2 = xPAD + xScale * link.get(i).x[j + 1] + lowerXtic * xScale;
+                    x1 = xPAD + xScale * link.get(i).x[j] - lowerXtic * xScale;
+                    x2 = xPAD + xScale * link.get(i).x[j + 1] - lowerXtic * xScale;
                 }
 
                 double y1 = h - yPAD - yScale * link.get(i).y[j] + lowerYtic * yScale;

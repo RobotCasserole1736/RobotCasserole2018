@@ -179,7 +179,7 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource {
         }
         m_spi.resetAccumulator();
     }
- s
+
     /**
      * Delete (free) the spi port used for the gyro and stop accumulating.
      */
