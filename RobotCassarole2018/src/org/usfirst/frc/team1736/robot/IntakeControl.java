@@ -88,16 +88,19 @@ public class IntakeControl {
 	public void update() {
 		if(intakeDesired) {
 		leftMotor.set(leftIntakeMotorCal.get());
-		rightMotor.set(leftIntakeMotorCal.get())
+		rightMotor.set(leftIntakeMotorCal.get());
 		}
 		if(ejectDesired) {
-			
+			leftMotor.set(leftEjectMotorCal.get());
+			leftMotor.set(rightEjectMotorCal.get());
 		}
 		if(intakeOvrdDesired) {
-			
+			leftMotor.set(leftIntakeMotorCal.get());
+			rightMotor.set(leftIntakeMotorCal.get());
 		}
 		if(throwDesired) {
-			
+			leftMotor.set(leftThrowMotorCal.get());
+			leftMotor.set(rightThrowMotorCal.get());
 		}
 	}
 }
