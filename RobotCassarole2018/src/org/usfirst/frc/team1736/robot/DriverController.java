@@ -16,9 +16,9 @@ public class DriverController {
 	private DriverController() {
 		driveController = new XboxController(0);
 	}
-
+	// assuming that positive is forward Cmd whereas negative is reverse
 	public double getDriverForwardReverseCommand() {
-		double driverLeftYValue = driveController.getY(Hand.kLeft);
+		double driverLeftYValue = -1 * driveController.getY(Hand.kLeft);
 		if (driverLeftYValue > -0.15 & driverLeftYValue < 0.15) {
 			driverLeftYValue = 0;
 		}
