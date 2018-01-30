@@ -12,6 +12,8 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 
 public class Autonomous {
 
@@ -163,6 +165,7 @@ public class Autonomous {
 				break;
 				
 			default: // Do nothing
+				DriverStation.reportError("Something went wrong in software", false);
 				break;
 		}
 

@@ -682,8 +682,19 @@ public class FalconPathPlanner {
 
 
         // create waypoint path
-        double[][] waypoints = new double[][] {{0, 0}, {18.875, 0}, {21.46, 4.475}};
+        //double[][] waypoints = new double[][] {{0, 0}, {18.875, 0}, {21.46, 4.475}};
 
+        final double[][] waypoints = new double[][] {
+    		{0, 0},
+    		{0, 2},
+    		{-4, 8},
+    		{-8, 8},
+    		{-10, 10},
+    		{-10, 12},
+    		{-8, 14},
+    		{-7, 14}
+    	};
+    	
         double totalTime = 10; // seconds
         double timeStep = 0.02; // period of control loop on Rio, seconds
         double robotTrackWidth = 2; // distance between left and right wheels, feet
@@ -722,13 +733,14 @@ public class FalconPathPlanner {
             fig1.setYTic(0, 24, 1);
             fig1.addData(path.smoothPath, Color.red, Color.blue);
 
-
+fig1.setBounds(-24, -27, 24, 27);
+            
             fig1.addData(path.leftPath, Color.magenta);
             fig1.addData(path.rightPath, Color.magenta);
 
 
             // generate poof path used in 2014 Einstein
-            path.poofExample();
+            //path.poofExample();
 
         }
 
