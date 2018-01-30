@@ -5,25 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team1736.robot;
-
-import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
-import org.usfirst.frc.team1736.lib.Calibration.Calibration;
-import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
-import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
-import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
-import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
-import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
-
-import edu.wpi.first.wpilibj.DriverStation;
-
-import org.usfirst.frc.team1736.lib.Util.CrashTracker;
-import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-
-
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 
 /*
  *******************************************************************************************
@@ -45,6 +26,29 @@ import edu.wpi.first.wpilibj.Timer;
  *   if you would consider donating to our club to help further STEM education.
  */
 
+package org.usfirst.frc.team1736.robot;
+
+import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
+import org.usfirst.frc.team1736.lib.Calibration.Calibration;
+import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
+
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
+
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+
+
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -56,17 +60,24 @@ public class Robot extends TimedRobot {
 	
 	// Software utilities
 	CasseroleWebServer webServer;
-	
-	PowerDistributionPanel pdp;
 	CasseroleRIOLoadMonitor ecuStats;
 	BatteryParamEstimator bpe;
-	Autonomous auto;
-	
 	final static int BPE_length = 200; 
 	final static double BPE_confidenceThresh_A = 10.0;
-	
 	Calibration minAllowableVoltageCal;
-
+	
+	PowerDistributionPanel pdp;
+	
+	//Auto Routine objects
+	Autonomous auto;
+	
+	//Camera stream objects
+	UsbCamera driverAssistCam;
+	MjpegServer driverStream;
+	
+	//Loop execution time metrics
+	double loopStartTime_s = 0;
+	double loopExecTime_ms = 20; //starting guess
 
 
 	//Hook the constructor to catch the overall class construction event.
@@ -87,28 +98,34 @@ public class Robot extends TimedRobot {
 		
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
+		Gyro.getInstance().reset();
 		
+		//Set up battery parameter estimation
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		
+		//Set up autonomous routine control
 		auto = new Autonomous();
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
 		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
 
-
+		//Set up and start webcam stream
+		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
+		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 640, 480, 10);
+		driverStream = new MjpegServer("DriverCamServer", 1180);
+		driverStream.setSource(driverAssistCam);
+		
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
 		webServer.startServer();
-
-
+		
 		// Load any saved calibration values (must be last to ensure all calibrations have been initialized first)
 		CalWrangler.loadCalValues();
 		
 		//Add all visual items to the website and data logs
 		initDriverView();
-
 		initRTPlot();
 		initLoggingChannels();
 
@@ -140,6 +157,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
+		
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		try {
 			//Close out whatever log may have been being recorded
 			CsvLogger.close();
@@ -151,10 +172,10 @@ public class Robot extends TimedRobot {
 			
 			//Update appropriate subsystems
 			GravityIndicator.getInstance().update();
-			Field_setup_string.getInstance().update();
+			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
 			
-			
+
 			//Update data viewers only
 			updateDriverView();
 			updateWebStates();
@@ -164,6 +185,8 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 		
 
@@ -177,7 +200,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logMatchInfo();
 			
 			//Poll the FMS one last time to see who owns which field pieces
-			Field_setup_string.getInstance().update();
+			FieldSetupString.getInstance().update();
 			
 			// Update autonomous selection and start
 			auto.updateAutoSelection();
@@ -198,8 +221,15 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		try {
-			CrashTracker.logAutoPeriodic();	
+			//Log a new periodic loop
+			CrashTracker.logAutoPeriodic();
+			
+			//Sample sensors
 			GravityIndicator.getInstance().update();
 			
 			//Perform current-limiting calculations
@@ -208,9 +238,9 @@ public class Robot extends TimedRobot {
 			
 			//Update autonomous sequencer
 			auto.update();
-			
+
+
 			//Update all subsystems
-			GravityIndicator.getInstance().update();
 			Drivetrain.getInstance().update();
 			ElbowControl.getInstance().update();
 			IntakeControl.getInstance().update();
@@ -228,6 +258,8 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 
 	
@@ -241,6 +273,9 @@ public class Robot extends TimedRobot {
 			CrashTracker.logTeleopInit();	
 			CrashTracker.logMatchInfo();
 			
+			
+			//Ensure Auto is not running
+			auto.stop();
 			
 			//Start up a new data log
 			CsvLogger.init();
@@ -257,12 +292,22 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		try {
+			//Log the start of a new teleop loop
 			CrashTracker.logTeleopPeriodic();
 			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
 			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
+			
+			//Sample Sensors
+			GravityIndicator.getInstance().update();
+			IntakeControl.getInstance().intakeFlag();
+			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			
 			//Map Driver & Operator inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
@@ -273,19 +318,16 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setEjectDesired(OperatorController.getInstance().getEjectCmd());
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
 			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
-			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			ElevatorCtrl.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorCtrl.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
 			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
 			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
 			Climb.getInstance().setHookReleaseCmd(OperatorController.getInstance().getHookReleaseCmd());
-
-
-
+			ElevatorCtrl.getInstance().setIndexDesired(OperatorController.getInstance().getElevaterCmd());
 			
+
 			//Update all subsystems
-			GravityIndicator.getInstance().update();
 			Drivetrain.getInstance().update();
 			ElbowControl.getInstance().update();
 			IntakeControl.getInstance().update();
@@ -293,7 +335,6 @@ public class Robot extends TimedRobot {
 			Climb.getInstance().update();
 			
 			
-
 			//Update data logs and data viewer
 			updateDriverView();
 			updateWebStates();
@@ -304,6 +345,8 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 
 
@@ -312,7 +355,13 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		//Do loop time sampling first
+		loopStartTime_s = Timer.getFPGATimestamp();
+		
 		GravityIndicator.getInstance().update();
+		
+		
+		loopExecTime_ms = (Timer.getFPGATimestamp() - loopStartTime_s)*1000;
 	}
 
 	
@@ -328,21 +377,23 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Total_Current", "A", "getTotalCurrent", pdp);
 		CsvLogger.addLoggingFieldDouble("RIO_Cpu_Load", "%", "getCpuLoad", this);
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
-		CsvLogger.addLoggingFieldDouble("ESR", "ohms", "getEstESR", bpe);
-		CsvLogger.addLoggingFieldDouble("EstVoc", "V", "getEstVoc", bpe);
-		CsvLogger.addLoggingFieldDouble("CurrentDrawLimit", "A", "getMaxAllowableCurrent_A", this);
+		CsvLogger.addLoggingFieldDouble("RIO_Main_Loop_Exec_Time", "ms", "getLoopExeTime_ms", this);
+		CsvLogger.addLoggingFieldDouble("Bat_ESR", "ohms", "getEstESR", bpe);
+		CsvLogger.addLoggingFieldDouble("Bat_EstVoc", "V", "getEstVoc", bpe);
+		CsvLogger.addLoggingFieldDouble("Bat_CurrentDrawLimit", "A", "getMaxAllowableCurrent_A", this);
 		CsvLogger.addLoggingFieldDouble("Climb_Angle","deg", "getRobotGravityAngle", this);
 		CsvLogger.addLoggingFieldDouble("Net_Speed","fps","getSpeedFtpS",Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Act_RPM", "RPM", "getRightWheelSpeedAct_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Des_RPM", "RPM", "getRightWheelSpeedDes_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Act_RPM", "RPM", "getLeftWheelSpeedAct_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Des_RPM", "RPM", "getLeftWheelSpeedDes_RPM", Drivetrain.getInstance());
-		CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor1);
-		CsvLogger.addLoggingFieldDouble("DT_Motor_L2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor2);
-		CsvLogger.addLoggingFieldDouble("DT_Motor_L3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor3);
-		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
-		CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
-		CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor1);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_L2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor2);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_L3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor3);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
+		//CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
+		CsvLogger.addLoggingFieldDouble("DT_Pose_Angle", "deg", "getAngle", Gyro.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Raise_Command", "cmd", "getDriverElbowRaiseCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Command", "cmd", "getDriverElbowLowerCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elbow_Motor_Command", "cmd", "getMotorCmd", ElbowControl.getInstance());
@@ -362,30 +413,35 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 
+
 	}
 	
 	
 	//Website init & update methods
 	private void initDriverView() {
-		CasseroleDriverView.newStringBox("Field Ownership");
 		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
 		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
 		CasseroleDriverView.newBoolean("DT Current High", "yellow");
 		CasseroleDriverView.newBoolean("Intake Current High", "red");
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
-		
+		CasseroleDriverView.newBoolean("Upper limit switch reached", "yellow");
+		CasseroleDriverView.newBoolean("Lower limit switch reached", "yellow");
+
+		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
-		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES); 
+		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
+
 	}
 	
 	private void updateDriverView() {
-		CasseroleDriverView.setStringBox("Field Ownership", DriverStation.getInstance().getGameSpecificMessage());
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
-		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
-		CasseroleDriverView.setBoolean("Intake Current High", false); //Todo - fill me in
+		CasseroleDriverView.setBoolean("DT Current High", IntakeControl.getInstance().intakeFlag());
+		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().intakeFlag());
 		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
-		
+		CasseroleDriverView.setBoolean("Upper limit switch reached", ElevatorCtrl.getInstance().getUpperlimitSwitch());
+		CasseroleDriverView.setBoolean("Lower limit switch reached", ElevatorCtrl.getInstance().getLowerLimitSwitch());
+
 	}
 	
 	private void initRTPlot() {
@@ -401,6 +457,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
+		CasseroleWebPlots.addNewSignal("Elevator_Height", "inchres");
+		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "inches");
+		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
 	}
 	
 	
@@ -418,6 +477,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
+		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());
+		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().desiredHeight);
+		CasseroleWebPlots.addSample("Pose_Angle", time, Gyro.getInstance().getAngle());
 	}
 
 	
@@ -426,16 +488,19 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
 		CasseroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
+		CasseroleWebStates.putDouble("RIO Main Loop Exec Time (ms)", getLoopExeTime_ms());
 		CasseroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
 		CasseroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
-		CasseroleWebStates.putBoolean("leftSwitchState", Field_setup_string.getInstance(). left_Switch_Owned);
-		CasseroleWebStates.putBoolean("rightSwitchState", Field_setup_string.getInstance().right_Switch_Owned);
-		CasseroleWebStates.putBoolean("leftScaleState", Field_setup_string.getInstance().left_Scale_Owned);
-		CasseroleWebStates.putBoolean("RightScaleState", Field_setup_string.getInstance().right_Scale_Owned);
+		CasseroleWebStates.putBoolean("leftSwitchState", FieldSetupString.getInstance(). left_Switch_Owned);
+		CasseroleWebStates.putBoolean("rightSwitchState", FieldSetupString.getInstance().right_Switch_Owned);
+		CasseroleWebStates.putBoolean("leftScaleState", FieldSetupString.getInstance().left_Scale_Owned);
+		CasseroleWebStates.putBoolean("RightScaleState", FieldSetupString.getInstance().right_Scale_Owned);
 		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleWebStates.putBoolean("Elbow_Lower_Limit_Reached", ElbowControl.getInstance().isLowerLimitReached());
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
 		CasseroleWebStates.putDouble("Auto Mode", auto.mode);
+		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
+		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().intakeSensorState());
 	}
 	
 	
@@ -458,6 +523,10 @@ public class Robot extends TimedRobot {
 		} else {
 			return -1;
 		}
+	}
+	
+	public double getLoopExeTime_ms() {
+		return loopExecTime_ms;
 	}
 	
 

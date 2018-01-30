@@ -5,6 +5,12 @@ import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
 
+
+/**
+ * Class to control the elbow motor, which raises and lowers the intake arms
+ * @author Chris Gerth
+ *
+ */
 public class ElbowControl {
 	private static ElbowControl singularInstance = null;
 	

@@ -23,11 +23,15 @@ package org.usfirst.frc.team1736.lib.WebServer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimerTask;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import java.util.Comparator;
+
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
@@ -188,10 +192,13 @@ public class CasseroleRTPlotStreamerSocket extends WebSocketAdapter {
         	signal_array.add(signal_info);
         }
         
+        signal_array.sort(new plotSignalNameComparator());
+        
         tx_obj.put("type", "signal_list");
         tx_obj.put("signals", signal_array);
         
     	return tx_obj;
+    	
     }
 
 
@@ -225,5 +232,20 @@ public class CasseroleRTPlotStreamerSocket extends WebSocketAdapter {
             broadcastData();
         }
     }
+    
+    private class plotSignalNameComparator implements Comparator<JSONObject> {
+
+		@Override
+		public int compare(JSONObject object1, JSONObject object2) {
+			
+			String firstStr  = (String) object1.get("display_name");
+			String secondStr = (String) object2.get("display_name");
+			
+			return firstStr.compareTo(secondStr);
+		}
+    	
+    }
 
 }
+
+

@@ -42,49 +42,49 @@ public class Autonomous {
 		CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
 		
 		//Anything modes
-		if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (Field_setup_string.getInstance().left_Scale_Owned)) {
+		if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {
 			mode = 4; //On left and own left scale
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (Field_setup_string.getInstance().right_Scale_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
 			mode = 5; //On right and own right scale
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (Field_setup_string.getInstance().left_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {
 			mode = 1; //On left and own left switch
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (Field_setup_string.getInstance().left_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {
 			mode = 0; //In center and own left switch
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (Field_setup_string.getInstance().right_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {
 			mode = 2; //In center and own right switch
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (Field_setup_string.getInstance().right_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {
 			mode = 3; //On right and own right switch
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (!Field_setup_string.getInstance().left_Scale_Owned && !Field_setup_string.getInstance().left_Switch_Owned ) ) {
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (!FieldSetupString.getInstance().left_Scale_Owned && !FieldSetupString.getInstance().left_Switch_Owned ) ) {
 			mode = 6; //On left but own neither left scale nor left switch
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (!Field_setup_string.getInstance().right_Scale_Owned && !Field_setup_string.getInstance().right_Switch_Owned ) ) {
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (!FieldSetupString.getInstance().right_Scale_Owned && !FieldSetupString.getInstance().right_Switch_Owned ) ) {
 			mode = 6; //On right but own neither right scale nor right switch
 		
 		//Switch Only Modes
-		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (Field_setup_string.getInstance().left_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {
 			mode = 1; //On left and own left
-		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (Field_setup_string.getInstance().left_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {
 			mode = 0; //In center and own left
-		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (Field_setup_string.getInstance().right_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {
 			mode = 3; //On right and own right
-		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (Field_setup_string.getInstance().right_Switch_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {
 			mode = 2; //In center and own right
-		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (Field_setup_string.getInstance().right_Switch_Owned)) {	
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {	
 			mode = 6; //On left but own right - CANT DO IT
-		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (Field_setup_string.getInstance().left_Switch_Owned)) {	
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {	
 			mode = 6; //On right but own left - CANT DO IT
 			
 		//Scale Only Modes
-		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (Field_setup_string.getInstance().left_Scale_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {
 			mode = 4; //On left and own left
-		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (Field_setup_string.getInstance().right_Scale_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
 			mode = 5; //On right and own right
-		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (Field_setup_string.getInstance().right_Scale_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
 			mode = 6; //On left but own right - CANT DO IT
-		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (Field_setup_string.getInstance().left_Scale_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {
 			mode = 6; //On right but own left - CANT DO IT
-		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (Field_setup_string.getInstance().right_Scale_Owned)) {
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
 			mode = 6; //In center and own right - CANT DO IT
-		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (Field_setup_string.getInstance().left_Scale_Owned)) {	
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {	
 			mode = 6; //In center and own left - CANT DO IT
 			
 		//Drive Forward Mode
@@ -101,9 +101,9 @@ public class Autonomous {
 		} else if(action.compareTo(ACTION_MODES[6])==0) { //Testmode 2
 				mode = 6;
 		} else {
-			String msg = "[Auto] ERR: Unimplemented mode selected! " + autoModeName;
-			CrashTracker.logGenericMessage(msg);
-			System.out.print(msg);
+			//String msg = "[Auto] ERR: Unimplemented mode selected! " + autoModeName;
+			//CrashTracker.logGenericMessage(msg);
+			//System.out.print(msg);
 		}
 
 		
@@ -149,13 +149,13 @@ public class Autonomous {
 			case 7: //Test Mode 1
 				AutoSequencer.addEvent(new AutoEventCrossBaseLine());//Event in parenthesis
 				break;
-				
+
 			case 8: //Test Mode 2
-				if (Field_setup_string.getInstance().leftSwitchOwned()){
-				AutoSequencer.addEvent(new AutoEventScaleLeft());//Event in parenthesis
+				if (FieldSetupString.getInstance().leftSwitchOwned()){
+					AutoSequencer.addEvent(new AutoEventScaleLeft());//Event in parenthesis
 				}
-				else if(Field_setup_string.getInstance().rightSwitchOwned()){
-				AutoSequencer.addEvent(new AutoEventScaleRight());//Event in parenthesis
+				else if(FieldSetupString.getInstance().rightSwitchOwned()){
+					AutoSequencer.addEvent(new AutoEventScaleRight());//Event in parenthesis
 				}
 				break;
 			
