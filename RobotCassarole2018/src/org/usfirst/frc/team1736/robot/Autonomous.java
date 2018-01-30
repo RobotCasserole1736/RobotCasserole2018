@@ -12,6 +12,8 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 
 public class Autonomous {
 
@@ -44,18 +46,18 @@ public class Autonomous {
 		//Anything modes
 		if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {
 			mode = 4; //On left and own left scale
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
+			mode = 5; //On right and own right scale
 		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {
 			mode = 1; //On left and own left switch
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (!FieldSetupString.getInstance().left_Scale_Owned && !FieldSetupString.getInstance().left_Switch_Owned ) ) {
-			mode = 6; //On left but own neither left scale nor left switch
 		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {
 			mode = 0; //In center and own left switch
 		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {
 			mode = 2; //In center and own right switch
-		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
-			mode = 5; //On right and own right scale
 		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {
 			mode = 3; //On right and own right switch
+		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (!FieldSetupString.getInstance().left_Scale_Owned && !FieldSetupString.getInstance().left_Switch_Owned ) ) {
+			mode = 6; //On left but own neither left scale nor left switch
 		}else if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (!FieldSetupString.getInstance().right_Scale_Owned && !FieldSetupString.getInstance().right_Switch_Owned ) ) {
 			mode = 6; //On right but own neither right scale nor right switch
 		
@@ -68,12 +70,24 @@ public class Autonomous {
 			mode = 3; //On right and own right
 		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {
 			mode = 2; //In center and own right
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().right_Switch_Owned)) {	
+			mode = 6; //On left but own right - CANT DO IT
+		}else if((action.compareTo(ACTION_MODES[1])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().left_Switch_Owned)) {	
+			mode = 6; //On right but own left - CANT DO IT
 			
 		//Scale Only Modes
 		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {
 			mode = 4; //On left and own left
 		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
 			mode = 5; //On right and own right
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
+			mode = 6; //On left but own right - CANT DO IT
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[2])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {
+			mode = 6; //On right but own left - CANT DO IT
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().right_Scale_Owned)) {
+			mode = 6; //In center and own right - CANT DO IT
+		}else if((action.compareTo(ACTION_MODES[2])==0) && (startPos.compareTo(START_POS_MODES[1])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {	
+			mode = 6; //In center and own left - CANT DO IT
 			
 		//Drive Forward Mode
 		}else if(action.compareTo(ACTION_MODES[3])==0) {	
@@ -107,7 +121,7 @@ public class Autonomous {
 		switch(mode) {
 			
 			case 0: //switch only if in center and own left
-				AutoSequencer.addEvent(new AutoEventSwitchLeft());
+				AutoSequencer.addEvent(new AutoEventSwitchLeft_Center());
 				break;
 				
 			case 1: //switch only if on left and own left
@@ -151,6 +165,7 @@ public class Autonomous {
 				break;
 				
 			default: // Do nothing
+				DriverStation.reportError("Something went wrong in software", false);
 				break;
 		}
 
