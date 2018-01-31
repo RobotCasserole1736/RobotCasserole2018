@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 
+
 public class ElevatorCtrl {
 	private static ElevatorCtrl  singularInstance = null;
 	
@@ -32,6 +33,7 @@ public class ElevatorCtrl {
 	Calibration DownSpeed = null;
 	public double currentHeightCmd = 0;
 	public double desiredHeight;
+	public boolean isZeroed = false;
 	
 	
 	public static synchronized ElevatorCtrl getInstance() {
@@ -236,6 +238,18 @@ public class ElevatorCtrl {
 	public boolean getLowerLimitSwitch() {
 		return lowerLimitSwitch.get();
 	}
+		
+	public boolean getIsZeroed(){
+		if(isZeroed = false) {
+		curMotorCmd = DownSpeed.get();
+			if(lowerLimitSwitchReached == true) {
+				elevatorEncoder.reset();
+				isZeroed = true;
+			}
+		}
+		return isZeroed;	
+	}
 }
+
 	
 

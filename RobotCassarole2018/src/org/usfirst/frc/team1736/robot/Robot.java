@@ -426,6 +426,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
 		CasseroleDriverView.newBoolean("Upper limit switch reached", "yellow");
 		CasseroleDriverView.newBoolean("Lower limit switch reached", "yellow");
+		CasseroleDriverView.newBoolean("Encoder not calibrated", "yellow");
 
 		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
@@ -441,6 +442,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
 		CasseroleDriverView.setBoolean("Upper limit switch reached", ElevatorCtrl.getInstance().getUpperlimitSwitch());
 		CasseroleDriverView.setBoolean("Lower limit switch reached", ElevatorCtrl.getInstance().getLowerLimitSwitch());
+		CasseroleDriverView.setBoolean("Encoder not calibrated", !ElevatorCtrl.getInstance().getIsZeroed());
 
 	}
 	
