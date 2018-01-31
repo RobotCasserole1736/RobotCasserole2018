@@ -30,7 +30,7 @@ public class DriverController {
 		if (driverRightXValue > -0.15 & driverRightXValue <0.15) {
 		    driverRightXValue = 0;
 		}
-		return (driverRightXValue*driverRightXValue*driverRightXValue);
+		return (Math.pow(driverRightXValue, 3));
 		
 	}
 

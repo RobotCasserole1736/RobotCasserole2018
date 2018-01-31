@@ -457,7 +457,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
-		CasseroleWebPlots.addNewSignal("Elevator_Height", "inchres");
+		CasseroleWebPlots.addNewSignal("Elevator_Height", "inches");
 		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "inches");
 		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
 	}
