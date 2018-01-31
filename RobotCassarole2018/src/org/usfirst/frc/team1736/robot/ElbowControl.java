@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
@@ -39,11 +40,13 @@ public class ElbowControl {
 	}
 	
 	private ElbowControl() {
+		CrashTracker.logGenericMessage("start of ElbowControl init");
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
 		upperLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_UP_LIMIT_SW);
 		lowerLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_DOWN_LIMIT_SW);
 		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.5, 0.0, 1.0);
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
+		CrashTracker.logGenericMessage("end of ElbowControl init");
 	}
 	
 	public void update() {

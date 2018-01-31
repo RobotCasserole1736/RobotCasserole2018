@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1736.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 public class DriverController {
@@ -14,7 +17,9 @@ public class DriverController {
 		return driveCtrl;
 	}
 	private DriverController() {
+		CrashTracker.logGenericMessage("start of Drivercontroller init");
 		driveController = new XboxController(0);
+		CrashTracker.logGenericMessage("end of Drivercontroller init");
 	}
 	// assuming that positive is forward Cmd whereas negative is reverse
 	public double getDriverForwardReverseCommand() {

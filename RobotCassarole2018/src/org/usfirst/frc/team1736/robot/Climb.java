@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
@@ -41,6 +43,7 @@ public class Climb {
 	
 	
 	private Climb() {
+		CrashTracker.logGenericMessage("start of climb init");
 		releaseLatch = new Servo(RobotConstants.PWM_RELEASE_LATCH); 
 		hookRelease = new Relay(RobotConstants.RELAY_HOOK_RELEASE, Relay.Direction.kForward);
 		
@@ -58,6 +61,7 @@ public class Climb {
 		leftWinchMotor2.set(0);
 		rightWinchMotor1.set(0);
 		rightWinchMotor2.set(0);
+		CrashTracker.logGenericMessage("end of climb init");
 	}
 	
 	

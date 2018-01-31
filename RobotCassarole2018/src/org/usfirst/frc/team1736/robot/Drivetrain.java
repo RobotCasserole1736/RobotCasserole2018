@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 public class Drivetrain {
 	private static Drivetrain singularInstance = null;
@@ -35,7 +36,7 @@ public class Drivetrain {
 	
 	
 	private Drivetrain() {
-		
+		CrashTracker.logGenericMessage("start of drivetrain init");
 		boolean useRealGearbox = false;
 		
 		if(useRealGearbox) {
@@ -54,7 +55,7 @@ public class Drivetrain {
 		
 		rightGearbox.setInverted(true);
 		curLimitEnable = new Calibration("Enable DT Current Limit", 0, 0, 1.0);
-		
+		CrashTracker.logGenericMessage("End ofdrivetrain init");
 	}
 		
 	public void setForwardReverseCommand(double command) {
