@@ -22,7 +22,7 @@ public class DriverController {
 		if (driverLeftYValue > -0.15 & driverLeftYValue < 0.15) {
 			driverLeftYValue = 0;
 		}
-		return (driverLeftYValue*driverLeftYValue*driverLeftYValue);
+		return (Math.pow(driverLeftYValue,3));
 	}
 	
 	public double getDriverLeftRightCommand() {
