@@ -29,13 +29,14 @@ import javax.swing.JFrame;
 import org.usfirst.frc.team1736.lib.LEDs.CasseroleLEDInterface;
 import org.usfirst.frc.team1736.lib.LEDs.DesktopTestLEDs;
 import org.usfirst.frc.team1736.lib.LEDs.DotStarsLEDStrip;
+import org.usfirst.frc.team1736.lib.LEDs.Particle;
 
 public class LEDSequencer {
 	private static LEDSequencer seqLocal = null;
 
 	private volatile LEDSwitchCase cur_pattern;
 
-	private static final boolean desktop_sim = false;
+	private static final boolean desktop_sim = true;
 
 	public enum LEDSwitchCase {
 		OFF, SMOOTH_SWEEP, SMOOTH_RAINBOW, SMOOTH_RED_WHITE, SPARKLE_WHITE, SPARKLE_RED_WHITE, SPARKLE_RAIN, CYLON, COMET_RED, COMET_RAIN, BOUNCE, GEAR, FUEL, CAPN, TEST, SMOOTH_GREEN, SMOOTH_BLUE, BLUE_GREEN_SWEEP, FIRE
@@ -68,6 +69,8 @@ public class LEDSequencer {
 		// Start LED animation thread in background.
 		timerThread = new java.util.Timer("LED Sequencer Update");
 		timerThread.schedule(new LEDBackgroundUpdateTask(this), (long) (CasseroleLEDInterface.m_update_period_ms), (long) (CasseroleLEDInterface.m_update_period_ms));
+		for(int i = 0; i < particles.length; i++) {particles [i] = new Particle();}		
+
 	}
 
 	public void update() {
@@ -146,6 +149,7 @@ public class LEDSequencer {
 		
 		case FIRE:
 			fire();
+			break;
 		}
 
 		// smoothStripSweep();
@@ -447,9 +451,27 @@ public class LEDSequencer {
 			ledstrip.setLEDColor(led_idx, 0.1, 1, not_green_comp);
 		}
 	}
-	
+	Particle[] particles = new Particle[4]; 
 	private void fire() {
-		final double period = 4.0;
+		
+	
+			for(int i = 0; i < particles.length; i++) {
+				particles [i].move();		
+			}
+			for(int led_idx = 0; led_idx < RobotConstants.NUM_LEDS_TOTAL / 2; led_idx++) {
+				double bright = 0;
+				
+				for(int part_idx = 0; part_idx < particles.length; part_idx++) {
+					bright += particles[part_idx].colorAt(led_idx);
+				}
+				
+				ledstrip.setLEDColor(led_idx, bright, bright, bright);
+				
+				
+			}			
+		
+
+		
 		
 		
 		
@@ -515,7 +537,7 @@ public class LEDSequencer {
 	public static void main(String[] args) {
 		LEDSequencer seq = new LEDSequencer();
 
-		seq.cur_pattern = LEDSwitchCase.TEST;
+		seq.cur_pattern = LEDSwitchCase.FIRE;
 
 		JFrame frame = new JFrame("LED Test");
 		frame.setSize(850, 200);
