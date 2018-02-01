@@ -29,16 +29,18 @@ import javax.swing.JFrame;
 import org.usfirst.frc.team1736.lib.LEDs.CasseroleLEDInterface;
 import org.usfirst.frc.team1736.lib.LEDs.DesktopTestLEDs;
 import org.usfirst.frc.team1736.lib.LEDs.DotStarsLEDStrip;
+import org.usfirst.frc.team1736.lib.LEDs.Particle;
+
 
 public class LEDSequencer {
 	private static LEDSequencer seqLocal = null;
 
 	private volatile LEDSwitchCase cur_pattern;
 
-	private static final boolean desktop_sim = true;
+	private static boolean desktop_sim = true;
 
 	public enum LEDSwitchCase {
-		OFF, SMOOTH_SWEEP, SMOOTH_RAINBOW, SMOOTH_RED_WHITE, SPARKLE_WHITE, SPARKLE_RED_WHITE, SPARKLE_RAIN, CYLON, COMET_RED, COMET_RAIN, BOUNCE, GEAR, FUEL, CAPN, TEST, SMOOTH_GREEN, SMOOTH_BLUE, BLUE_GREEN_SWEEP, FIRE_RENDER
+		OFF, SMOOTH_SWEEP, SMOOTH_RAINBOW, SMOOTH_RED_WHITE, SPARKLE_WHITE, SPARKLE_RED_WHITE, SPARKLE_RAIN, CYLON, COMET_RED, COMET_RAIN, BOUNCE, GEAR, FUEL, CAPN, TEST, SMOOTH_GREEN, SMOOTH_BLUE, BLUE_GREEN_SWEEP, FIRE
 	}
 
 	static CasseroleLEDInterface ledstrip; // interface so that we can swap between desktop and robot
@@ -54,6 +56,9 @@ public class LEDSequencer {
 	}
 
 	private LEDSequencer() {
+		//Easy peasy check to see if weshould be running an actual strip or a fake strip
+		desktop_sim = System.getProperty("os.name").contains("Windows");
+		
 		if(desktop_sim) {
 			ledstrip = new DesktopTestLEDs(RobotConstants.NUM_LEDS_TOTAL);
 		}
@@ -68,6 +73,11 @@ public class LEDSequencer {
 		// Start LED animation thread in background.
 		timerThread = new java.util.Timer("LED Sequencer Update");
 		timerThread.schedule(new LEDBackgroundUpdateTask(this), (long) (CasseroleLEDInterface.m_update_period_ms), (long) (CasseroleLEDInterface.m_update_period_ms));
+
+		for(int i = 0; i < particles.length; i++) {
+			particles [i] = new Particle();
+		}		
+
 	}
 
 	public void update() {
@@ -144,8 +154,8 @@ public class LEDSequencer {
 			smoothBlueCycle();
 			break;
 		
-		case FIRE_RENDER:
-			fireRender();
+		case FIRE:
+			fire();
 			break;
 		}
 
@@ -167,6 +177,7 @@ public class LEDSequencer {
 		// smoothBlueCycle();
 		// fire();
 		
+
 		loop_counter++;
 	}
 
@@ -449,12 +460,34 @@ public class LEDSequencer {
 			ledstrip.setLEDColor(led_idx, 0.1, 1, not_green_comp);
 		}
 	}
-	
-	private void fireRender() {
-		final double width = 1.0;
 
-	}
+	Particle[] particles = new Particle[4]; 
+	private void fire() {
+		
 	
+			for(int i = 0; i < particles.length; i++) {
+				particles [i].move();		
+			}
+			for(int led_idx = 0; led_idx < RobotConstants.NUM_LEDS_TOTAL / 2; led_idx++) {
+				double bright = 0;
+				
+				for(int part_idx = 0; part_idx < particles.length; part_idx++) {
+					bright += particles[part_idx].colorAt(led_idx);
+				}
+				
+				ledstrip.setLEDColor(led_idx, bright, bright, bright);
+				
+				
+			}			
+		
+
+		
+		
+		
+		
+		
+	}
+
 
 	public void setGearDesiredPattern() {
 		cur_pattern = LEDSwitchCase.SMOOTH_GREEN;
@@ -491,7 +524,7 @@ public class LEDSequencer {
 	}
 
 	// Java multithreading magic. Do not touch.
-	// Touching will incur the wrath of Cthulhu, god of java and LED Strips.
+	// Touching will incour the wrath of Cthulhu, god of java and LED Strips.
 	// May the oceans of 1's and 0's rise to praise him.
 	private class LEDBackgroundUpdateTask extends TimerTask {
 		private LEDSequencer m_sequencer;
@@ -515,7 +548,9 @@ public class LEDSequencer {
 	public static void main(String[] args) {
 		LEDSequencer seq = new LEDSequencer();
 
-		seq.cur_pattern = LEDSwitchCase.CYLON;
+
+		seq.cur_pattern = LEDSwitchCase.FIRE;
+
 
 		JFrame frame = new JFrame("LED Test");
 		frame.setSize(850, 200);
@@ -523,6 +558,7 @@ public class LEDSequencer {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		if(desktop_sim) {
 			frame.add((Component) ledstrip);
+			frame.add((Component) ledstrip); // uncomment this to do a desktop test
 		}
 	}
 }

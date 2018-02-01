@@ -171,7 +171,7 @@ public class DesktopTestLEDs extends JPanel implements CasseroleLEDInterface  {
 	
 	
     // Java multithreading magic. Do not touch.
-    // Touching will incour the wrath of Cthulhu, god of java and LED Strips.
+    // Touching will incur the wrath of Cthulhu, god of java and LED Strips.
     // May the oceans of 1's and 0's rise to praise him.
     private class DesktopTestLEDSUpdateTask extends TimerTask {
         private DesktopTestLEDs m_leds;
