@@ -46,7 +46,7 @@ public class ElbowControl {
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
 	}
 	
-	public void update() {
+	public void sampleSensors() {
 		
 		//Read Limit Switches
 		if(upperLimitSw.get()) {
@@ -60,7 +60,10 @@ public class ElbowControl {
 		} else {
 			lowerLimitReached = false;
 		}
-		
+	}
+	
+	public void update() {
+
 		//calculate motor command
 		if(upperLimitReached == false && curRaiseCmd == true) {
 			curMotorCmd = raiseSpeedCal.get();

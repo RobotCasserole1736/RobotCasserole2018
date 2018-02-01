@@ -85,6 +85,24 @@ public class ElevatorCtrl {
 		
 	}
 	
+	public void sampleSensors() {
+		//Check if we've hit the upper or lower limits of travel yet
+		if(upperLimitSwitch.get()) {
+			upperLimitSwitchReached = true;
+		} else {
+			upperLimitSwitchReached = false;
+		}
+		
+		if(lowerLimitSwitch.get()) {
+			lowerLimitSwitchReached = true;
+		} else {
+			lowerLimitSwitchReached = false;
+		}
+		
+		//Read in present elevator height
+		actualHeight = getElevHeight_in();
+	}
+	
 	
 	public void update() {
 		//Check for zeroed condition
@@ -101,8 +119,10 @@ public class ElevatorCtrl {
 			//Open Loop control - Operator commands motor directly
 			curMotorCmd = continuousModeCmd;
 			
-			//Keep the closed loop command set to the nearest height
-			indexModeDesired = desiredHightToEmun(getElevHeight_in());
+			if(isZeroed == true) {
+				//Keep the closed loop command set to the nearest height
+				indexModeDesired = desiredHightToEmun(getElevHeight_in());
+			}
 
 		} else {
 			
@@ -110,7 +130,7 @@ public class ElevatorCtrl {
 			
 			//Super-de-duper simple bang-bang control of elevator in closed loop
 			desiredHeight = enumToDesiredHeight(indexModeDesired);
-			actualHeight = getElevHeight_in();
+
 			if(isInDeadzone()) {
 				//Deadzone, don't run motor.
 				curMotorCmd = 0;
@@ -121,20 +141,6 @@ public class ElevatorCtrl {
 				//Too high, run motor down.
 				curMotorCmd = DownMotorCmdCal.get();
 			}
-		}
-		
-		
-		//Check if we've hit the upper or lower limits of travel yet
-		if(upperLimitSwitch.get()) {
-			upperLimitSwitchReached = true;
-		} else {
-			upperLimitSwitchReached = false;
-		}
-		
-		if(lowerLimitSwitch.get()) {
-			lowerLimitSwitchReached = true;
-		} else {
-			lowerLimitSwitchReached = false;
 		}
 		
 		

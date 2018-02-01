@@ -171,6 +171,7 @@ public class Robot extends TimedRobot {
 			
 			
 			//Update appropriate subsystems
+			ElevatorCtrl.getInstance().sampleSensors();
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
@@ -231,6 +232,7 @@ public class Robot extends TimedRobot {
 			
 			//Sample sensors
 			GravityIndicator.getInstance().update();
+			ElevatorCtrl.getInstance().sampleSensors();
 			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
@@ -306,6 +308,7 @@ public class Robot extends TimedRobot {
 			
 			//Sample Sensors
 			GravityIndicator.getInstance().update();
+			ElevatorCtrl.getInstance().sampleSensors();
 			IntakeControl.getInstance().intakeFlag();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			
@@ -424,9 +427,10 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("DT Current High", "yellow");
 		CasseroleDriverView.newBoolean("Intake Current High", "red");
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
-		CasseroleDriverView.newBoolean("Upper limit switch reached", "yellow");
-		CasseroleDriverView.newBoolean("Lower limit switch reached", "yellow");
-		CasseroleDriverView.newBoolean("Encoder not calibrated", "yellow");
+		CasseroleDriverView.newBoolean("Elbow In Transit", "green");
+		CasseroleDriverView.newBoolean("Elevator Upper Limit", "yellow");
+		CasseroleDriverView.newBoolean("Elevator Lower Limit", "yellow");
+		CasseroleDriverView.newBoolean("Elevator Not Zeroed", "yellow");
 
 		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
@@ -437,11 +441,12 @@ public class Robot extends TimedRobot {
 	private void updateDriverView() {
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
-		CasseroleDriverView.setBoolean("DT Current High", IntakeControl.getInstance().intakeFlag());
+		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
 		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().intakeFlag());
-		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
-		CasseroleDriverView.setBoolean("Upper limit switch reached", ElevatorCtrl.getInstance().getUpperlimitSwitch());
-		CasseroleDriverView.setBoolean("Lower limit switch reached", ElevatorCtrl.getInstance().getLowerLimitSwitch());
+		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isInDeadzone()); 
+		CasseroleDriverView.setBoolean("Elbow In Transit", !(ElbowControl.getInstance().isLowerLimitReached() || ElbowControl.getInstance().isUpperLimitReached()));
+		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperlimitSwitch());
+		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerLimitSwitch());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
 
 	}
