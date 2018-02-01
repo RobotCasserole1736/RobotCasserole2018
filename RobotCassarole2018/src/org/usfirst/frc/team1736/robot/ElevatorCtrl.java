@@ -10,30 +10,51 @@ import edu.wpi.first.wpilibj.Spark;
 public class ElevatorCtrl {
 	private static ElevatorCtrl  singularInstance = null;
 	
+	//Input Commands
 	private Elevator_index indexModeDesired;
 	private boolean continuousModeDesired;
 	private double continuousModeCmd;
 	private double curMotorCmd;
-	private Spark motor1;
-	private Spark motor2;
+	
+	//State variables
+	public double currentHeightCmd = 0;
+	public double desiredHeight = 0;
+	public double actualHeight = 0;
+	public boolean isZeroed = false;
+
+	//Travel limit reached check booleans
 	boolean upperLimitSwitchReached = false;
 	boolean lowerLimitSwitchReached = false;
+	
+	
+	//Physical devices
+	private Spark motor1;
+	private Spark motor2;
 	DigitalInput upperLimitSwitch = null;
 	DigitalInput lowerLimitSwitch = null;
-	Calibration FloorPos = null;
-	Calibration SwitchPos = null;
-	Calibration ScaleDownPos = null;
-	Calibration ScaleBalancedPos = null;
-	Calibration ScaleUpPos = null;
-	Calibration ExchangePos = null;
 	private Encoder elevatorEncoder;
-	public final double Encoder_Pulse_Pur_Rev = 1024;
-	public final double Elevator_Inches_Pur_Rev = 2;
-	Calibration UpSpeed = null;
-	Calibration DownSpeed = null;
-	public double currentHeightCmd = 0;
-	public double desiredHeight;
-	public boolean isZeroed = false;
+	
+	//Height calibrations
+	Calibration FloorPosCal = null;
+	Calibration SwitchPosCal = null;
+	Calibration ScaleDownPosCal = null;
+	Calibration ScaleBalancedPosCal = null;
+	Calibration ScaleUpPosCal = null;
+	Calibration ExchangePosCal = null;
+	
+	//Closed-loop calibrations
+	Calibration UpMotorCmdCal = null;
+	Calibration DownMotorCmdCal = null;
+	Calibration ElevCtrlDeadzoneCal = null;
+
+	//Constants
+	public final double ELEV_ENC_PULSES_PER_REV = 1024;
+	public final double ELEV_WINCH_DIAMETER_IN = 1.5;
+	
+	//Derived Constants
+	public final double ELEV_HEIGHT_IN_PER_WINCH_REV = 2*Math.PI*(ELEV_WINCH_DIAMETER_IN/2.0); //Linear rope distance is 2*pi*r_winch
+
+
 	
 	
 	public static synchronized ElevatorCtrl getInstance() {
@@ -43,28 +64,39 @@ public class ElevatorCtrl {
 	}
 	
 	private ElevatorCtrl() {
+		//Init physical devices
 		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
 		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
 		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_LOWER_LIMIT_SW);	
 		
-		//Calibrations for positions & speeds
-		FloorPos = new Calibration("Floor position", 0.0, 0.0, 84.0);
-		SwitchPos = new Calibration("Switch position", 20.0, 0.0,84.0);
-		ScaleDownPos = new Calibration("Scale down Position", 55.0, 0.0, 84.0);
-		ScaleBalancedPos = new Calibration("Scale balanced postion", 66.0, 0.0, 84.0);
-		ScaleUpPos = new Calibration ("Scale up position", 77.0, 0.0, 84.0);
-		ExchangePos = new Calibration("Exchange position", 4.0, 0.0, 84.0);
-		UpSpeed = new Calibration("Elevator Closed-Loop up speed", 0.5, 0.0, 1.0);
-		DownSpeed = new Calibration("Elevator Closed-Loop down speed", 0.5, 0.0, 1.0);
+		//Init Calibrations for positions & speeds
+		FloorPosCal = new Calibration("Elev Floor position (in)", 0.0, 0.0, 84.0);
+		SwitchPosCal = new Calibration("Elev Switch position (in)", 20.0, 0.0,84.0);
+		ScaleDownPosCal = new Calibration("Elev Scale down Position (in)", 55.0, 0.0, 84.0);
+		ScaleBalancedPosCal = new Calibration("Elev Scale balanced postion (in)", 66.0, 0.0, 84.0);
+		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 77.0, 0.0, 84.0);
+		ExchangePosCal = new Calibration("Elev Exchange position (in)", 4.0, 0.0, 84.0);
+		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cd)", 0.5, 0.0, 1.0);
+		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 0.5, 0.0, 1.0);
+		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
 		
 		
 	}
 	
 	
 	public void update() {
-		if (continuousModeDesired == true) {
+		//Check for zeroed condition
+		if(lowerLimitSwitchReached == true) {
+			elevatorEncoder.reset();
+			isZeroed = true;
+		}
+
+		
+		if (continuousModeDesired == true || isZeroed == false) {
+			
+			//Continuous mode - used whenever the driver wants control, or the encoder has not yet been zeroed.
 			
 			//Open Loop control - Operator commands motor directly
 			curMotorCmd = continuousModeCmd;
@@ -74,13 +106,20 @@ public class ElevatorCtrl {
 
 		} else {
 			
+			//Indexed mode - the default case where the driver just presses buttons.
+			
 			//Super-de-duper simple bang-bang control of elevator in closed loop
 			desiredHeight = enumToDesiredHeight(indexModeDesired);
-			double actualHeight = getElevHeight_in();
-			if(desiredHeight >= actualHeight) {
-				curMotorCmd = UpSpeed.get();
-			}else if(desiredHeight <= actualHeight) {
-				curMotorCmd = DownSpeed.get();
+			actualHeight = getElevHeight_in();
+			if(isInDeadzone()) {
+				//Deadzone, don't run motor.
+				curMotorCmd = 0;
+			}else if(desiredHeight >= actualHeight) {
+				//Too low, run motor up.
+				curMotorCmd = UpMotorCmdCal.get();
+			}else if(desiredHeight < actualHeight) {
+				//Too high, run motor down.
+				curMotorCmd = DownMotorCmdCal.get();
 			}
 		}
 		
@@ -112,7 +151,7 @@ public class ElevatorCtrl {
 			}
 		}
 		
-		//Actually output command tomotors
+		//Actually output command to motors
 		motor1.set(curMotorCmd);
 		motor2.set(curMotorCmd);
 	}
@@ -145,22 +184,22 @@ public class ElevatorCtrl {
 	 */
 	private double enumToDesiredHeight(Elevator_index cmd) {
 		if(cmd == Elevator_index.Bottom) {
-			currentHeightCmd = FloorPos.get();
+			currentHeightCmd = FloorPosCal.get();
 		}
 		else if(cmd == Elevator_index.Exchange) {
-			currentHeightCmd = ExchangePos.get();
+			currentHeightCmd = ExchangePosCal.get();
 		}
 		else if(cmd == Elevator_index.ScaleUnderscoreDown) {
-			currentHeightCmd = ScaleDownPos.get();
+			currentHeightCmd = ScaleDownPosCal.get();
 		}
 		else if(cmd == Elevator_index.ScaleUnderscoreBalanced) {
-			currentHeightCmd = ScaleBalancedPos.get();
+			currentHeightCmd = ScaleBalancedPosCal.get();
 		}
 		else if(cmd == Elevator_index.ScaleUnderscoreUp) {
-			currentHeightCmd = ScaleUpPos.get();
+			currentHeightCmd = ScaleUpPosCal.get();
 		}
 		else if(cmd == Elevator_index.Switch1) {
-			currentHeightCmd = SwitchPos.get();
+			currentHeightCmd = SwitchPosCal.get();
 		}
 		else if(cmd == Elevator_index.nothingUnderscoreNew){
 			//do nothing
@@ -182,37 +221,37 @@ public class ElevatorCtrl {
 		
 		//Check every possible height to see which one the 
 		// current height is closes to.
-		double calculation1 = Math.abs(FloorPos.get() - height);
+		double calculation1 = Math.abs(FloorPosCal.get() - height);
 		if(calculation1 < mindist) {
 			mindist = calculation1;
 			returnValue = Elevator_index.Bottom;
 		}
 		
-		double calculation2 = Math.abs(ExchangePos.get() - height);
+		double calculation2 = Math.abs(ExchangePosCal.get() - height);
 		if(calculation2 < mindist) {
 			mindist = calculation2; 
 			returnValue = Elevator_index.Exchange;
 		}
 		 
-	 	double calculation3 = Math.abs(SwitchPos.get() - height);
+	 	double calculation3 = Math.abs(SwitchPosCal.get() - height);
 		if(calculation3 > mindist) {
 			mindist = calculation3;
 			returnValue =  Elevator_index.Switch1;
 		}
 		 
-		double calculation4 = Math.abs(ScaleDownPos.get() - height);
+		double calculation4 = Math.abs(ScaleDownPosCal.get() - height);
 		if(calculation4 > mindist) {
 			mindist = calculation4; 
 			returnValue =  Elevator_index.ScaleUnderscoreDown;
 		}
 		 
-		double calculation5 = Math.abs(ScaleBalancedPos.get() - height);
+		double calculation5 = Math.abs(ScaleBalancedPosCal.get() - height);
 		if(calculation5 > mindist) {
 			mindist = calculation5; 
 			returnValue =  Elevator_index.ScaleUnderscoreBalanced;
 		}
 		 
-		double calculation6 = Math.abs(ScaleUpPos.get() - height);
+		double calculation6 = Math.abs(ScaleUpPosCal.get() - height);
 		if(calculation6 > mindist) {
 			 mindist = calculation6;
 			 returnValue =  Elevator_index.ScaleUnderscoreUp;
@@ -228,7 +267,7 @@ public class ElevatorCtrl {
 	
 	public double getElevHeight_in() {
 		elevatorEncoder.get();
-		return elevatorEncoder.get() * Encoder_Pulse_Pur_Rev * Elevator_Inches_Pur_Rev;
+		return elevatorEncoder.get() * (1.0/ELEV_ENC_PULSES_PER_REV) * ELEV_HEIGHT_IN_PER_WINCH_REV;
 	}
 	
 	public boolean getUpperlimitSwitch() {
@@ -240,14 +279,11 @@ public class ElevatorCtrl {
 	}
 		
 	public boolean getIsZeroed(){
-		if(isZeroed = false) {
-		curMotorCmd = DownSpeed.get();
-			if(lowerLimitSwitchReached == true) {
-				elevatorEncoder.reset();
-				isZeroed = true;
-			}
-		}
 		return isZeroed;	
+	}
+	
+	public boolean isInDeadzone() {
+		return (Math.abs(desiredHeight - actualHeight) < ElevCtrlDeadzoneCal.get());
 	}
 }
 

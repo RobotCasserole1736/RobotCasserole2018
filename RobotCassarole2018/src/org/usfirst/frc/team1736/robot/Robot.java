@@ -442,25 +442,25 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Elevator In Transit", false); //Todo - fill me in
 		CasseroleDriverView.setBoolean("Upper limit switch reached", ElevatorCtrl.getInstance().getUpperlimitSwitch());
 		CasseroleDriverView.setBoolean("Lower limit switch reached", ElevatorCtrl.getInstance().getLowerLimitSwitch());
-		CasseroleDriverView.setBoolean("Encoder not calibrated", !ElevatorCtrl.getInstance().getIsZeroed());
+		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
 
 	}
 	
 	private void initRTPlot() {
 		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
-		CasseroleWebPlots.addNewSignal("Driver_FwdRev_cmd","cmd");
-		CasseroleWebPlots.addNewSignal("Driver_Rotate_cmd","cmd");
-		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Act_RPM","RPM");
-		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Des_RPM","RPM");
-		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Act_RPM","RPM");
-		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des_RPM","RPM");
+		CasseroleWebPlots.addNewSignal("Driver_FwdRev_Cmd","cmd");
+		CasseroleWebPlots.addNewSignal("Driver_Rotate_Cmd","cmd");
+		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Act","RPM");
+		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Des","RPM");
+		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Act","RPM");
+		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des","RPM");
 		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
-		CasseroleWebPlots.addNewSignal("Elevator_Height", "inchres");
-		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "inches");
+		CasseroleWebPlots.addNewSignal("Elevator_Height", "in");
+		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "in");
 		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
 	}
 	
@@ -469,12 +469,12 @@ public class Robot extends TimedRobot {
 		double time = Timer.getFPGATimestamp();
 		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
-		CasseroleWebPlots.addSample("Driver_FwdRev_cmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
-		CasseroleWebPlots.addSample("Driver_Rotate_cmd", time, DriverController.getInstance().getDriverLeftRightCommand());
-		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Act_RPM", time, Drivetrain.getInstance().getRightWheelSpeedAct_RPM());
-		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Des_RPM", time,Drivetrain.getInstance().getRightWheelSpeedDes_RPM());
-		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Act_RPM", time,Drivetrain.getInstance().getLeftWheelSpeedAct_RPM());
-		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Des_RPM", time,Drivetrain.getInstance().getLeftWheelSpeedDes_RPM());
+		CasseroleWebPlots.addSample("Driver_FwdRev_Cmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
+		CasseroleWebPlots.addSample("Driver_Rotate_Cmd", time, DriverController.getInstance().getDriverLeftRightCommand());
+		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Act", time, Drivetrain.getInstance().getRightWheelSpeedAct_RPM());
+		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Des", time,Drivetrain.getInstance().getRightWheelSpeedDes_RPM());
+		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Act", time,Drivetrain.getInstance().getLeftWheelSpeedAct_RPM());
+		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Des", time,Drivetrain.getInstance().getLeftWheelSpeedDes_RPM());
 		CasseroleWebPlots.addSample("DT_Left_Motor_Cmd", time, Drivetrain.getInstance().getLeftMotorCommand());
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
