@@ -16,12 +16,10 @@ public class AutoEventSwitchLeft_Center extends AutoEvent {
 	private static final double[][] waypoints = new double[][] {
 		{0, 0},
 		{0, 2},
-		{-4, 8},
-		{-8, 8},
-		{-10, 10},
-		{-10, 12},
-		{-8, 14},
-		{-7, 14}
+		{-2, 5},
+		{-3, 5},
+		{-5, 9},
+		{-5, 11},
 	};
 	
 	private static final double time = 6.0;
