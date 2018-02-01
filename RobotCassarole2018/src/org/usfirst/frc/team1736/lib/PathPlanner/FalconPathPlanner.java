@@ -685,14 +685,12 @@ public class FalconPathPlanner {
         //double[][] waypoints = new double[][] {{0, 0}, {18.875, 0}, {21.46, 4.475}};
 
         final double[][] waypoints = new double[][] {
-    		{0, 0},
-    		{0, 2},
-    		{-4, 8},
-    		{-8, 8},
-    		{-10, 10},
-    		{-10, 12},
-    		{-8, 14},
-    		{-7, 14}
+        	{0, 0},
+        	{0, 2},
+        	{5, 10},
+        	{5, 15},
+        	{4, 20},
+        	{2, 25}
     	};
     	
         double totalTime = 10; // seconds
@@ -701,10 +699,10 @@ public class FalconPathPlanner {
 
         final FalconPathPlanner path = new FalconPathPlanner(waypoints);
 
-        path.setPathBeta(0.1);
+        path.setPathBeta(0.2);
         path.setPathAlpha(0.5);
         path.setVelocityAlpha(0.01);
-        path.setVelocityBeta(0.8);
+        path.setVelocityBeta(0.9);
         path.calculate(totalTime, timeStep, robotTrackWidth);
 
         System.out.println("Time in ms: " + (System.currentTimeMillis() - start));
