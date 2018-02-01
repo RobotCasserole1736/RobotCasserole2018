@@ -109,7 +109,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
 	}
 	
 	private double FT_PER_SEC_TO_RPM(double ftps_in) {
-		return ftps_in / (2*Math.PI*Drivetrain.WHEEL_ROLLING_RADIUS_FT) / 60;
+		return ftps_in / (2*Math.PI*Drivetrain.WHEEL_ROLLING_RADIUS_FT) * 60;
 	}
 
 

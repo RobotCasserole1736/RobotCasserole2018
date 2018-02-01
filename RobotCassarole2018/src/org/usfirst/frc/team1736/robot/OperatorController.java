@@ -56,7 +56,7 @@ public class OperatorController {
 	}
 	
 	public boolean getEjectCmd() {
-		boolean operaterXbutton = operatorController.getXButtonPressed();
+		boolean operaterXbutton = operatorController.getXButton();
 		return operaterXbutton;
 	}
 	
@@ -71,12 +71,12 @@ public class OperatorController {
 	}
 	
 	public boolean getPlatformLatchReleaseCmd() {
-		boolean operaterL3 = operatorController.getStickButtonPressed(Hand.kLeft);
+		boolean operaterL3 = operatorController.getStickButton(Hand.kLeft);
 		return operaterL3;
 	}
 	
 	public boolean getHookReleaseCmd() {
-		boolean operatorR3 = operatorController.getStickButtonPressed(Hand.kRight);
+		boolean operatorR3 = operatorController.getStickButton(Hand.kRight);
 		return operatorR3;
 	}
 
