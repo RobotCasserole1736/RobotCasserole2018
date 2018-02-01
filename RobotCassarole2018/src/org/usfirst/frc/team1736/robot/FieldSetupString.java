@@ -18,7 +18,10 @@ public class FieldSetupString {
 			return singularInstance;
 		}
 		
-		
+		private FieldSetupString() {
+			CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+			CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		}
 		
 		
 		public void update() {

@@ -19,7 +19,7 @@ public class RealGearbox implements Gearbox{
 	//Update this to match the actual encoders we put on the drivetrain.
 	// This should be total periods per rev - the quadrature 4x decoding
 	// is accounted for elsewhere.
-	private static final double ENCODER_CYCLES_PER_REV = 1024;
+	private static final double ENCODER_CYCLES_PER_REV = 2048;
 	
 	// TALON Can Bus Read timeouts
 	private static final int TIMEOUT_MS = 0;
@@ -136,6 +136,21 @@ public class RealGearbox implements Gearbox{
 	}
 	private double CTRE_UNITS_TO_RPM(double ctre_units) {
 		return ctre_units*600.0 / ENCODER_CYCLES_PER_REV / 4.0;
+	}
+
+	@Override
+	public double getMasterMotorCurrent() {
+		return motor1.getOutputCurrent() ;
+	}
+
+	@Override
+	public double getSlave1MotorCurrent() {
+		return motor2.getOutputCurrent() ;
+	}
+
+	@Override
+	public double getSlave2MotorCurrent() {
+		return motor3.getOutputCurrent() ;
 	}
 	
 }

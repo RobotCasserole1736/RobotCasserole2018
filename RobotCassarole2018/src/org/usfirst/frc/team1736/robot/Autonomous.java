@@ -41,7 +41,7 @@ public class Autonomous {
 		String startPos = CasseroleDriverView.getAutoSelectorVal("Start Position");
 		String action = CasseroleDriverView.getAutoSelectorVal("Action");
 		autoModeName = startPos + " " + action;
-		CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
+		//CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
 		
 		//Anything modes
 		if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {

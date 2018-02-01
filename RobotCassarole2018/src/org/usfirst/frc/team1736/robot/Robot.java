@@ -28,6 +28,8 @@
 
 package org.usfirst.frc.team1736.robot;
 
+import java.util.Date;
+
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
@@ -393,12 +395,12 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Des_RPM", "RPM", "getRightWheelSpeedDes_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Act_RPM", "RPM", "getLeftWheelSpeedAct_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Des_RPM", "RPM", "getLeftWheelSpeedDes_RPM", Drivetrain.getInstance());
-		//CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor1);
-		//CsvLogger.addLoggingFieldDouble("DT_Motor_L2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor2);
-		//CsvLogger.addLoggingFieldDouble("DT_Motor_L3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().leftGearbox.motor3);
-		//CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor1);
-		//CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor2);
-		//CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getOutputCurrent", Drivetrain.getInstance().rightGearbox.motor3);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getMasterMotorCurrent", Drivetrain.getInstance().leftGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_L2_Current", "A", "getSlave1MotorCurrent", Drivetrain.getInstance().leftGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_L3_Current", "A", "getSlave2MotorCurrent", Drivetrain.getInstance().leftGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getMasterMotorCurrent", Drivetrain.getInstance().rightGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getSlave1MotorCurrent", Drivetrain.getInstance().rightGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getSlave2MotorCurrent", Drivetrain.getInstance().rightGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Pose_Angle", "deg", "getAngle", Gyro.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Raise_Command", "cmd", "getDriverElbowRaiseCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Command", "cmd", "getDriverElbowLowerCmd", DriverController.getInstance());
@@ -503,6 +505,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
 		CasseroleWebStates.putDouble("RIO Main Loop Exec Time (ms)", getLoopExeTime_ms());
+		CasseroleWebStates.putString("RioTimeandDate", new Date().toString());
 		CasseroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
 		CasseroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
 		CasseroleWebStates.putBoolean("leftSwitchState", FieldSetupString.getInstance(). left_Switch_Owned);

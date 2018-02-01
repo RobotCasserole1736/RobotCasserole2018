@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 
 public class GravityIndicator{
@@ -15,7 +17,9 @@ public class GravityIndicator{
 	
 	double finalOutput = 0;	
 	private GravityIndicator() {
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		robotAccelerometer = new BuiltInAccelerometer();
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}
 	
 	public void update(){

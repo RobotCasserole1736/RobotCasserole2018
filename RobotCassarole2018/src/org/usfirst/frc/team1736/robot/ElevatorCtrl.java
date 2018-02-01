@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -64,6 +65,8 @@ public class ElevatorCtrl {
 	}
 	
 	private ElevatorCtrl() {
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+
 		//Init physical devices
 		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
@@ -82,6 +85,9 @@ public class ElevatorCtrl {
 		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 0.5, 0.0, 1.0);
 		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
 		
+
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+
 		
 	}
 	

@@ -2,7 +2,7 @@ package org.usfirst.frc.team1736.robot;
 
 public class SimGearbox implements Gearbox {
 
-
+double presentCommand = 0;
 	
 	public SimGearbox() {
 	
@@ -18,7 +18,7 @@ public class SimGearbox implements Gearbox {
 	}
 	
 	public void setMotorCommand(double command) {
-
+presentCommand = command;
 	}
 	
 	public double getSpeedRPM() {
@@ -38,6 +38,24 @@ public class SimGearbox implements Gearbox {
 	}
 	
 	public double getMotorCommand() {
+		return presentCommand;
+	}
+
+	@Override
+	public double getMasterMotorCurrent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getSlave1MotorCurrent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getSlave2MotorCurrent() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 	

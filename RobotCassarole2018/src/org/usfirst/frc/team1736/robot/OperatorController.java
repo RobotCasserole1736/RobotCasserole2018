@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
@@ -18,7 +20,10 @@ public class OperatorController {
 	
 	//Constructor - private because singleton
 	private OperatorController() {
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		operatorController = new XboxController(1);
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+
 	}
 	
 	

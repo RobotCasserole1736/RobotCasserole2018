@@ -2,6 +2,9 @@ package org.usfirst.frc.team1736.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.PWMSpeedController;
@@ -55,6 +58,7 @@ public class IntakeControl {
 	}
 	
 	private IntakeControl () {
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		sensor = new DigitalInput(RobotConstants.DI_INTAKE_CUBE_PRESENT_SENSOR);
 		leftMotor = new Spark(RobotConstants.PWM_INTAKE_LEFT);
 		rightMotor = new Spark(RobotConstants.PWM_INTAKE_RIGHT);
@@ -65,6 +69,8 @@ public class IntakeControl {
 		rightEjectMotorCal  = new Calibration("Intake Right Eject Cmd",  0.4, 0.0, 1.0);
 		leftThrowMotorCal   = new Calibration("Intake Left Throw Cmd",   0.4, 0.0, 1.0);
 		rightThrowMotorCal  = new Calibration("Intake Right Throw Cmd",  0.4, 0.0, 1.0);
+		
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}
 	
 	public void setIntakeDesired(boolean Cmd ) {
