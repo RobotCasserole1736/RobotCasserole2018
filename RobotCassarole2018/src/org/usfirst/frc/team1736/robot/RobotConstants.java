@@ -67,7 +67,7 @@ public class RobotConstants {
 	
 
 	//Camera View URL. Requires the roboRIO be set to a fixed IP address of 10.17.36.2
-	public static final String DRIVER_CAMERA_URL = "http://10.17.36.2:1182/stream.mjpg";
+	public static final String DRIVER_CAMERA_URL = "http://10.17.36.2:1180/stream.mjpg";
 
 	//LED Stuff
 	public static final int NUM_LEDS_TOTAL = 50;

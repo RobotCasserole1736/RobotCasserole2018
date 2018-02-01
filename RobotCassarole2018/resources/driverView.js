@@ -399,6 +399,15 @@ autoSelSetCurrent = function(name, val){
     document.getElementById(name+"_cur").innerHTML = val;
 }
 
+//Freakin hacks to make this webcam work. Don't use these if you can help it
+reloadWebcamHack = function(webcam){
+    webcam.src = webcam.src + "/" + Math.floor(Math.random()*1000);
+    return;
+}
+reloadWebcamHack2 = function(webcam_name){
+    reloadWebcamHack(document.getElementById(webcam_name));
+}
+
 dataSocket.onmessage = function (event) {
   var arr = JSON.parse(event.data);
   
@@ -424,7 +433,10 @@ dataSocket.onmessage = function (event) {
 			var tgt_y_pct = arr.obj_array[i].marker_y;
 			var rotation = arr.obj_array[i].rotation_deg;
 			//Draw webcam plus crosshairs overlaid
-			webcamTexts += "<td><div id=\"outter\" style=\"position:relative;width:300px;height:auto;\"><img src="+arr.obj_array[i].url+" style=\"width:300px;height:auto;transform:rotate("+rotation.toString()+"deg)\"/><div id=\"crosshair_vert"+ (arr.obj_array[i].name) +"\" style=\"background:yellow;position:absolute;top:"+tgt_y_pct.toString()+"%;left:"+tgt_x_pct.toString()+"%;width:2px;height:30px;transform:translate(-50%, -50%)\"/><div id=\"crosshair_horiz"+ (arr.obj_array[i].name) +"\" style=\"background:yellow;position:absolute;top:"+tgt_y_pct.toString()+"%;left:"+tgt_x_pct.toString()+"%;width:30px;height:2px;transform:translate(-50%, -50%)\"/></div></td>";    
+            webcamTexts += "<td><a href=\"#\" onClick=\"return reloadWebcamHack("+arr.obj_array[i].name+")\">"
+			webcamTexts += "<div id=\"outter\" style=\"position:relative;width:600px;height:auto;\"><img src="+arr.obj_array[i].url+" id=\""+arr.obj_array[i].name+"\" style=\"width:600px;height:auto;transform:rotate("+rotation.toString()+"deg)\"/><div id=\"crosshair_vert"+ (arr.obj_array[i].name) +"\" style=\"background:yellow;position:absolute;top:"+tgt_y_pct.toString()+"%;left:"+tgt_x_pct.toString()+"%;width:2px;height:30px;transform:translate(-50%, -50%)\"/><div id=\"crosshair_horiz"+ (arr.obj_array[i].name) +"\" style=\"background:yellow;position:absolute;top:"+tgt_y_pct.toString()+"%;left:"+tgt_x_pct.toString()+"%;width:30px;height:2px;transform:translate(-50%, -50%)\"/></div>";
+            webcamTexts += "<td></a>"
+			//webcamTexts += "<td><div id=\"outter\" style=\"position:relative;width:600px;height:auto;\"><iframe src="+arr.obj_array[i].url+" style=\"width:600px;height:auto;transform:rotate("+rotation.toString()+"deg)\"/><div id=\"crosshair_vert"+ (arr.obj_array[i].name) +"\" style=\"background:yellow;position:absolute;top:"+tgt_y_pct.toString()+"%;left:"+tgt_x_pct.toString()+"%;width:2px;height:30px;transform:translate(-50%, -50%)\"/><div id=\"crosshair_horiz"+ (arr.obj_array[i].name) +"\" style=\"background:yellow;position:absolute;top:"+tgt_y_pct.toString()+"%;left:"+tgt_x_pct.toString()+"%;width:30px;height:2px;transform:translate(-50%, -50%)\"/></div></td>";    
 		 } else if(arr.obj_array[i].type == "autosel"){
             autoSelText += "<tr>";
             autoSelText += "<td>" + arr.obj_array[i].displayName + "</td>";
