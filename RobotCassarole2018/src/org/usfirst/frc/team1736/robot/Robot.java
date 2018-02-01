@@ -171,6 +171,7 @@ public class Robot extends TimedRobot {
 			
 			
 			//Update appropriate subsystems
+			IntakeControl.getInstance().sampleSensors();
 			ElevatorCtrl.getInstance().sampleSensors();
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
@@ -233,6 +234,8 @@ public class Robot extends TimedRobot {
 			//Sample sensors
 			GravityIndicator.getInstance().update();
 			ElevatorCtrl.getInstance().sampleSensors();
+			IntakeControl.getInstance().sampleSensors();
+			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			
 			//Perform current-limiting calculations
 			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
@@ -309,7 +312,7 @@ public class Robot extends TimedRobot {
 			//Sample Sensors
 			GravityIndicator.getInstance().update();
 			ElevatorCtrl.getInstance().sampleSensors();
-			IntakeControl.getInstance().intakeFlag();
+			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			
 			//Map Driver & Operator inputs to drivetrain open-loop commands
@@ -400,12 +403,16 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldBoolean("Elbow_Raise_Command", "cmd", "getDriverElbowRaiseCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Command", "cmd", "getDriverElbowLowerCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elbow_Motor_Command", "cmd", "getMotorCmd", ElbowControl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elbow_Upper_Limit_Reached", "cmd", "isUpperLimitReached", ElbowControl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Limit_Reached", "cmd", "isLowerLimitReached", ElbowControl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elbow_Upper_Limit_Reached", "bool", "isUpperLimitReached", ElbowControl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Limit_Reached", "bool", "isLowerLimitReached", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_Intake_Desired", "cmd", "getIntakeCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_Eject_Desired", "cmd", "getEjectCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_IntakeOvrd_Desired", "cmd", "getIntakeOverideCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_Throw_Desired", "cmd", "getThrowCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Intake_Current_Limit_Exceeded", "bool", "getCurrentLimitExceeded", IntakeControl.getInstance());
+		CsvLogger.addLoggingFieldDouble("Intake_Right_Motor_Cmd", "cmd", "getRightMotorCmd", IntakeControl.getInstance());
+		CsvLogger.addLoggingFieldDouble("Intake_Left_Motor_Cmd", "cmd", "getLeftMotorCmd", IntakeControl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Intake_Cube_In", "bool", "cubeInIntake", IntakeControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Continuous_Mode_Desired", "cmd", "getElevCntrlModeCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Continuous_Mode_Cmd", "cmd", "getElevCntrlModeCmdSpeed", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Intake_Left", "A", "getCurrent", pdp, RobotConstants.PDP_INTAKE_LEFT);
@@ -442,7 +449,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setDialValue("Robot Angle (deg)", GravityIndicator.getInstance().getRobotAngle());
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
 		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
-		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().intakeFlag());
+		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().getCurrentLimitExceeded());
 		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isInDeadzone()); 
 		CasseroleDriverView.setBoolean("Elbow In Transit", !(ElbowControl.getInstance().isLowerLimitReached() || ElbowControl.getInstance().isUpperLimitReached()));
 		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperlimitSwitch());
@@ -507,7 +514,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
 		CasseroleWebStates.putDouble("Auto Mode", auto.mode);
 		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
-		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().intakeSensorState());
+		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().cubeInIntake());
 	}
 	
 	
