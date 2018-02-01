@@ -53,7 +53,7 @@ public class Drivetrain {
 		}
 		
 		rightGearbox.setInverted(true);
-		curLimitEnable = new Calibration("Enable DT Current Limit", 0, 0, 1.0);
+		curLimitEnable = new Calibration("DT Enable Current Limit", 0, 0, 1.0);
 		
 	}
 		
