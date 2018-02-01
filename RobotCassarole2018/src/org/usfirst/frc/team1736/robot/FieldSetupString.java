@@ -19,8 +19,8 @@ public class FieldSetupString {
 		}
 		
 		private FieldSetupString() {
-			CrashTracker.logGenericMessage("Start of FieldSetupString init");
-			CrashTracker.logGenericMessage("end of FieldSetupString init");
+			CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+			CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 		}
 		
 		

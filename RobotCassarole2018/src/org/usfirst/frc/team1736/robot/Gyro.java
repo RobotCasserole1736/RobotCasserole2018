@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 /*
  *******************************************************************************************
  * Copyright (C) 2017-2018 FRC Team 1736 Robot Casserole - www.robotcasserole.org
@@ -40,8 +42,10 @@ public class Gyro {
 	}
 
 	Gyro() {
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		adxrs453 = new ADXRS453_Gyro();
 		angleOffset = 0;
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}
 
 	public double getAngle() {

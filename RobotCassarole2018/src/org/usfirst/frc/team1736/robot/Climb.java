@@ -43,7 +43,7 @@ public class Climb {
 	
 	
 	private Climb() {
-		CrashTracker.logGenericMessage("start of climb init");
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		releaseLatch = new Servo(RobotConstants.PWM_RELEASE_LATCH); 
 		hookRelease = new Relay(RobotConstants.RELAY_HOOK_RELEASE, Relay.Direction.kForward);
 		
@@ -61,7 +61,7 @@ public class Climb {
 		leftWinchMotor2.set(0);
 		rightWinchMotor1.set(0);
 		rightWinchMotor2.set(0);
-		CrashTracker.logGenericMessage("end of climb init");
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}
 	
 	

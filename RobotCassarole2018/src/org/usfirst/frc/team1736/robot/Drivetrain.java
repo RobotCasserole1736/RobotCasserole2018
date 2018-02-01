@@ -36,7 +36,7 @@ public class Drivetrain {
 	
 	
 	private Drivetrain() {
-		CrashTracker.logGenericMessage("start of drivetrain init");
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		boolean useRealGearbox = false;
 		
 		if(useRealGearbox) {
@@ -55,7 +55,7 @@ public class Drivetrain {
 		
 		rightGearbox.setInverted(true);
 		curLimitEnable = new Calibration("Enable DT Current Limit", 0, 0, 1.0);
-		CrashTracker.logGenericMessage("End ofdrivetrain init");
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}
 		
 	public void setForwardReverseCommand(double command) {

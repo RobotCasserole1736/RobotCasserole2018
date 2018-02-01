@@ -17,9 +17,9 @@ public class DriverController {
 		return driveCtrl;
 	}
 	private DriverController() {
-		CrashTracker.logGenericMessage("start of Drivercontroller init");
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		driveController = new XboxController(0);
-		CrashTracker.logGenericMessage("end of Drivercontroller init");
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}
 	// assuming that positive is forward Cmd whereas negative is reverse
 	public double getDriverForwardReverseCommand() {

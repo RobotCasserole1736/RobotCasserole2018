@@ -28,6 +28,8 @@
 
 package org.usfirst.frc.team1736.robot;
 
+import java.util.Date;
+
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
@@ -489,6 +491,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
 		CasseroleWebStates.putDouble("RIO Main Loop Exec Time (ms)", getLoopExeTime_ms());
+		CasseroleWebStates.putString("RioTimeandDate", new Date().toString());
 		CasseroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
 		CasseroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
 		CasseroleWebStates.putBoolean("leftSwitchState", FieldSetupString.getInstance(). left_Switch_Owned);

@@ -2,6 +2,9 @@ package org.usfirst.frc.team1736.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Spark;
 
@@ -25,7 +28,9 @@ public class IntakeControl {
 	}
 	
 	private IntakeControl () {
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		sensor = new DigitalInput(RobotConstants.DI_INTAKE_CUBE_PRESENT_SENSOR);
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 		
 	}
 	

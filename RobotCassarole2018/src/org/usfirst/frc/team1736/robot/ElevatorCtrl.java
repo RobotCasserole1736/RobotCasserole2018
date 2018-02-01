@@ -42,7 +42,7 @@ public class ElevatorCtrl {
 	}
 	
 	private ElevatorCtrl() {
-		CrashTracker.logGenericMessage("Start of ElevatorCtrl init");
+		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
 		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
 		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
@@ -58,7 +58,7 @@ public class ElevatorCtrl {
 		ExchangePos = new Calibration("Exchange position", 4.0, 0.0, 84.0);
 		UpSpeed = new Calibration("Elevator Closed-Loop up speed", 0.5, 0.0, 1.0);
 		DownSpeed = new Calibration("Elevator Closed-Loop down speed", 0.5, 0.0, 1.0);
-		CrashTracker.logGenericMessage("end of ElevatorCtrl init");
+		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 		
 	}
 	
