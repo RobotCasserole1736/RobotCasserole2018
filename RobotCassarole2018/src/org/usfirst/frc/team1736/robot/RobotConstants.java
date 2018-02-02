@@ -20,12 +20,12 @@ public class RobotConstants {
 	
 	
 	//CAN ID's
-	public static final int CANID_DRIVETRAIN_LEFT_MASTER_SRX = 0;
-	public static final int CANID_DRIVETRAIN_LEFT_SLAVE1_SRX = 1;
-	public static final int CANID_DRIVETRAIN_LEFT_SLAVE2_SRX = 1;
-	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 2;
-	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX = 3;
-	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 3; //TODO: Make these correct
+	public static final int CANID_DRIVETRAIN_LEFT_MASTER_SRX = 1;
+	public static final int CANID_DRIVETRAIN_LEFT_SLAVE1_SRX = 0;
+	public static final int CANID_DRIVETRAIN_LEFT_SLAVE2_SRX = 12;
+	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 15;
+	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX = 13;
+	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 14; 
 	
 	//Relay
 	public static final int RELAY_HOOK_RELEASE = 0;
@@ -52,7 +52,7 @@ public class RobotConstants {
 	/////////////////////////////////////////////////////////////////////////////////////
 	
 	//PDP Hookups
-	public static final int PDP_INTAKE_LEFT = 0; //TODO: Make these correct
+	public static final int PDP_INTAKE_LEFT = 0;
 	public static final int PDP_INTAKE_RIGHT = 1;
 	public static final int PDP_CLIMBER_LEFT_ONE = 2;
 	public static final int PDP_CLIMBER_LEFT_TWO = 3;

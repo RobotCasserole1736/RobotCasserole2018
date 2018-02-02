@@ -31,7 +31,7 @@ public class DriverController {
 	}
 	
 	public double getDriverLeftRightCommand() {
-		double driverRightXValue = driveController.getX(Hand.kRight);
+		double driverRightXValue = -1 * driveController.getX(Hand.kRight);
 		if (driverRightXValue > -0.15 & driverRightXValue <0.15) {
 		    driverRightXValue = 0;
 		}

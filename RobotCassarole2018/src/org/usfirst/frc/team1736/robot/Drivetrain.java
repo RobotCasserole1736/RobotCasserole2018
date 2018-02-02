@@ -37,7 +37,7 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
-		boolean useRealGearbox = false;
+		boolean useRealGearbox = true;
 		
 		if(useRealGearbox) {
 			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
@@ -53,7 +53,9 @@ public class Drivetrain {
 			rightGearbox = new SimGearbox();
 		}
 		
-		rightGearbox.setInverted(true);
+		leftGearbox.setInverted(true);
+		
+		rightGearbox.setInverted(false);
 		
 		curLimitEnable = new Calibration("DT Enable Current Limit", 0, 0, 1.0);
 
@@ -90,7 +92,7 @@ public class Drivetrain {
 		            rightMotorCommand = Math.max(curFwdRevCmd, curRotCmd);
 				} else {
 					leftMotorCommand = Math.max(curFwdRevCmd, -curRotCmd);
-		            rightMotorCommand = curFwdRevCmd + curRotCmd;
+		        rightMotorCommand = curFwdRevCmd + curRotCmd;
 				}
 			} else {
 				if (curRotCmd > 0.0) {
