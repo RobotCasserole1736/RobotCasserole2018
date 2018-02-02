@@ -401,6 +401,10 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getMasterMotorCurrent", Drivetrain.getInstance().rightGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getSlave1MotorCurrent", Drivetrain.getInstance().rightGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getSlave2MotorCurrent", Drivetrain.getInstance().rightGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Left_Motor_Cmd", "cmd", "getLeftMotorCommand", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Right_Motor_Cmd", "cmd", "getRightMotorCommand", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_FwdRev_Cmd", "cmd", "getDriverForwardReverseCommand", DriverController.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Rotate_Cmd", "cmd", "getDriverLeftRightCommand", DriverController.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Pose_Angle", "deg", "getAngle", Gyro.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Raise_Command", "cmd", "getDriverElbowRaiseCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Command", "cmd", "getDriverElbowLowerCmd", DriverController.getInstance());
