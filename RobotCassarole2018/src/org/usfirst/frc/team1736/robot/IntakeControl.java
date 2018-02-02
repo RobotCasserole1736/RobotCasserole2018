@@ -15,6 +15,8 @@ public class IntakeControl {
 	private DigitalInput sensor;
 	Spark leftMotor;
 	Spark rightMotor;
+	double leftMotorCurrent;
+	double rightMotorCurrent;
 	Calibration leftIntakeMotorCal;
 	Calibration rightIntakeMotorCal;
 	Calibration leftEjectMotorCal;
@@ -65,7 +67,7 @@ public class IntakeControl {
 	}
 	
 	
-	public  void setMotorCurrents(double leftCurrent, double rightCurrent) {
+	public  void setMotorCurrents(double leftCurrent_in, double rightCurrent_in) {
 		
 	}
 	
