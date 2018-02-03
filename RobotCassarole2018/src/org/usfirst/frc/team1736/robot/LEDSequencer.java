@@ -463,20 +463,20 @@ public class LEDSequencer {
 
 	Particle[] particles = new Particle[4]; 
 	private void fire() {
+		int H_Value = 0;
+		int S_Value = 100;
+		int Brightness = 0;
+		double bright = 0;
 		
-	
+		
 			for(int i = 0; i < particles.length; i++) {
 				particles [i].move();		
 			}
 			for(int led_idx = 0; led_idx < RobotConstants.NUM_LEDS_TOTAL / 2; led_idx++) {
-				double bright = 0;
+
 				
 				for(int part_idx = 0; part_idx < particles.length; part_idx++) {
-					bright += particles[part_idx].colorAt(led_idx);
-				}
-				
-				ledstrip.setLEDColor(led_idx, bright, bright, bright);
-				
+					bright += particles[part_idx].Color
 				
 			}			
 		

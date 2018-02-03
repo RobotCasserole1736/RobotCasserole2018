@@ -1,7 +1,5 @@
 package org.usfirst.frc.team1736.lib.LEDs;
 
-import edu.wpi.first.wpilibj.Timer;
-
 public class Particle {
 //Number of the LED the center of the particle is occupying
 	private int position;
@@ -13,8 +11,9 @@ public class Particle {
 	private int level;
 //# of times called
 	private int callNum;
-//Color int.
-	private int Color; 
+//Color 
+	private Color On_Color; 
+	private Color Off_Color;
 //Age is # of cycles the particle has existed for.
 	private double age;
 	
@@ -22,30 +21,30 @@ public class Particle {
 	public Particle() {
 		double time = (callNum * 50);
 		int ledNum = position;
-		Color = level;
+		On_Color = new Color();
+		On_Color.setLevel(1);
+		Off_Color = new Color();
+		Off_Color.setLevel(0);
 		speed = 1;
 		width = 4;
-			
-		
-		
-		
-	}
+	}	
+	
 	public void move() {
 		position = position + speed;
 		if (position > 24) {
 			reset();
 		}
 	}
+
 	
-	
-	public double colorAt(int idx) {
+	public Color ColorAt(int idx) {
 		int lower = position;
 		int upper = position + width;
 		
 		if (idx < upper & idx > lower) {
-			return .25;
+			return On_Color;
 		} else {
-			return 0;
+			return ;
 		}
 	}
 	
