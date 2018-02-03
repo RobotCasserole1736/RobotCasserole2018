@@ -11,6 +11,7 @@ public class FieldSetupString {
 		boolean left_Scale_Owned;
 		boolean right_Scale_Owned;
 		String prevGameData = "";
+		boolean validString;
 		
 		public static synchronized FieldSetupString getInstance() {
 			if ( singularInstance == null)
@@ -28,8 +29,8 @@ public class FieldSetupString {
 			String gameData;
 			try {
 				gameData = DriverStation.getInstance().getGameSpecificMessage();
-				if(gameData.charAt(0) == 'L')
-				{
+			if(gameData.length() >= 2) {	
+				if(gameData.charAt(0) == 'L') {
 					left_Switch_Owned = true;
 					right_Switch_Owned = false;
 				} else if(gameData.charAt(0) == 'R') {
@@ -43,21 +44,39 @@ public class FieldSetupString {
 				{
 					left_Scale_Owned = true;
 					right_Scale_Owned = false;
-				} else if(gameData.charAt(1) == 'R'){
+				} else if(gameData.charAt(1) == 'R') {
 					right_Scale_Owned = true;
 					left_Scale_Owned = false;
 				}else {
 					right_Scale_Owned = false;
 					left_Scale_Owned = false;
-				}
-				
-				if(gameData.compareTo(prevGameData) != 0 ) {
+				}	
+			}
+			else {
+				left_Switch_Owned = false;
+				right_Switch_Owned = false;
+				left_Scale_Owned = false;
+				right_Scale_Owned = false;
+			}
+			
+				//(left_Switch_Owned == true || right_Switch_Owned == true) && (left_Scale_Owned == true || right_Scale_Owned == true)
+			
+				if(gameData.compareTo(prevGameData) != 0 && (left_Switch_Owned == true || right_Switch_Owned == true) && (left_Scale_Owned == true || right_Scale_Owned == true)) {
 					CrashTracker.logGenericMessage("got new game data:" + gameData);
+				}
+				else if(gameData.compareTo(prevGameData) != 0 && (left_Switch_Owned == false && right_Switch_Owned == false) && (left_Scale_Owned == false && right_Scale_Owned == false)) {
+					CrashTracker.logGenericMessage("got unexpected game data:" + gameData);
+				}
+				else {
+					//When no new strings are received nothing is returned
 				}
 				
 				prevGameData = gameData;
 				
-			} catch (Throwable t){
+				
+				
+				
+			} catch (Throwable t) {
 				String msg = "Error parsing string data\n" + t.getMessage() + "\n" + t.getStackTrace();
 				CrashTracker.logGenericMessage(msg);
 				DriverStation.reportError(msg, false);
@@ -67,8 +86,8 @@ public class FieldSetupString {
 				right_Scale_Owned = false;
 				
 			}
-			
 		}
+		
 		
 		public boolean leftSwitchOwned() {
 			boolean leftSwitchPath = left_Switch_Owned;
@@ -90,4 +109,5 @@ public class FieldSetupString {
 			return rightScalePath;
 			
 		}
+		
 	}

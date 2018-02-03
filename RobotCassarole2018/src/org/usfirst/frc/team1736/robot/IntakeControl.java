@@ -31,8 +31,10 @@ public class IntakeControl {
 	DigitalInput sensor;
 	Spark leftMotor;
 	Spark rightMotor;
-	
+
 	//Calibrations
+	double leftMotorCurrent;
+	double rightMotorCurrent;
 	Calibration leftIntakeMotorCal;
 	Calibration rightIntakeMotorCal;
 	Calibration leftEjectMotorCal;
