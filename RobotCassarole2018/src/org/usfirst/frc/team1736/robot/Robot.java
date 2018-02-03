@@ -395,6 +395,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Des_RPM", "RPM", "getRightWheelSpeedDes_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Act_RPM", "RPM", "getLeftWheelSpeedAct_RPM", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Wheel_Speed_Des_RPM", "RPM", "getLeftWheelSpeedDes_RPM", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("DT_Heading_Des", "deg", "getHeadingDes_deg", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Motor_L1_Current", "A", "getMasterMotorCurrent", Drivetrain.getInstance().leftGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_L2_Current", "A", "getSlave1MotorCurrent", Drivetrain.getInstance().leftGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_L3_Current", "A", "getSlave2MotorCurrent", Drivetrain.getInstance().leftGearbox);
@@ -475,6 +476,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Left_Wheel_Speed_Des","RPM");
 		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("DT_Heading_des", "deg");
 		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
 		CasseroleWebPlots.addNewSignal("Elevator_Height", "in");
@@ -495,6 +497,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Left_Wheel_Speed_Des", time,Drivetrain.getInstance().getLeftWheelSpeedDes_RPM());
 		CasseroleWebPlots.addSample("DT_Left_Motor_Cmd", time, Drivetrain.getInstance().getLeftMotorCommand());
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
+		CasseroleWebPlots.addSample("DT_Heading_des", time, Drivetrain.getInstance().getHeadingDes_deg());
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());

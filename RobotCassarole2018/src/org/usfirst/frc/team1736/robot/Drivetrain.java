@@ -15,6 +15,7 @@ public class Drivetrain {
 	private double leftMotorCommand;
 	private double curLeftSpeedCmd_RPM = 0;
 	private double curRightSpeedCmd_RPM = 0;
+	private double curHeadingCmd_deg = 0;
 	private boolean isClosedLoop = false;
 	private double speedFtpS = 0;
 	double leftWheelRPM = 0;
@@ -25,6 +26,7 @@ public class Drivetrain {
 	public static final double WHEEL_ROLLING_RADIUS_FT = 0.45; //6 inch pneumatic wheels with a bit of squish
 	
 	Calibration curLimitEnable;
+	Calibration headingGainCal;
 	
 
 	public static synchronized Drivetrain getInstance() {
@@ -58,6 +60,7 @@ public class Drivetrain {
 		rightGearbox.setInverted(false);
 		
 		curLimitEnable = new Calibration("DT Enable Current Limit", 0, 0, 1.0);
+		headingGainCal = new Calibration("DT Heading Comp P Gain", 0);
 
 		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}
@@ -79,6 +82,11 @@ public class Drivetrain {
 	
 	public void setRightWheelSpeed(double speed_RPM) {
 		curRightSpeedCmd_RPM = speed_RPM/SPROCKET_RATIO;
+		isClosedLoop = true;
+	}
+	
+	public void setDesiredHeading(double heading_deg) {
+		curHeadingCmd_deg = heading_deg;
 		isClosedLoop = true;
 	}
 	
@@ -107,7 +115,17 @@ public class Drivetrain {
 			rightGearbox.setMotorCommand(rightMotorCommand);
 			
 		} else {
-			//Closed loop logic - set closed loop speed commands
+			//Closed loop logic
+			double headingCompVal = 0;
+			
+			//Calc heading compensation
+			if(Gyro.getInstance().isOnline()) {
+				headingCompVal = (Gyro.getInstance().getAngle() - curHeadingCmd_deg) * headingGainCal.get();
+			}
+			curLeftSpeedCmd_RPM -= headingCompVal;
+			curRightSpeedCmd_RPM += headingCompVal;
+			
+			//Set values to gearboxes
 			leftGearbox.setMotorSpeed(curLeftSpeedCmd_RPM);
 			rightGearbox.setMotorSpeed(curRightSpeedCmd_RPM);
 		}
@@ -152,6 +170,14 @@ public class Drivetrain {
 	public double getLeftWheelSpeedDes_RPM() {
 		if(isClosedLoop) {
 			return curLeftSpeedCmd_RPM;
+		} else {
+			return 0;
+		}
+	}
+	
+	public double getHeadingDes_deg() {
+		if(isClosedLoop) {
+			return curHeadingCmd_deg;
 		} else {
 			return 0;
 		}

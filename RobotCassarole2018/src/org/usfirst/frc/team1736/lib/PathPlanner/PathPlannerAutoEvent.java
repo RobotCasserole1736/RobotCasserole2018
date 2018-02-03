@@ -70,6 +70,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
         
         Drivetrain.getInstance().setLeftWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothLeftVelocity[timestep][1]));
         Drivetrain.getInstance().setRightWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothRightVelocity[timestep][1]));
+        Drivetrain.getInstance().setDesiredHeading(path.heading[timestep][1]);
 
         timestep++;
     }
