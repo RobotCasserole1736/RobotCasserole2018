@@ -20,7 +20,7 @@ public class RobotConstants {
 	public static final int CANID_DRIVETRAIN_LEFT_SLAVE2_SRX = 2;
 	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 3;
 	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX = 4;
-	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 4;
+	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 5;
 	
 	
 	//Digital Inputs
@@ -42,5 +42,13 @@ public class RobotConstants {
 	public static final int PDP_CLIMBER_RIGHT_ONE = 4;
 	public static final int PDP_CLIMBER_RIGHT_TWO = 5;
 	public static final int PDP_ELBOW = 6;
+	
+	
 }
+	
+	
+	
+	
+	
+
 
