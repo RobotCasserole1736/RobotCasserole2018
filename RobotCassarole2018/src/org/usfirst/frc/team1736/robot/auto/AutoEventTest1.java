@@ -17,10 +17,13 @@ public class AutoEventTest1 extends AutoEvent {
 		{0, 20}
 	};
 	
-	private static final double time = 8.0;
+	private static final double time = 5.0;
 
 	public AutoEventTest1() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
+
+		driveForward.path.setVelocityAlpha(0.001);
+
 	}
 
 	@Override

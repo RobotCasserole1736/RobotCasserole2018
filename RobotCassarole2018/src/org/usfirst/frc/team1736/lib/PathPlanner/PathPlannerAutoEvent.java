@@ -23,6 +23,8 @@ package org.usfirst.frc.team1736.lib.PathPlanner;
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
 import org.usfirst.frc.team1736.robot.Drivetrain;
 
+import edu.wpi.first.wpilibj.Timer;
+
 /**
  * Interface into the Casserole autonomous sequencer for a path-planned traversal. Simply wraps
  * path-planner functionality into the AutoEvent abstract class.
@@ -54,6 +56,12 @@ public class PathPlannerAutoEvent extends AutoEvent {
         
         path = new FalconPathPlanner(waypoints);
         pathCalculated = false;
+        
+        //Default alpha/beta
+		path.setPathBeta(0.2);
+		path.setPathAlpha(0.5);
+		path.setVelocityAlpha(0.01);
+		path.setVelocityBeta(0.9);
     }
 
 
@@ -61,18 +69,26 @@ public class PathPlannerAutoEvent extends AutoEvent {
      * On the first loop, calculates velocities needed to take the path specified. Later loops will
      * assign these velocities to the drivetrain at the proper time.
      */
+    double startTime = 0;
     public void userUpdate() {
+    	double tmp;
         if (pathCalculated == false) {
             path.calculate(time_duration_s, taskRate, DT_TRACK_WIDTH_FT);
             timestep = 0;
             pathCalculated = true;
+            startTime = Timer.getFPGATimestamp();
+        }
+        
+        tmp = (Timer.getFPGATimestamp()-startTime)/taskRate;
+        timestep = (int) Math.round(tmp);
+        
+        if(timestep >= path.numFinalPoints) {
+        	timestep = (int) (path.numFinalPoints - 1);
         }
         
         Drivetrain.getInstance().setLeftWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothLeftVelocity[timestep][1]));
         Drivetrain.getInstance().setRightWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothRightVelocity[timestep][1]));
         Drivetrain.getInstance().setDesiredHeading(path.heading[timestep][1]);
-
-        timestep++;
     }
 
 
@@ -104,8 +120,9 @@ public class PathPlannerAutoEvent extends AutoEvent {
 	@Override
 	public void userStart() {
 		path.calculate(time_duration_s, taskRate,DT_TRACK_WIDTH_FT);
-        timestep = 0;
         pathCalculated = true;
+        timestep = 0;
+        startTime = Timer.getFPGATimestamp();
         
 	}
 	

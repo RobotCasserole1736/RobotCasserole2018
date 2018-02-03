@@ -30,10 +30,10 @@ public class RealGearbox implements Gearbox{
 		motor2 = new TalonSRX(canid2);
 		motor3 = new TalonSRX(canid3);
 		
-		kP = new Calibration("Gearbox_"+name+"_velocity_kP", 0);
-		kI = new Calibration("Gearbox_"+name+"_velocity_kI", 0);
+		kP = new Calibration("Gearbox_"+name+"_velocity_kP", 0.008);
+		kI = new Calibration("Gearbox_"+name+"_velocity_kI", 0.00008);
 		kD = new Calibration("Gearbox_"+name+"_velocity_kD", 0);
-		kF = new Calibration("Gearbox_"+name+"_velocity_kF", 0);
+		kF = new Calibration("Gearbox_"+name+"_velocity_kF", 0.0018);
 		
 		
 		updateCalibrations();
@@ -64,6 +64,9 @@ public class RealGearbox implements Gearbox{
 		motor3.configNominalOutputReverse(0, TIMEOUT_MS);
 		motor3.configPeakOutputForward(1,TIMEOUT_MS);
 		motor3.configPeakOutputReverse(-1, TIMEOUT_MS);
+		
+		//Set coast mode always
+		
 		
 		//Motor 1 is presumed to be the one with a sensor hooked up to it.
 		motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT_MS);
@@ -133,7 +136,7 @@ public class RealGearbox implements Gearbox{
 		return rpm / 600.0 * ENCODER_CYCLES_PER_REV *4.0;
 	}
 	private double CTRE_VEL_UNITS_TO_RPM(double ctre_units) {
-		return ctre_units*600.0 / ENCODER_CYCLES_PER_REV / 4.0;
+		return ctre_units * 600.0 / ENCODER_CYCLES_PER_REV / 4.0;
 	}
 	
 	//We desire kP and kF to be calibrated in units of motor cmd (-1 to 1) per RPM

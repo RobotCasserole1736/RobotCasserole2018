@@ -23,7 +23,7 @@ public class Drivetrain {
 	double perGearboxCurrentLimit = 1000;
 	
 	public static final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
-	public static final double WHEEL_ROLLING_RADIUS_FT = 0.45; //6 inch pneumatic wheels with a bit of squish
+	public static final double WHEEL_ROLLING_RADIUS_FT = 0.26; //6 inch pneumatic wheels with a bit of squish
 	
 	Calibration curLimitEnable;
 	Calibration headingGainCal;
@@ -161,7 +161,7 @@ public class Drivetrain {
 	
 	public double getRightWheelSpeedDes_RPM() {
 		if(isClosedLoop) {
-			return curRightSpeedCmd_RPM;
+			return curRightSpeedCmd_RPM*SPROCKET_RATIO;
 		} else {
 			return 0;
 		}
@@ -169,7 +169,7 @@ public class Drivetrain {
 	
 	public double getLeftWheelSpeedDes_RPM() {
 		if(isClosedLoop) {
-			return curLeftSpeedCmd_RPM;
+			return curLeftSpeedCmd_RPM*SPROCKET_RATIO;
 		} else {
 			return 0;
 		}
