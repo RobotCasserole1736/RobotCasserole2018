@@ -11,6 +11,8 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTest1;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTest2;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -149,16 +151,11 @@ public class Autonomous {
 				break;
 					
 			case 7: //Test Mode 1
-				AutoSequencer.addEvent(new AutoEventCrossBaseLine());//Event in parenthesis
+				AutoSequencer.addEvent(new AutoEventTest1());//Event in parenthesis
 				break;
 
 			case 8: //Test Mode 2
-				if (FieldSetupString.getInstance().leftSwitchOwned()){
-					AutoSequencer.addEvent(new AutoEventScaleLeft());//Event in parenthesis
-				}
-				else if(FieldSetupString.getInstance().rightSwitchOwned()){
-					AutoSequencer.addEvent(new AutoEventScaleRight());//Event in parenthesis
-				}
+				AutoSequencer.addEvent(new AutoEventTest2());
 				break;
 			
 			case 9: //Do nothing
