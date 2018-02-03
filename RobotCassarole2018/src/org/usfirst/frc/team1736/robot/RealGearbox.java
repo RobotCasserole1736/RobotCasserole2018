@@ -83,25 +83,23 @@ public class RealGearbox implements Gearbox{
 	}
 	
 	public void updateCalibrations() {
-		motor1.config_kP(0, kP.get(), TIMEOUT_MS);
-		motor1.config_kI(0, kP.get(), TIMEOUT_MS);
-		motor1.config_kD(0, kP.get(), TIMEOUT_MS);
-		motor1.config_kF(0, kP.get(), TIMEOUT_MS);
+		motor1.config_kP(0, CMD_PER_RPM_TO_CTRE_GAIN(kP.get()), TIMEOUT_MS);
+		motor1.config_kI(0, CMD_PER_RPM_TO_CTRE_GAIN(kI.get()), TIMEOUT_MS);
+		motor1.config_kD(0, CMD_PER_RPM_TO_CTRE_GAIN(kD.get()), TIMEOUT_MS);
+		motor1.config_kF(0, CMD_PER_RPM_TO_CTRE_GAIN(kF.get()), TIMEOUT_MS);
 	}
 	
 	
 	public void setMotorSpeed(double speed_RPM) {
-		
-		motor1.set(ControlMode.Velocity,RPM_TO_CTRE_UNITS(speed_RPM));
+		motor1.set(ControlMode.Velocity,RPM_TO_CTRE_VEL_UNITS(speed_RPM));
 	}
 	
 	public void setMotorCommand(double command) {
-		
 		motor1.set(ControlMode.PercentOutput,command);
 	}
 	
 	public double getSpeedRPM() {
-		return CTRE_UNITS_TO_RPM(motor1.getSelectedSensorVelocity(0));
+		return CTRE_VEL_UNITS_TO_RPM(motor1.getSelectedSensorVelocity(0));
 	}
 	
 	public void setInverted(boolean invert) {
@@ -131,12 +129,22 @@ public class RealGearbox implements Gearbox{
 	// CTRE measures velocity in terms of "per 100ms" (???!?!) - hence factor of 600 to get to/from "per-minute"
 	// CTRE does quadrature decoding of every edge, so each encoder full period is counted as 4 pulses
 	// ENCODER_CYCLES_PER_REV defines how county the encoder is
-	private double RPM_TO_CTRE_UNITS(double rpm) {
+	private double RPM_TO_CTRE_VEL_UNITS(double rpm) {
 		return rpm / 600.0 * ENCODER_CYCLES_PER_REV *4.0;
 	}
-	private double CTRE_UNITS_TO_RPM(double ctre_units) {
+	private double CTRE_VEL_UNITS_TO_RPM(double ctre_units) {
 		return ctre_units*600.0 / ENCODER_CYCLES_PER_REV / 4.0;
 	}
+	
+	//We desire kP and kF to be calibrated in units of motor cmd (-1 to 1) per RPM
+	// Other gains will have a timing scale factor (per 1ms???) not sure. We'll scale them all the same for now.
+	// CTRE will have the gain set in terms of output percentage steps per native encoder units
+	//  SRX's have a full output range of -1024 to 1024
+	//  and this should use the same native encoder units as above.
+	private double CMD_PER_RPM_TO_CTRE_GAIN(double cmd) {
+		return cmd*1024/RPM_TO_CTRE_VEL_UNITS(1.0);
+	}
+	
 
 	@Override
 	public double getMasterMotorCurrent() {
