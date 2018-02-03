@@ -97,6 +97,13 @@ public class Robot extends TimedRobot {
 		//Log that we are starting the robot code
 		CrashTracker.logRobotInit();	
 
+		Drivetrain.getInstance();
+		Climb.getInstance();
+		ElbowControl.getInstance();
+		ElevatorCtrl.getInstance();
+		FieldSetupString.getInstance();
+		IntakeControl.getInstance();
+		
 		
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
