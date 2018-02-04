@@ -7,7 +7,7 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 import org.usfirst.frc.team1736.robot.Drivetrain;
 
 /**
- * drive straight and stuff.
+ * drive straight and stuff. Step response check (with typical smoothing)
  */
 public class AutoEventTest1 extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
