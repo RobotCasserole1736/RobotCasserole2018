@@ -60,7 +60,7 @@ public class Drivetrain {
 		rightGearbox.setInverted(false);
 		
 		curLimitEnable = new Calibration("DT Enable Current Limit", 0, 0, 1.0);
-		headingGainCal = new Calibration("DT Heading Comp P Gain", 0);
+		headingGainCal = new Calibration("DT Heading Comp P Gain", 4.0);
 
 		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
 	}

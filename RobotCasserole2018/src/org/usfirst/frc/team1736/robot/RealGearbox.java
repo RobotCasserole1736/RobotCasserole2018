@@ -30,7 +30,7 @@ public class RealGearbox implements Gearbox{
 		motor2 = new TalonSRX(canid2);
 		motor3 = new TalonSRX(canid3);
 		
-		kP = new Calibration("Gearbox_"+name+"_velocity_kP", 0.008);
+		kP = new Calibration("Gearbox_"+name+"_velocity_kP", 0.006);
 		kI = new Calibration("Gearbox_"+name+"_velocity_kI", 0.00008);
 		kD = new Calibration("Gearbox_"+name+"_velocity_kD", 0);
 		kF = new Calibration("Gearbox_"+name+"_velocity_kF", 0.0018);
