@@ -85,7 +85,7 @@ public class Drivetrain {
 		isClosedLoop = true;
 	}
 	
-	public void setDesiredHeading(double heading_deg) {
+	public void setDesiredPose(double heading_deg) {
 		curHeadingCmd_deg = heading_deg;
 		isClosedLoop = true;
 	}

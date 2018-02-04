@@ -36,12 +36,14 @@ public class PathPlannerAutoEvent extends AutoEvent {
     public FalconPathPlanner path;
     private double[][] waypoints;
     private double time_duration_s; 
-    boolean pathCalculated;
+    boolean pathCalculated = false;
+    boolean reversed = false;
 
     private int timestep;
     private double taskRate = 0.02;
-    private final double DT_TRACK_WIDTH_FT = 25 / 12; //Width in Feet
+    private final double DT_TRACK_WIDTH_FT = 25.0 / 12.0; //Width in Feet
 
+    
     /**
      * Constructor. Set up the parameters of the planner here.
      * 
@@ -49,10 +51,40 @@ public class PathPlannerAutoEvent extends AutoEvent {
      * @param timeAllowed_in Number of seconds the path traversal should take. Must be long enough
      *        to allow the path planner to output realistic speeds.         
      */
-    public PathPlannerAutoEvent(double[][] waypoints_in, double timeAllowed_in) {        
+    public PathPlannerAutoEvent(double[][] waypoints_in, double timeAllowed_in) { 
     	super();
+    	commonConstructor(waypoints_in, timeAllowed_in, false);
+    }
+    
+    /**
+     * Constructor. Set up the parameters of the planner here.
+     * 
+     * @param waypoints_in Set of x/y points which define the path the robot should take.
+     * @param timeAllowed_in Number of seconds the path traversal should take. Must be long enough
+     *        to allow the path planner to output realistic speeds. 
+     * @param reversed set to True if you desire the robot to travel backward through the provided path        
+     */
+    public PathPlannerAutoEvent(double[][] waypoints_in, double timeAllowed_in, boolean reversed_in) {        
+    	super();
+    	commonConstructor(waypoints_in, timeAllowed_in, reversed_in);
+
+    }
+    
+    private void commonConstructor(double[][] waypoints_in, double timeAllowed_in, boolean reversed_in) {
         waypoints = waypoints_in;
         time_duration_s = timeAllowed_in;
+        reversed = reversed_in;
+        
+        if(reversed) {
+	        //Reflect all points across the origin. It is expected the user will provide the actual
+	        // waypoints to us. We will invert before sending to the pathPlanner (to satisfy its assumptions)
+	        // then re-invert as needed before sending to drivetrain.
+	        for(int ii = 0; ii < waypoints.length; ii++) {
+	        	for(int jj = 0; jj < waypoints[ii].length; jj++) {
+	        		waypoints[ii][jj] *= -1;
+	        	}
+	        }
+        }
         
         path = new FalconPathPlanner(waypoints);
         pathCalculated = false;
@@ -79,16 +111,36 @@ public class PathPlannerAutoEvent extends AutoEvent {
             startTime = Timer.getFPGATimestamp();
         }
         
+        
+        //For _when_ loop timing isn't exact 20ms, and we need to skip setpoints,
+        // calculate the proper timestep based on FPGA timestamp.
         tmp = (Timer.getFPGATimestamp()-startTime)/taskRate;
         timestep = (int) Math.round(tmp);
-        
         if(timestep >= path.numFinalPoints) {
         	timestep = (int) (path.numFinalPoints - 1);
         }
         
-        Drivetrain.getInstance().setLeftWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothLeftVelocity[timestep][1]));
-        Drivetrain.getInstance().setRightWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothRightVelocity[timestep][1]));
-        Drivetrain.getInstance().setDesiredHeading(90.0-path.heading[timestep][1]);
+        //Interpret the path planner outputs into commands which are meaningful.
+        double leftCommand_RPM  = FT_PER_SEC_TO_RPM(path.smoothLeftVelocity[timestep][1]);
+        double rightCommand_RPM = FT_PER_SEC_TO_RPM(path.smoothRightVelocity[timestep][1]);
+        double poseCommand_deg = 90.0-path.heading[timestep][1];
+        
+        if(reversed) {
+        	//When running in reversed mode, we need to undo the inversion applied to the 
+        	// the waypoints.
+        	leftCommand_RPM  *= -1;
+        	rightCommand_RPM *= -1;
+        	
+        	//Note that we don't invert the pose command. Despite the fact that the "heading"
+        	// has inverted by 180 degrees (aka robot travels backward), the pose angle remains
+        	// forward. Since the path planner assumes we are actually traveling forward, and the 
+        	// drivetrain takes in a pose command, we don't need to invert the Pose command before
+        	// passing to the drivetrain.
+        }
+        
+        Drivetrain.getInstance().setLeftWheelSpeed(leftCommand_RPM);
+        Drivetrain.getInstance().setRightWheelSpeed(rightCommand_RPM);
+        Drivetrain.getInstance().setDesiredPose(poseCommand_deg);
     }
 
 
