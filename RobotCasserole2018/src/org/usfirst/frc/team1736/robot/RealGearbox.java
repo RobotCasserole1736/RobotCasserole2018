@@ -16,6 +16,15 @@ public class RealGearbox implements Gearbox{
 	Calibration kD;
 	Calibration kF;
 	
+	//State Variables
+	private double motor1_current = 0;
+	private double motor2_current = 0;
+	private double motor3_current = 0;
+	
+	private double motor_cmd = 0;
+	private double motor_speed_rpm = 0;
+
+	
 	//Update this to match the actual encoders we put on the drivetrain.
 	// This should be total periods per rev - the quadrature 4x decoding
 	// is accounted for elsewhere.
@@ -91,7 +100,15 @@ public class RealGearbox implements Gearbox{
 		motor1.config_kD(0, CMD_PER_RPM_TO_CTRE_GAIN(kD.get()), TIMEOUT_MS);
 		motor1.config_kF(0, CMD_PER_RPM_TO_CTRE_GAIN(kF.get()), TIMEOUT_MS);
 	}
-	
+
+	public void sampleSensors() {
+		motor1_current = motor1.getOutputCurrent();
+		motor2_current = motor2.getOutputCurrent();
+		motor3_current = motor3.getOutputCurrent();
+		
+		motor_cmd = motor1.getMotorOutputPercent();
+		motor_speed_rpm = CTRE_VEL_UNITS_TO_RPM(motor1.getSelectedSensorVelocity(0));
+	}
 	
 	public void setMotorSpeed(double speed_RPM) {
 		motor1.set(ControlMode.Velocity,RPM_TO_CTRE_VEL_UNITS(speed_RPM));
@@ -102,7 +119,7 @@ public class RealGearbox implements Gearbox{
 	}
 	
 	public double getSpeedRPM() {
-		return CTRE_VEL_UNITS_TO_RPM(motor1.getSelectedSensorVelocity(0));
+		return motor_speed_rpm;
 	}
 	
 	public void setInverted(boolean invert) {
@@ -118,13 +135,13 @@ public class RealGearbox implements Gearbox{
 	}
 	
 	public double getTotalCurrent() {
-		return motor1.getOutputCurrent() + 
-			   motor2.getOutputCurrent() + 
-			   motor3.getOutputCurrent();
+		return motor1_current + 
+			   motor2_current + 
+			   motor3_current;
 	}
 	
 	public double getMotorCommand() {
-		return motor1.getMotorOutputPercent();
+		return motor_cmd;
 	}
 	
 	
@@ -155,17 +172,17 @@ public class RealGearbox implements Gearbox{
 
 	@Override
 	public double getMasterMotorCurrent() {
-		return motor1.getOutputCurrent() ;
+		return motor1_current ;
 	}
 
 	@Override
 	public double getSlave1MotorCurrent() {
-		return motor2.getOutputCurrent() ;
+		return motor2_current;
 	}
 
 	@Override
 	public double getSlave2MotorCurrent() {
-		return motor3.getOutputCurrent() ;
+		return motor3_current ;
 	}
 	
 }

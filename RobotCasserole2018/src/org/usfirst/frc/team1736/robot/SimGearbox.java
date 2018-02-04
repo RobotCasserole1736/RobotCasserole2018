@@ -2,7 +2,9 @@ package org.usfirst.frc.team1736.robot;
 
 public class SimGearbox implements Gearbox {
 
-double presentCommand = 0;
+	double presentCommand = 0;
+	double presentSpeed = 0;
+	
 	
 	public SimGearbox() {
 	
@@ -14,15 +16,15 @@ double presentCommand = 0;
 	
 	
 	public void setMotorSpeed(double speed_RPM) {
-		
+		presentSpeed = speed_RPM;
 	}
 	
 	public void setMotorCommand(double command) {
-presentCommand = command;
+		presentCommand = command;
 	}
 	
 	public double getSpeedRPM() {
-		return 0;
+		return presentSpeed + (Math.random()-0.5)*30; //"simulate" sensor noise
 	}
 	
 	public void setInverted(boolean invert) {
@@ -57,6 +59,12 @@ presentCommand = command;
 	public double getSlave2MotorCurrent() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void sampleSensors() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

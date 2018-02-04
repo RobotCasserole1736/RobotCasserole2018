@@ -91,6 +91,10 @@ public class Drivetrain {
 	}
 	
 	public void update() {
+		
+		//Update IO for gearbox
+		leftGearbox.sampleSensors();
+		rightGearbox.sampleSensors();
 	
 		if(!isClosedLoop) {
 			//Open loop logic - calculate motor commands from driver inputs
@@ -118,7 +122,7 @@ public class Drivetrain {
 			//Closed loop logic
 			double headingCompVal = 0;
 			
-			//Calc heading compensation
+			//Calc heading compensation. Simple P controller.
 			if(Gyro.getInstance().isOnline()) {
 				headingCompVal = (Gyro.getInstance().getAngle() - curHeadingCmd_deg) * headingGainCal.get();
 			}

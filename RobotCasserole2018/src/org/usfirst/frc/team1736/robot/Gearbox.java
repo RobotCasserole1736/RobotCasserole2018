@@ -22,5 +22,7 @@ public interface Gearbox {
 	public abstract double getSlave2MotorCurrent();
 	
 	public abstract double getMotorCommand();
+	
+	public abstract void sampleSensors();
 
 }
