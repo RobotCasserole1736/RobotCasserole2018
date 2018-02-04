@@ -459,6 +459,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
+		CasseroleDriverView.newAutoSelector("Delay", Autonomous.DELAY_OPTIONS);
 
 	}
 	

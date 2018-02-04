@@ -13,6 +13,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest1;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest2;
+import org.usfirst.frc.team1736.robot.auto.AutoEventWait;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -31,7 +32,15 @@ public class Autonomous {
 			                                                    "Center", 
 			                                                    "Right"};
 	
+	public static final String[] DELAY_OPTIONS = new String[]{"0s", 
+                                                              "3s", 
+                                                              "6s",
+                                                              "9s",
+                                                              "12s"};
+	
 	String autoModeName = "Not Initalized";
+	
+	double delayTime_s = 0;
 	
 	int mode = -1;
 
@@ -40,10 +49,24 @@ public class Autonomous {
 	}
 		
 	public void updateAutoSelection() {
-		String startPos = CasseroleDriverView.getAutoSelectorVal("Start Position");
-		String action = CasseroleDriverView.getAutoSelectorVal("Action");
-		autoModeName = startPos + " " + action;
+		String startPos     = CasseroleDriverView.getAutoSelectorVal("Start Position");
+		String action       = CasseroleDriverView.getAutoSelectorVal("Action");
+		String delayTimeStr = CasseroleDriverView.getAutoSelectorVal("Delay Times");
+		autoModeName = startPos + " " + action + " with initial delay of " + delayTimeStr;
 		//CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
+		
+		//Map delay times
+		if(delayTimeStr.compareTo(DELAY_OPTIONS[0]) == 0) { //No Delay
+			delayTime_s = 0.0;
+		} else if (delayTimeStr.compareTo(DELAY_OPTIONS[1]) == 0) { //First delay time
+			delayTime_s = 3.0;
+		} else if (delayTimeStr.compareTo(DELAY_OPTIONS[2]) == 0) { //Second delay time
+			delayTime_s = 6.0;
+		} else if (delayTimeStr.compareTo(DELAY_OPTIONS[3]) == 0) { //Third delay time
+			delayTime_s = 9.0;
+		} else if (delayTimeStr.compareTo(DELAY_OPTIONS[4]) == 0) { //Fourth delay time
+			delayTime_s = 12.0;
+		}
 		
 		//Anything modes
 		if((action.compareTo(ACTION_MODES[0])==0) && (startPos.compareTo(START_POS_MODES[0])==0) && (FieldSetupString.getInstance().left_Scale_Owned)) {
@@ -120,6 +143,12 @@ public class Autonomous {
 
 		AutoSequencer.clearAllEvents();
 		
+		//Set up initial delay
+		if(delayTime_s != 0.0) {
+			AutoSequencer.addEvent(new AutoEventWait(delayTime_s));
+		}
+		
+		//Set up each mode
 		switch(mode) {
 			
 			case 0: //switch only if in center and own left
@@ -162,7 +191,7 @@ public class Autonomous {
 				break;
 				
 			default: // Do nothing
-				DriverStation.reportError("Something went wrong in software", false);
+				DriverStation.reportError("Unimplemented autonomous mode requested! Tell software team they got auto mode " + Integer.toString(mode) , false);
 				break;
 		}
 
