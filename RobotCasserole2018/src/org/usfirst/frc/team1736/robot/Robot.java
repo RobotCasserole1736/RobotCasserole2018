@@ -213,6 +213,9 @@ public class Robot extends TimedRobot {
 			//Poll the FMS one last time to see who owns which field pieces
 			FieldSetupString.getInstance().update();
 			
+			//Ensure gyro is starting at zero
+			Gyro.getInstance().reset();
+			
 			// Update autonomous selection and start
 			auto.updateAutoSelection();
 			auto.executeAutonomus();

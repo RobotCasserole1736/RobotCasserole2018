@@ -88,7 +88,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
         
         Drivetrain.getInstance().setLeftWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothLeftVelocity[timestep][1]));
         Drivetrain.getInstance().setRightWheelSpeed(FT_PER_SEC_TO_RPM(path.smoothRightVelocity[timestep][1]));
-        Drivetrain.getInstance().setDesiredHeading(path.heading[timestep][1]);
+        Drivetrain.getInstance().setDesiredHeading(90.0-path.heading[timestep][1]);
     }
 
 
@@ -122,6 +122,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
 		path.calculate(time_duration_s, taskRate,DT_TRACK_WIDTH_FT);
         pathCalculated = true;
         timestep = 0;
+        
         startTime = Timer.getFPGATimestamp();
         
 	}

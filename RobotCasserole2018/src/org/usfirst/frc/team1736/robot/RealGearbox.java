@@ -128,6 +128,10 @@ public class RealGearbox implements Gearbox{
 	}
 	
 	
+	public void resetIntegrators() {
+		motor1.setIntegralAccumulator(0, 0, TIMEOUT_MS);
+	}
+	
 	//Conversion Functions
 	// CTRE measures velocity in terms of "per 100ms" (???!?!) - hence factor of 600 to get to/from "per-minute"
 	// CTRE does quadrature decoding of every edge, so each encoder full period is counted as 4 pulses
