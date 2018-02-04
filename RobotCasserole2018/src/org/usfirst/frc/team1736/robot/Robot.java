@@ -64,10 +64,7 @@ public class Robot extends TimedRobot {
 	// Software utilities
 	CasseroleWebServer webServer;
 	CasseroleRIOLoadMonitor ecuStats;
-	BatteryParamEstimator bpe;
-	final static int BPE_length = 200; 
-	final static double BPE_confidenceThresh_A = 10.0;
-	Calibration minAllowableVoltageCal;
+	
 	
 	PowerDistributionPanel pdp;
 	
@@ -113,16 +110,11 @@ public class Robot extends TimedRobot {
 		pdp = new PowerDistributionPanel(0);
 		Gyro.getInstance().reset();
 		
-		//Set up battery parameter estimation
-		bpe = new BatteryParamEstimator(BPE_length); 
-		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
-		
 		//Set up autonomous routine control
 		auto = new Autonomous();
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
-		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
 
 		//Set up and start webcam stream
 		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
@@ -252,10 +244,7 @@ public class Robot extends TimedRobot {
 			ElevatorCtrl.getInstance().sampleSensors();
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
-			
-			//Perform current-limiting calculations
-			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
-			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
+			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
 			
 			//Update autonomous sequencer
 			auto.update();
@@ -321,15 +310,13 @@ public class Robot extends TimedRobot {
 			//Log the start of a new teleop loop
 			CrashTracker.logTeleopPeriodic();
 			
-			//Perform current-limiting calculations
-			bpe.updateEstimate(pdp.getVoltage(), pdp.getTotalCurrent());
-			Drivetrain.getInstance().setCurrentLimit_A(getMaxAllowableCurrent_A());
-			
 			//Sample Sensors
 			GravityIndicator.getInstance().update();
 			ElevatorCtrl.getInstance().sampleSensors();
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
+			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
+			
 			
 			//Map Driver & Operator inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
@@ -400,9 +387,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("RIO_Cpu_Load", "%", "getCpuLoad", this);
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
 		CsvLogger.addLoggingFieldDouble("RIO_Main_Loop_Exec_Time", "ms", "getLoopExeTime_ms", this);
-		CsvLogger.addLoggingFieldDouble("Bat_ESR", "ohms", "getEstESR", bpe);
-		CsvLogger.addLoggingFieldDouble("Bat_EstVoc", "V", "getEstVoc", bpe);
-		CsvLogger.addLoggingFieldDouble("Bat_CurrentDrawLimit", "A", "getMaxAllowableCurrent_A", this);
+		CsvLogger.addLoggingFieldDouble("Bat_ESR", "ohms", "getBattESR", Drivetrain.getInstance());
+		CsvLogger.addLoggingFieldDouble("Bat_Voc", "V", "getBattVoc", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Angle","deg", "getRobotGravityAngle", this);
 		CsvLogger.addLoggingFieldDouble("Net_Speed","fps","getSpeedFtpS",Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Right_Wheel_Speed_Act_RPM", "RPM", "getRightWheelSpeedAct_RPM", Drivetrain.getInstance());
@@ -496,7 +482,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Heading_des", "deg");
 		CasseroleWebPlots.addNewSignal("DT_Left_Current", "A");
 		CasseroleWebPlots.addNewSignal("DT_Right_Current", "A");
-		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
+		CasseroleWebPlots.addNewSignal("DT_Left_Current_Est", "A");
+		CasseroleWebPlots.addNewSignal("DT_Right_Current_Est", "A");
+		CasseroleWebPlots.addNewSignal("DT_Current_Limit_Factor", "factor");
 		CasseroleWebPlots.addNewSignal("BPE_Est_Voc", "V");
 		CasseroleWebPlots.addNewSignal("BPE_Est_ESR", "Ohm");
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
@@ -522,9 +510,11 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Heading_des", time, Drivetrain.getInstance().getHeadingDes_deg());
 		CasseroleWebPlots.addSample("DT_Left_Current", time, Drivetrain.getInstance().getLeftCurrent());
 		CasseroleWebPlots.addSample("DT_Right_Current", time, Drivetrain.getInstance().getRightCurrent());
-		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
-		CasseroleWebPlots.addSample("BPE_Est_Voc", time, bpe.getEstVoc());
-		CasseroleWebPlots.addSample("BPE_Est_ESR", time, bpe.getEstESR());
+		CasseroleWebPlots.addSample("DT_Left_Current_Est", time, Drivetrain.getInstance().getLeftCurrentEst());
+		CasseroleWebPlots.addSample("DT_Right_Current_Est", time, Drivetrain.getInstance().getRightCurrentEst());
+		CasseroleWebPlots.addSample("DT_Current_Limit_Factor", time, Drivetrain.getInstance().getLimitFactor());
+		CasseroleWebPlots.addSample("BPE_Est_Voc", time, Drivetrain.getInstance().getBattVoc());
+		CasseroleWebPlots.addSample("BPE_Est_ESR", time, Drivetrain.getInstance().getBattESR());
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());
 		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().desiredHeight);
@@ -540,8 +530,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
 		CasseroleWebStates.putDouble("RIO Main Loop Exec Time (ms)", getLoopExeTime_ms());
 		CasseroleWebStates.putString("RioTimeandDate", new Date().toString());
-		CasseroleWebStates.putDouble("Estimated ESR (ohms)",bpe.getEstESR());
-		CasseroleWebStates.putDouble("Estimated Voc (V)", bpe.getEstVoc());
 		CasseroleWebStates.putBoolean("leftSwitchState", FieldSetupString.getInstance(). left_Switch_Owned);
 		CasseroleWebStates.putBoolean("rightSwitchState", FieldSetupString.getInstance().right_Switch_Owned);
 		CasseroleWebStates.putBoolean("leftScaleState", FieldSetupString.getInstance().left_Scale_Owned);
@@ -568,13 +556,6 @@ public class Robot extends TimedRobot {
 		return GravityIndicator.getInstance().getRobotAngle();
 	}
 	
-	public double getMaxAllowableCurrent_A() {
-		if(bpe != null) {
-			return bpe.getMaxIdraw(minAllowableVoltageCal.get());
-		} else {
-			return -1;
-		}
-	}
 	
 	public double getLoopExeTime_ms() {
 		return loopExecTime_ms;

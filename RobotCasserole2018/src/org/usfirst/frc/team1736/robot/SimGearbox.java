@@ -66,6 +66,12 @@ public class SimGearbox implements Gearbox {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public double getMotorSpeedRadpSec() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
 

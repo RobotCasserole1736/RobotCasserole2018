@@ -21,12 +21,27 @@ public class Drivetrain {
 	double leftWheelRPM = 0;
 	double rightWheelRPM = 0;
 	double perGearboxCurrentLimit = 1000;
+	double systemVoltage_V;
+	double systemCurrent_A;
+	
+	double leftCurrentEst_A = 0;
+	double rightCurrentEst_A = 0;
 	
 	public static final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
 	public static final double WHEEL_ROLLING_RADIUS_FT = 0.26; //~6 inch pneumatic wheels with a bit of squish. Measured with a ruler.
 	
 	Calibration curLimitEnable;
 	Calibration headingGainCal;
+	
+	//Current Limiting Verification
+	CIMCurrentEstimator leftCurrentEst;
+	CIMCurrentEstimator rightCurrentEst;
+	double reductionFactor = 1.0;
+	BatteryParamEstimator bpe;
+	final static int BPE_length = 200; 
+	final static double BPE_confidenceThresh_A = 10.0;
+	Calibration minAllowableVoltageCal;
+	final static double REDUCTION_ITER_STEP = 0.1;
 	
 
 	public static synchronized Drivetrain getInstance() {
@@ -58,6 +73,13 @@ public class Drivetrain {
 		leftGearbox.setInverted(true);
 		
 		rightGearbox.setInverted(false);
+		
+		//Set up current limiting & battery estimation
+		leftCurrentEst = new CIMCurrentEstimator(3,0);
+		rightCurrentEst = new CIMCurrentEstimator(3,0);
+		bpe = new BatteryParamEstimator(BPE_length); 
+		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
+		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
 		
 		curLimitEnable = new Calibration("DT Enable Current Limit", 0, 0, 1.0);
 		headingGainCal = new Calibration("DT Heading Comp P Gain", 4.0);
@@ -95,6 +117,9 @@ public class Drivetrain {
 		//Update IO for gearbox
 		leftGearbox.sampleSensors();
 		rightGearbox.sampleSensors();
+		
+		//Perform current-limiting calculations
+		bpe.updateEstimate(systemVoltage_V, systemCurrent_A);
 	
 		if(!isClosedLoop) {
 			//Open loop logic - calculate motor commands from driver inputs
@@ -104,7 +129,7 @@ public class Drivetrain {
 		            rightMotorCommand = Math.max(curFwdRevCmd, curRotCmd);
 				} else {
 					leftMotorCommand = Math.max(curFwdRevCmd, -curRotCmd);
-		        rightMotorCommand = curFwdRevCmd + curRotCmd;
+					rightMotorCommand = curFwdRevCmd + curRotCmd;
 				}
 			} else {
 				if (curRotCmd > 0.0) {
@@ -115,6 +140,19 @@ public class Drivetrain {
 				    rightMotorCommand = -Math.max(-curFwdRevCmd, -curRotCmd);
 				  }
 			}
+			
+			//If requested, perform current limiting
+			calcCurrentLimitFactor(leftMotorCommand, rightMotorCommand);
+			if(curLimitEnable.get() == 1.0) {
+				leftMotorCommand  *= reductionFactor;
+				rightMotorCommand *= reductionFactor;
+			}
+			
+			//Run final motor current estimation for logging purposes
+			leftCurrentEst_A = leftCurrentEst.getCurrentEstimate(leftGearbox.getMotorSpeedRadpSec(), leftMotorCommand, systemVoltage_V);
+			rightCurrentEst_A = rightCurrentEst.getCurrentEstimate(rightGearbox.getMotorSpeedRadpSec(), rightMotorCommand, systemVoltage_V);
+			
+			//pass final commands to drivetrain
 			leftGearbox.setMotorCommand(leftMotorCommand);
 			rightGearbox.setMotorCommand(rightMotorCommand);
 			
@@ -203,31 +241,37 @@ public class Drivetrain {
 		return rightGearbox.getTotalCurrent();
 	}
 	
+	public double getLeftCurrentEst() {
+		return leftCurrentEst_A;
+	}
+	
+	public double getRightCurrentEst() {
+		return rightCurrentEst_A;
+	}
+	
+	public double getLimitFactor() {
+		return reductionFactor;
+	}
+	
 	public boolean getCurrentHigh() {
-		if(
-		   leftGearbox.getTotalCurrent() > perGearboxCurrentLimit*0.9
-		    ||
-		   rightGearbox.getTotalCurrent() > perGearboxCurrentLimit*0.9 	
-		  ) {
+		if(	reductionFactor != 1.0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 	
-	/**
-	 * Sets the current limit for the whole drivetrain.
-	 * @param limit_A
-	 */
-	public void setCurrentLimit_A(double limit_A) {
-		if(curLimitEnable.get() == 1) {
-			perGearboxCurrentLimit = limit_A/2.0;
-		} else {
-			perGearboxCurrentLimit = 1000; //Effectively remove any reasonable limit
-		}
-		leftGearbox.setCurrentLimit_A(perGearboxCurrentLimit);
-		rightGearbox.setCurrentLimit_A(perGearboxCurrentLimit);
+	public double getBattESR() {
+		return bpe.getEstESR();
+	}
+	
+	public double getBattVoc() {
+		return bpe.getEstVoc();
+	}
+	
+	public void setSystemVoltageCurrent(double voltage_v_in, double current_a_in) {
+		systemVoltage_V = voltage_v_in;
+		systemCurrent_A = current_a_in;
 	}
 	
 	/**
@@ -249,6 +293,43 @@ public class Drivetrain {
 		}
 		return y;
 		
+	}
+	
+	private void calcCurrentLimitFactor(double leftOutput, double rightOutput) {
+		//If motor induces acceptable voltage drop, just set it
+		if(isAcceptableVoltage(leftOutput, rightOutput))
+		{
+			reductionFactor = 1;
+		}
+		else
+		{
+			reductionFactor = 0;
+			//If not, iterate over a set of reduction factors
+			//to get the drop acceptable it.
+			for(double i = 1.0; i >= 0; i-=REDUCTION_ITER_STEP){
+				if(isAcceptableVoltage(leftOutput*i, rightOutput*i)){
+					reductionFactor = i;
+					break;
+				}
+			}
+			reductionFactor = Math.max(reductionFactor, REDUCTION_ITER_STEP);
+		}
+	}
+	
+	private boolean isAcceptableVoltage(double leftOutput, double rightOutput)
+	{
+		//handle when this is called without proper initialization
+		if(leftCurrentEst == null || leftCurrentEst == null){
+			return true;
+		}
+		
+		double leftCurEst = leftCurrentEst.getCurrentEstimate(leftGearbox.getMotorSpeedRadpSec(), leftOutput, systemVoltage_V);
+		double rightCurEst = rightCurrentEst.getCurrentEstimate(rightGearbox.getMotorSpeedRadpSec(), rightOutput, systemVoltage_V);
+		
+		if(bpe.getEstVsys(leftCurEst + rightCurEst+10) > minAllowableVoltageCal.get())
+			return true;
+		else
+			return false;
 	}
 	
 }

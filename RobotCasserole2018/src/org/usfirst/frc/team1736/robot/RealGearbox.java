@@ -31,6 +31,8 @@ public class RealGearbox implements Gearbox{
 	// is accounted for elsewhere.
 	private static final double ENCODER_CYCLES_PER_REV = 2048;
 	
+	private static final double GEARBOX_RATIO = 72.0/12.0;
+	
 	// TALON Can Bus Read timeouts
 	private static final int TIMEOUT_MS = 0;
 	
@@ -50,15 +52,9 @@ public class RealGearbox implements Gearbox{
 		
 		//Enable current limits on all motors, with very large limits to start
 		// We'll only use the continuous limiting for now
-		motor1.enableCurrentLimit(true);
-		motor2.enableCurrentLimit(true);
-		motor3.enableCurrentLimit(true);
-		motor1.configPeakCurrentDuration(0,TIMEOUT_MS);
-		motor2.configPeakCurrentDuration(0,TIMEOUT_MS);
-		motor3.configPeakCurrentDuration(0,TIMEOUT_MS);
-		motor1.configPeakCurrentLimit(0,TIMEOUT_MS);
-		motor2.configPeakCurrentLimit(0,TIMEOUT_MS);
-		motor3.configPeakCurrentLimit(0,TIMEOUT_MS);
+		motor1.enableCurrentLimit(false);
+		motor2.enableCurrentLimit(false);
+		motor3.enableCurrentLimit(false);
 		
 		//Config Min/Max output values. Not 100% sure if this is needed, but
 		// CTRE put it in their example...
@@ -123,6 +119,10 @@ public class RealGearbox implements Gearbox{
 	
 	public double getSpeedRPM() {
 		return motor_speed_rpm;
+	}
+	
+	public double getMotorSpeedRadpSec() {
+		return motor_speed_rpm*0.104719*GEARBOX_RATIO;
 	}
 	
 	public void setInverted(boolean invert) {

@@ -11,6 +11,7 @@ public interface Gearbox {
 	public abstract void setMotorCommand(double command);
 	
 	public abstract double getSpeedRPM();
+	public abstract double getMotorSpeedRadpSec();
 	
 	public abstract void setInverted(boolean invert);
 	
