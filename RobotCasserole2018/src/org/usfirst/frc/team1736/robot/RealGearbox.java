@@ -3,6 +3,7 @@ import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class RealGearbox implements Gearbox{
@@ -75,7 +76,9 @@ public class RealGearbox implements Gearbox{
 		motor3.configPeakOutputReverse(-1, TIMEOUT_MS);
 		
 		//Set coast mode always
-		
+		motor1.setNeutralMode(NeutralMode.Coast);
+		motor2.setNeutralMode(NeutralMode.Coast);
+		motor3.setNeutralMode(NeutralMode.Coast);
 		
 		//Motor 1 is presumed to be the one with a sensor hooked up to it.
 		motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT_MS);

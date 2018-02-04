@@ -44,9 +44,10 @@ import edu.wpi.cscore.VideoMode.PixelFormat;
 
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-
-
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -442,6 +443,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_One", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_ONE);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
+		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
 
 
 	}
@@ -459,7 +461,8 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Elevator Lower Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Not Zeroed", "yellow");
 
-		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180);
+		
+		//CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180); //no worky yet??s
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
 		CasseroleDriverView.newAutoSelector("Delay", Autonomous.DELAY_OPTIONS);
@@ -500,6 +503,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Elevator_Height", "in");
 		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "in");
 		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
+		CasseroleWebPlots.addNewSignal("Brownout", "bit");
 	}
 	
 	
@@ -525,6 +529,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());
 		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().desiredHeight);
 		CasseroleWebPlots.addSample("Pose_Angle", time, Gyro.getInstance().getAngle());
+		CasseroleWebPlots.addSample("Brownout", time, RobotController.isBrownedOut()?1.0:0.0);
 	}
 
 	

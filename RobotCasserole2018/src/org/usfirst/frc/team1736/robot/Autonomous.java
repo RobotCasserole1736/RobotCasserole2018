@@ -51,7 +51,7 @@ public class Autonomous {
 	public void updateAutoSelection() {
 		String startPos     = CasseroleDriverView.getAutoSelectorVal("Start Position");
 		String action       = CasseroleDriverView.getAutoSelectorVal("Action");
-		String delayTimeStr = CasseroleDriverView.getAutoSelectorVal("Delay Times");
+		String delayTimeStr = CasseroleDriverView.getAutoSelectorVal("Delay");
 		autoModeName = startPos + " " + action + " delay by " + delayTimeStr;
 		//CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
 		
