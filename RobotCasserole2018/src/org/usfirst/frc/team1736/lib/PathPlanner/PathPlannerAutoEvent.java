@@ -38,6 +38,8 @@ public class PathPlannerAutoEvent extends AutoEvent {
     private double time_duration_s; 
     boolean pathCalculated = false;
     boolean reversed = false;
+    
+    boolean done = false;
 
     private int timestep;
     private double taskRate = 0.02;
@@ -116,8 +118,10 @@ public class PathPlannerAutoEvent extends AutoEvent {
         // calculate the proper timestep based on FPGA timestamp.
         tmp = (Timer.getFPGATimestamp()-startTime)/taskRate;
         timestep = (int) Math.round(tmp);
+        
         if(timestep >= path.numFinalPoints) {
         	timestep = (int) (path.numFinalPoints - 1);
+        	done = true;
         }
         
         //Interpret the path planner outputs into commands which are meaningful.
@@ -165,7 +169,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
      * Returns true once we've run the whole path
      */
     public boolean isDone() {
-        return timestep >= path.numFinalPoints;
+        return done;
     }
 
 
@@ -173,6 +177,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
 	public void userStart() {
 		path.calculate(time_duration_s, taskRate,DT_TRACK_WIDTH_FT);
         pathCalculated = true;
+        done = false;
         timestep = 0;
         
         startTime = Timer.getFPGATimestamp();

@@ -14,11 +14,13 @@ import edu.wpi.first.wpilibj.Timer;
 public class AutoEventTest2 extends AutoEvent {
 
 	//Update these constants to define the testcase
-	final double CYCLE_PERIOD_S = 5.0;
-	final double AMP_RPM = 150.0;
+	final double CYCLE_PERIOD_S = 7.0;
+	final double AMP_RPM = 200.0;
 	
 	//derived constants
 	final double FREQ_HZ = 1.0/CYCLE_PERIOD_S;
+	
+	double startTime = 0;
 
 	public AutoEventTest2() {
 
@@ -28,7 +30,7 @@ public class AutoEventTest2 extends AutoEvent {
 	public void userUpdate() {
 		
 		//Generate sine wave commands
-		double rpmCmd = AMP_RPM*Math.sin(2 * Math.PI * FREQ_HZ * Timer.getFPGATimestamp());
+		double rpmCmd = AMP_RPM*Math.sin(2 * Math.PI * FREQ_HZ * (Timer.getFPGATimestamp()-startTime));
 		
         Drivetrain.getInstance().setLeftWheelSpeed(rpmCmd);
         Drivetrain.getInstance().setRightWheelSpeed(rpmCmd);
@@ -53,6 +55,7 @@ public class AutoEventTest2 extends AutoEvent {
 
 	@Override
 	public void userStart() {
+		startTime = Timer.getFPGATimestamp();
 
 	}
 

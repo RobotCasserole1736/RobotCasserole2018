@@ -12,6 +12,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest1;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTest1Reversed;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest2;
 import org.usfirst.frc.team1736.robot.auto.AutoEventWait;
 
@@ -228,6 +229,8 @@ public class Autonomous {
 					
 			case TEST_MODE_1: //Test Mode 1
 				AutoSequencer.addEvent(new AutoEventTest1());
+				AutoSequencer.addEvent(new AutoEventWait(1.5));
+				AutoSequencer.addEvent(new AutoEventTest1Reversed());
 				break;
 
 			case TEST_MODE_2: //Test Mode 2

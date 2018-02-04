@@ -160,9 +160,14 @@ public class Drivetrain {
 			//Closed loop logic
 			double headingCompVal = 0;
 			
-			//Calc heading compensation. Simple P controller.
+			//Calc heading compensation. Simple P controller. Sorta.
 			if(Gyro.getInstance().isOnline()) {
-				headingCompVal = (Gyro.getInstance().getAngle() - curHeadingCmd_deg) * headingGainCal.get();
+				//Switch-mode gains since the in-motion correction is more agressive than stand still logic and causes instability
+				if(Math.abs(curLeftSpeedCmd_RPM) > 10 ||Math.abs(curRightSpeedCmd_RPM) > 10 ) {
+					headingCompVal = (Gyro.getInstance().getAngle() - curHeadingCmd_deg) * headingGainCal.get();
+				} else {
+					headingCompVal = 0;
+				}
 			}
 			curLeftSpeedCmd_RPM -= headingCompVal;
 			curRightSpeedCmd_RPM += headingCompVal;
