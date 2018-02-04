@@ -97,6 +97,9 @@ public class Robot extends TimedRobot {
 		//Log that we are starting the robot code
 		CrashTracker.logRobotInit();	
 
+		//Make sure all singelton subsystems get init'ed once here
+		// Two impacts: reduces 1st loop processor load, and ensures 
+		// all calibrations are registered prior to loading calWrangler values.
 		Drivetrain.getInstance();
 		Climb.getInstance();
 		ElbowControl.getInstance();
@@ -488,7 +491,11 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Heading_des", "deg");
+		CasseroleWebPlots.addNewSignal("DT_Left_Current", "A");
+		CasseroleWebPlots.addNewSignal("DT_Right_Current", "A");
 		CasseroleWebPlots.addNewSignal("BPE_Max_Allowable_Current", "A");
+		CasseroleWebPlots.addNewSignal("BPE_Est_Voc", "V");
+		CasseroleWebPlots.addNewSignal("BPE_Est_ESR", "Ohm");
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
 		CasseroleWebPlots.addNewSignal("Elevator_Height", "in");
 		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "in");
@@ -509,7 +516,11 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("DT_Left_Motor_Cmd", time, Drivetrain.getInstance().getLeftMotorCommand());
 		CasseroleWebPlots.addSample("DT_Right_Motor_Cmd", time, Drivetrain.getInstance().getRightMotorCommand());
 		CasseroleWebPlots.addSample("DT_Heading_des", time, Drivetrain.getInstance().getHeadingDes_deg());
+		CasseroleWebPlots.addSample("DT_Left_Current", time, Drivetrain.getInstance().getLeftCurrent());
+		CasseroleWebPlots.addSample("DT_Right_Current", time, Drivetrain.getInstance().getRightCurrent());
 		CasseroleWebPlots.addSample("BPE_Max_Allowable_Current", time, getMaxAllowableCurrent_A());
+		CasseroleWebPlots.addSample("BPE_Est_Voc", time, bpe.getEstVoc());
+		CasseroleWebPlots.addSample("BPE_Est_ESR", time, bpe.getEstESR());
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevHeight_in());
 		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().desiredHeight);

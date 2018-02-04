@@ -23,7 +23,7 @@ public class Drivetrain {
 	double perGearboxCurrentLimit = 1000;
 	
 	public static final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
-	public static final double WHEEL_ROLLING_RADIUS_FT = 0.26; //6 inch pneumatic wheels with a bit of squish
+	public static final double WHEEL_ROLLING_RADIUS_FT = 0.26; //~6 inch pneumatic wheels with a bit of squish. Measured with a ruler.
 	
 	Calibration curLimitEnable;
 	Calibration headingGainCal;
@@ -189,6 +189,14 @@ public class Drivetrain {
 	
 	public double getRightMotorCommand() {
 		return rightGearbox.getMotorCommand();
+	}
+	
+	public double getLeftCurrent() {
+		return leftGearbox.getTotalCurrent();
+	}
+	
+	public double getRightCurrent() {
+		return rightGearbox.getTotalCurrent();
 	}
 	
 	public boolean getCurrentHigh() {
