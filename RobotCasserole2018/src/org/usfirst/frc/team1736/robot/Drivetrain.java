@@ -16,16 +16,16 @@ public class Drivetrain {
 	private double curLeftSpeedCmd_RPM = 0;
 	private double curRightSpeedCmd_RPM = 0;
 	private double curHeadingCmd_deg = 0;
+	double systemVoltage_V;
+	double systemCurrent_A;
 	private boolean isClosedLoop = false;
 	private double speedFtpS = 0;
 	double leftWheelRPM = 0;
 	double rightWheelRPM = 0;
 	double perGearboxCurrentLimit = 1000;
-	double systemVoltage_V;
-	double systemCurrent_A;
+
 	
-	double leftCurrentEst_A = 0;
-	double rightCurrentEst_A = 0;
+
 	
 	public static final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
 	public static final double WHEEL_ROLLING_RADIUS_FT = 0.26; //~6 inch pneumatic wheels with a bit of squish. Measured with a ruler.
@@ -42,6 +42,8 @@ public class Drivetrain {
 	final static double BPE_confidenceThresh_A = 10.0;
 	Calibration minAllowableVoltageCal;
 	final static double REDUCTION_ITER_STEP = 0.1;
+	double leftCurrentEst_A = 0;
+	double rightCurrentEst_A = 0;
 	
 
 	public static synchronized Drivetrain getInstance() {
@@ -185,7 +187,7 @@ public class Drivetrain {
 		//ft/sec = rev/min * ft/rev * min/sec
 		double leftSpeedFtpS = leftWheelRPM*(2*Math.PI*WHEEL_ROLLING_RADIUS_FT)/60.0;
 		double rightSpeedFtpS = rightWheelRPM*(2*Math.PI*WHEEL_ROLLING_RADIUS_FT)/60.0;
-		speedFtpS = (leftSpeedFtpS + rightSpeedFtpS / 2.0);
+		speedFtpS = Math.abs((leftSpeedFtpS + rightSpeedFtpS) / 2.0);
 		
 	}
 	
