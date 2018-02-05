@@ -106,7 +106,7 @@ public class ElevatorCtrl {
 		}
 		
 		//Read in present elevator height
-		actualHeight = getElevHeight_in();
+		actualHeight = elevatorEncoder.get()* (1.0/ELEV_ENC_PULSES_PER_REV) * ELEV_HEIGHT_IN_PER_WINCH_REV;;
 	}
 	
 	
@@ -127,7 +127,7 @@ public class ElevatorCtrl {
 			
 			if(isZeroed == true) {
 				//Keep the closed loop command set to the nearest height
-				indexModeDesired = desiredHightToEmun(getElevHeight_in());
+				indexModeDesired = desiredHightToEmun(getElevActualHeight_in());
 			}
 
 		} else {
@@ -277,9 +277,12 @@ public class ElevatorCtrl {
 	
 	// Public getters and setters
 	
-	public double getElevHeight_in() {
-		elevatorEncoder.get();
-		return elevatorEncoder.get() * (1.0/ELEV_ENC_PULSES_PER_REV) * ELEV_HEIGHT_IN_PER_WINCH_REV;
+	public double getElevActualHeight_in() {
+		return actualHeight;
+	}
+	
+	public double getElevDesiredHeight_in() {
+		return desiredHeight;
 	}
 	
 	public boolean getUpperlimitSwitch() {
