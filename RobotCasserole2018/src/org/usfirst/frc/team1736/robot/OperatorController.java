@@ -20,9 +20,9 @@ public class OperatorController {
 	
 	//Constructor - private because singleton
 	private OperatorController() {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 		operatorController = new XboxController(1);
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 
 	}
 	

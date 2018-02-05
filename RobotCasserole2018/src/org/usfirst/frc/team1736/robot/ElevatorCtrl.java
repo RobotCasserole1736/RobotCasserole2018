@@ -65,7 +65,7 @@ public class ElevatorCtrl {
 	}
 	
 	private ElevatorCtrl() {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 
 		//Init physical devices
 		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
@@ -86,7 +86,7 @@ public class ElevatorCtrl {
 		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
 		
 
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 
 		
 	}

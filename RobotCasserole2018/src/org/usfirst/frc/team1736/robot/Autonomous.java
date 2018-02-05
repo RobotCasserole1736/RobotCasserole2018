@@ -46,7 +46,9 @@ public class Autonomous {
 	AutoModes mode = AutoModes.UNKNOWN;
 
 	public Autonomous() {
-
+		CrashTracker.logClassInitStart(this.getClass());
+		
+		CrashTracker.logClassInitEnd(this.getClass());
 	}
 		
 	public void updateAutoSelection() {

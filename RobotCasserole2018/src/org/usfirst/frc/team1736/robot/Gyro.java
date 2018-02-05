@@ -42,10 +42,10 @@ public class Gyro {
 	}
 
 	Gyro() {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 		adxrs453 = new ADXRS453_Gyro();
 		angleOffset = 0;
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 	}
 
 	public double getAngle() {

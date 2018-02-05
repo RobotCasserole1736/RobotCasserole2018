@@ -20,8 +20,10 @@ public class FieldSetupString {
 		}
 		
 		private FieldSetupString() {
-			CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
-			CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+			CrashTracker.logClassInitStart(this.getClass());
+			//Nothing to do?
+			
+			CrashTracker.logClassInitEnd(this.getClass());
 		}
 		
 		

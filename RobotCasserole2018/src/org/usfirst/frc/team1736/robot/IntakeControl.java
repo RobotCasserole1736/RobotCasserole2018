@@ -60,7 +60,7 @@ public class IntakeControl {
 	}
 	
 	private IntakeControl () {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 		sensor = new DigitalInput(RobotConstants.DI_INTAKE_CUBE_PRESENT_SENSOR);
 		leftMotor = new Spark(RobotConstants.PWM_INTAKE_LEFT);
 		rightMotor = new Spark(RobotConstants.PWM_INTAKE_RIGHT);
@@ -72,7 +72,7 @@ public class IntakeControl {
 		leftThrowMotorCal   = new Calibration("Intake Left Throw Cmd",   0.4, 0.0, 1.0);
 		rightThrowMotorCal  = new Calibration("Intake Right Throw Cmd",  0.4, 0.0, 1.0);
 		
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	
 	public void setIntakeDesired(boolean Cmd ) {

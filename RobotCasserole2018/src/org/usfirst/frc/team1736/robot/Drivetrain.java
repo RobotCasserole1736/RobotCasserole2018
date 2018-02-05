@@ -55,7 +55,7 @@ public class Drivetrain {
 	
 	
 	private Drivetrain() {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 		boolean useRealGearbox = true;
 		
 		if(useRealGearbox) {
@@ -86,7 +86,7 @@ public class Drivetrain {
 		curLimitEnable = new Calibration("DT Enable Current Limit", 0, 0, 1.0);
 		headingGainCal = new Calibration("DT Heading Comp P Gain", 4.0);
 
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 	}
 		
 	public void setForwardReverseCommand(double command) {
@@ -302,6 +302,7 @@ public class Drivetrain {
 		
 	}
 	
+	//2016-style current limiter. Calculates an adjustment factor for drivetrain commands based on predicted current draw.
 	private void calcCurrentLimitFactor(double leftOutput, double rightOutput) {
 		//If motor induces acceptable voltage drop, just set it
 		if(isAcceptableVoltage(leftOutput, rightOutput))

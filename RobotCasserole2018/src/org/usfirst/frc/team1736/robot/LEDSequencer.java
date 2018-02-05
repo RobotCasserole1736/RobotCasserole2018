@@ -30,6 +30,7 @@ import org.usfirst.frc.team1736.lib.LEDs.CasseroleLEDInterface;
 import org.usfirst.frc.team1736.lib.LEDs.DesktopTestLEDs;
 import org.usfirst.frc.team1736.lib.LEDs.DotStarsLEDStrip;
 import org.usfirst.frc.team1736.lib.LEDs.Particle;
+import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 
 public class LEDSequencer {
@@ -56,6 +57,7 @@ public class LEDSequencer {
 	}
 
 	private LEDSequencer() {
+		CrashTracker.logClassInitStart(this.getClass());
 		//Easy peasy check to see if weshould be running an actual strip or a fake strip
 		desktop_sim = System.getProperty("os.name").contains("Windows");
 		
@@ -77,6 +79,8 @@ public class LEDSequencer {
 		for(int i = 0; i < particles.length; i++) {
 			particles [i] = new Particle();
 		}		
+		
+		CrashTracker.logClassInitEnd(this.getClass());
 
 	}
 

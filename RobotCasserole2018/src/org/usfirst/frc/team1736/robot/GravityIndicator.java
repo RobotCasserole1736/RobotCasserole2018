@@ -17,9 +17,9 @@ public class GravityIndicator{
 	
 	double finalOutput = 0;	
 	private GravityIndicator() {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 		robotAccelerometer = new BuiltInAccelerometer();
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	
 	public void update(){

@@ -50,8 +50,8 @@ public class RealGearbox implements Gearbox{
 		
 		updateCalibrations();
 		
-		//Enable current limits on all motors, with very large limits to start
-		// We'll only use the continuous limiting for now
+		//Make sure the on-SRX current limiting is disabled. We'll do that
+		// ourselves.
 		motor1.enableCurrentLimit(false);
 		motor2.enableCurrentLimit(false);
 		motor3.enableCurrentLimit(false);
