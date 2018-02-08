@@ -1,7 +1,5 @@
 package org.usfirst.frc.team1736.lib.LEDs;
 
-import edu.wpi.first.wpilibj.Timer;
-
 public class Particle {
 //Number of the LED the center of the particle is occupying
 	private int position;
@@ -13,15 +11,14 @@ public class Particle {
 	private int level;
 //# of times called
 	private int callNum;
-//Color int.
-	private int Color; 
+ 
 //Age is # of cycles the particle has existed for.
-	private double age;
+
 	
 	
 	public Particle() {
 		double time = (callNum * 50);
-		int ledNum = position;
+		
 		Color = level;
 		speed = 1;
 		width = 4;

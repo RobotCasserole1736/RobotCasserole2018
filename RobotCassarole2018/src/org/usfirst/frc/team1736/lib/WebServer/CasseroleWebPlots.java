@@ -23,7 +23,6 @@ package org.usfirst.frc.team1736.lib.WebServer;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import org.json.simple.JSONObject;
 
 /**
  * DESCRIPTION: <br>

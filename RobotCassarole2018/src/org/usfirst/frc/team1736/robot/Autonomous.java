@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoSequencer;
-import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
