@@ -12,7 +12,7 @@ import org.usfirst.frc.team1736.robot.Drivetrain;
 public class AutoEventTest1Reversed extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private static final double[][] waypoints = new double[][] {
+	private final double[][] waypoints = new double[][] {
 		{0,0},
 		{-0.5,-1},
 		{-1.5,-3},
