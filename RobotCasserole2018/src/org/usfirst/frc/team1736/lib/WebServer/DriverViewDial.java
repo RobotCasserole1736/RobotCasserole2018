@@ -20,7 +20,6 @@ public class DriverViewDial extends DriverViewObject {
     private double min_acceptable;
     private double max_acceptable;
     
-    private double cur_val;
 	
 	public DriverViewDial(String name_in, double min_in, double max_in, double step_in, double min_acceptable_in,
             double max_acceptable_in){

@@ -22,13 +22,11 @@ package org.usfirst.frc.team1736.lib.WebServer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.TimerTask;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+
 
 import java.util.Comparator;
 
@@ -205,7 +203,6 @@ public class CasseroleRTPlotStreamerSocket extends WebSocketAdapter {
     /**
      * send socket data out to client
      */
-    @SuppressWarnings("unchecked")
 	public void broadcastData() {
         if (isConnected() & CasseroleWebPlots.acqActive) {
         	

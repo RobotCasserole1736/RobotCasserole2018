@@ -63,7 +63,6 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
     private double xMax;
     private double xMin;
 
-    private int yticCount;
     private int xticCount;
     private double xTicStepSize;
     private double yTicStepSize;
@@ -337,7 +336,7 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
             double xScale = (double) (w - 2 * xPAD) / (upperXtic - lowerXtic);
             double yScale = (double) (h - 2 * yPAD) / (upperYtic - lowerYtic);
             
-            double xOffset = (double)(lowerXtic);
+            
 
             for (int j = 0; j < link.get(i).y.length - 1; j++) {
                 double x1;
@@ -847,7 +846,6 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
 
         fig2.addData(data2, Color.blue);
 
-        FalconLinePlot fig1 = new FalconLinePlot(test, data);
 
     }
 
