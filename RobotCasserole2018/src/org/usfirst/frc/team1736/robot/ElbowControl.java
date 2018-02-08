@@ -40,13 +40,13 @@ public class ElbowControl {
 	}
 	
 	private ElbowControl() {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
 		upperLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_UP_LIMIT_SW);
 		lowerLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_DOWN_LIMIT_SW);
 		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.5, 0.0, 1.0);
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	
 	public void sampleSensors() {

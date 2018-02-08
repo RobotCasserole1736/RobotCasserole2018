@@ -23,8 +23,8 @@ public class Climb {
 	private boolean currClimbEnabledCmd = false;
 	private boolean currReleaseLatchCmd = false;
 	private boolean currHookReleaseCmd = false;
-	private double latchAngleReleased = 90; 
-	private double latchAngleClosed = 0;
+	private double LATCH_ANGLE_RELEASED = 90; 
+	private double LATCH_ANGLE_CLOSED = 0;
 	
 	
 	private Spark leftWinchMotor1;
@@ -43,12 +43,12 @@ public class Climb {
 	
 	
 	private Climb() {
-		CrashTracker.logGenericMessage("start of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitStart(this.getClass());
 		releaseLatch = new Servo(RobotConstants.PWM_RELEASE_LATCH); 
 		hookRelease = new Relay(RobotConstants.RELAY_HOOK_RELEASE, Relay.Direction.kForward);
 		
 		//Init latches and hook release to unreleased
-		releaseLatch.set(latchAngleClosed);
+		releaseLatch.set(LATCH_ANGLE_CLOSED);
 		hookRelease.set(Relay.Value.kOff);
 		
 		leftWinchMotor1 = new Spark (RobotConstants.PWM_CLIMBER_LEFT_ONE);
@@ -61,7 +61,7 @@ public class Climb {
 		leftWinchMotor2.set(0);
 		rightWinchMotor1.set(0);
 		rightWinchMotor2.set(0);
-		CrashTracker.logGenericMessage("End of"+(this.getClass().getSimpleName()));
+		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	
 	
@@ -70,29 +70,33 @@ public class Climb {
 		
 		//Interpret commands for latch/hook release 
 		if(currReleaseLatchCmd == true) {
-			releaseLatch.set(latchAngleReleased);
+			releaseLatch.set(LATCH_ANGLE_RELEASED);
 		}else {
-			releaseLatch.set(latchAngleClosed);
+			releaseLatch.set(LATCH_ANGLE_CLOSED);
 		}
-		
+
 		if(currHookReleaseCmd == true) {
 			hookRelease.set(Relay.Value.kOn);
 		}else {
 			hookRelease.set(Relay.Value.kOff);
 		}
 		
-		//Once climb is enabled, set climbing winch motors
-		if(currClimbEnabledCmd) {
-			leftWinchMotor1.set(Math.abs(currLeftWinchCmd));
-			leftWinchMotor2.set(Math.abs(currLeftWinchCmd));
-			rightWinchMotor1.set(Math.abs(currRightWinchCmd));
-			rightWinchMotor2.set(Math.abs(currRightWinchCmd));
-		}else {
-			leftWinchMotor1.set(0);
-			leftWinchMotor2.set(0);
-			rightWinchMotor1.set(0);
-			rightWinchMotor2.set(0);
+		
+		if(!currClimbEnabledCmd) {
+			//Inhibit climb if not enabled
+			currLeftWinchCmd = 0;
+			currRightWinchCmd = 0;
+		} else {
+			//Ensure we have the absolute value of the commands
+			currLeftWinchCmd = Math.abs(currLeftWinchCmd);
+			currRightWinchCmd = Math.abs(currRightWinchCmd);
 		}
+		
+		//Assign outputs to motors
+		leftWinchMotor1.set(currLeftWinchCmd);
+		leftWinchMotor2.set(currLeftWinchCmd);
+		rightWinchMotor1.set(currRightWinchCmd);
+		rightWinchMotor2.set(currRightWinchCmd);
 		
 	}
 	
@@ -103,11 +107,23 @@ public class Climb {
 	public void setRightWinchCmd(double cmd) {
 		currRightWinchCmd = cmd;
 	}
+	public double getLeftWinchCmd() {
+		return currLeftWinchCmd;	
+	}
+	public double getRightWinchCmd() {
+		return currRightWinchCmd;
+	}
 	public void setReleaseLatchCmd(boolean cmd) {
 		currReleaseLatchCmd = cmd;
 	}
 	public void setHookReleaseCmd(boolean cmd) {
 		currHookReleaseCmd = cmd;
+	}
+	public void setClimbEnabledCmd(boolean cmd) {
+		currClimbEnabledCmd = cmd;
+	}
+	public boolean getClimbEnabledCmd() {
+		return currClimbEnabledCmd;
 	}
 	
 }

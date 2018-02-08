@@ -79,6 +79,14 @@ public class CrashTracker {
 			hasLogged = true;
 		}
 	}
+	
+	public static void logClassInitStart(Class class_in) {
+		logMarker("[Class Init] Starting "+(class_in.getSimpleName()));
+	}
+	
+	public static void logClassInitEnd(Class class_in) {
+		logMarker("[Class Init] Finished "+(class_in.getSimpleName()));
+	}
 		
 	public static void logGenericMessage(String message) {
 			logMarker(message);

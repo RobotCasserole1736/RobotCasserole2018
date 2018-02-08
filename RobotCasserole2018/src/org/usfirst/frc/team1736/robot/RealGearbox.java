@@ -3,6 +3,7 @@ import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class RealGearbox implements Gearbox{
@@ -16,10 +17,21 @@ public class RealGearbox implements Gearbox{
 	Calibration kD;
 	Calibration kF;
 	
+	//State Variables
+	private double motor1_current = 0;
+	private double motor2_current = 0;
+	private double motor3_current = 0;
+	
+	private double motor_cmd = 0;
+	private double motor_speed_rpm = 0;
+
+	
 	//Update this to match the actual encoders we put on the drivetrain.
 	// This should be total periods per rev - the quadrature 4x decoding
 	// is accounted for elsewhere.
 	private static final double ENCODER_CYCLES_PER_REV = 2048;
+	
+	private static final double GEARBOX_RATIO = 72.0/12.0;
 	
 	// TALON Can Bus Read timeouts
 	private static final int TIMEOUT_MS = 0;
@@ -30,7 +42,7 @@ public class RealGearbox implements Gearbox{
 		motor2 = new TalonSRX(canid2);
 		motor3 = new TalonSRX(canid3);
 		
-		kP = new Calibration("Gearbox_"+name+"_velocity_kP", 0.008);
+		kP = new Calibration("Gearbox_"+name+"_velocity_kP", 0.006);
 		kI = new Calibration("Gearbox_"+name+"_velocity_kI", 0.00008);
 		kD = new Calibration("Gearbox_"+name+"_velocity_kD", 0);
 		kF = new Calibration("Gearbox_"+name+"_velocity_kF", 0.0018);
@@ -38,17 +50,11 @@ public class RealGearbox implements Gearbox{
 		
 		updateCalibrations();
 		
-		//Enable current limits on all motors, with very large limits to start
-		// We'll only use the continuous limiting for now
-		motor1.enableCurrentLimit(true);
-		motor2.enableCurrentLimit(true);
-		motor3.enableCurrentLimit(true);
-		motor1.configPeakCurrentDuration(0,TIMEOUT_MS);
-		motor2.configPeakCurrentDuration(0,TIMEOUT_MS);
-		motor3.configPeakCurrentDuration(0,TIMEOUT_MS);
-		motor1.configPeakCurrentLimit(0,TIMEOUT_MS);
-		motor2.configPeakCurrentLimit(0,TIMEOUT_MS);
-		motor3.configPeakCurrentLimit(0,TIMEOUT_MS);
+		//Make sure the on-SRX current limiting is disabled. We'll do that
+		// ourselves.
+		motor1.enableCurrentLimit(false);
+		motor2.enableCurrentLimit(false);
+		motor3.enableCurrentLimit(false);
 		
 		//Config Min/Max output values. Not 100% sure if this is needed, but
 		// CTRE put it in their example...
@@ -66,7 +72,9 @@ public class RealGearbox implements Gearbox{
 		motor3.configPeakOutputReverse(-1, TIMEOUT_MS);
 		
 		//Set coast mode always
-		
+		motor1.setNeutralMode(NeutralMode.Coast);
+		motor2.setNeutralMode(NeutralMode.Coast);
+		motor3.setNeutralMode(NeutralMode.Coast);
 		
 		//Motor 1 is presumed to be the one with a sensor hooked up to it.
 		motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT_MS);
@@ -91,7 +99,15 @@ public class RealGearbox implements Gearbox{
 		motor1.config_kD(0, CMD_PER_RPM_TO_CTRE_GAIN(kD.get()), TIMEOUT_MS);
 		motor1.config_kF(0, CMD_PER_RPM_TO_CTRE_GAIN(kF.get()), TIMEOUT_MS);
 	}
-	
+
+	public void sampleSensors() {
+		motor1_current = motor1.getOutputCurrent();
+		motor2_current = motor2.getOutputCurrent();
+		motor3_current = motor3.getOutputCurrent();
+		
+		motor_cmd = motor1.getMotorOutputPercent();
+		motor_speed_rpm = CTRE_VEL_UNITS_TO_RPM(motor1.getSelectedSensorVelocity(0));
+	}
 	
 	public void setMotorSpeed(double speed_RPM) {
 		motor1.set(ControlMode.Velocity,RPM_TO_CTRE_VEL_UNITS(speed_RPM));
@@ -102,7 +118,11 @@ public class RealGearbox implements Gearbox{
 	}
 	
 	public double getSpeedRPM() {
-		return CTRE_VEL_UNITS_TO_RPM(motor1.getSelectedSensorVelocity(0));
+		return motor_speed_rpm;
+	}
+	
+	public double getMotorSpeedRadpSec() {
+		return motor_speed_rpm*0.104719*GEARBOX_RATIO;
 	}
 	
 	public void setInverted(boolean invert) {
@@ -118,15 +138,19 @@ public class RealGearbox implements Gearbox{
 	}
 	
 	public double getTotalCurrent() {
-		return motor1.getOutputCurrent() + 
-			   motor2.getOutputCurrent() + 
-			   motor3.getOutputCurrent();
+		return motor1_current + 
+			   motor2_current + 
+			   motor3_current;
 	}
 	
 	public double getMotorCommand() {
-		return motor1.getMotorOutputPercent();
+		return motor_cmd;
 	}
 	
+	
+	public void resetIntegrators() {
+		motor1.setIntegralAccumulator(0, 0, TIMEOUT_MS);
+	}
 	
 	//Conversion Functions
 	// CTRE measures velocity in terms of "per 100ms" (???!?!) - hence factor of 600 to get to/from "per-minute"
@@ -151,17 +175,17 @@ public class RealGearbox implements Gearbox{
 
 	@Override
 	public double getMasterMotorCurrent() {
-		return motor1.getOutputCurrent() ;
+		return motor1_current ;
 	}
 
 	@Override
 	public double getSlave1MotorCurrent() {
-		return motor2.getOutputCurrent() ;
+		return motor2_current;
 	}
 
 	@Override
 	public double getSlave2MotorCurrent() {
-		return motor3.getOutputCurrent() ;
+		return motor3_current ;
 	}
 	
 }

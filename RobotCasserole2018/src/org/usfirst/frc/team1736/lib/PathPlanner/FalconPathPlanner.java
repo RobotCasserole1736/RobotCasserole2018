@@ -685,11 +685,13 @@ public class FalconPathPlanner {
         //double[][] waypoints = new double[][] {{0, 0}, {18.875, 0}, {21.46, 4.475}};
 
         final double[][] waypoints = new double[][] {
-    		{0, 0},
-    		{0, 20}
+    		{0,0},
+    		{0.5,1},
+    		{1.5,3},
+    		{1.5,23}
     	};
     	
-        double totalTime = 5; // seconds
+        double totalTime = 4; // seconds
         double timeStep = 0.02; // period of control loop on Rio, seconds
         double robotTrackWidth = 2; // distance between left and right wheels, feet
 
@@ -705,15 +707,6 @@ public class FalconPathPlanner {
 
         if (!GraphicsEnvironment.isHeadless()) {
 
-            FalconLinePlot fig2 = new FalconLinePlot(path.smoothCenterVelocity, null, Color.blue);
-            fig2.yGridOn();
-            fig2.xGridOn();
-            fig2.setYLabel("Velocity (ft/sec)");
-            fig2.setXLabel("time (seconds)");
-            fig2.setTitle("Velocity Profile for Left and Right Wheels \n Left = Cyan, Right = Magenta");
-            fig2.addData(path.smoothRightVelocity, Color.magenta);
-            fig2.addData(path.smoothLeftVelocity, Color.cyan);
-
             FalconLinePlot fig1 = new FalconLinePlot(path.nodeOnlyPath, Color.blue, Color.green);
             fig1.yGridOn();
             fig1.xGridOn();
@@ -726,10 +719,26 @@ public class FalconPathPlanner {
             fig1.setXTic(-27, 27, 1);
             fig1.setYTic(0, 30, 1);
             fig1.addData(path.smoothPath, Color.red, Color.blue);
-
             
             fig1.addData(path.leftPath, Color.magenta);
             fig1.addData(path.rightPath, Color.magenta);
+
+            
+            FalconLinePlot fig2 = new FalconLinePlot(path.smoothCenterVelocity, null, Color.blue);
+            fig2.yGridOn();
+            fig2.xGridOn();
+            fig2.setYLabel("Velocity (ft/sec)");
+            fig2.setXLabel("time (seconds)");
+            fig2.setTitle("Velocity Profile for Left and Right Wheels \n Left = Cyan, Right = Magenta");
+            fig2.addData(path.smoothRightVelocity, Color.magenta);
+            fig2.addData(path.smoothLeftVelocity, Color.cyan);
+            
+            FalconLinePlot fig3 = new FalconLinePlot(path.heading, null, Color.blue);
+            fig3.yGridOn();
+            fig3.xGridOn();
+            fig3.setYLabel("Pose Angle (deg)");
+            fig3.setXLabel("time (seconds)");
+            fig3.setTitle("desired heading profile");
 
 
 
