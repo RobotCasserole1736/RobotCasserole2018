@@ -19,7 +19,7 @@ public class Particle {
 	public Particle() {
 		double time = (callNum * 50);
 		
-		Color = level;
+		int Color = level;
 		speed = 1;
 		width = 4;
 			
