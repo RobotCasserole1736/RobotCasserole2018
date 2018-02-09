@@ -45,6 +45,7 @@ import edu.wpi.cscore.VideoMode.PixelFormat;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotController;
@@ -251,6 +252,7 @@ public class Robot extends TimedRobot {
 			ElevatorCtrl.getInstance().sampleSensors();
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
+			ElbowControl.getInstance();
 			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
 			
 			//Update autonomous sequencer
@@ -455,7 +457,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
-
+		
 
 
 	}
@@ -472,7 +474,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Elevator Upper Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Lower Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Not Zeroed", "yellow");
-
+		
 		
 		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180); //no worky yet??
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
@@ -491,7 +493,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperlimitSwitch());
 		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerLimitSwitch());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
-
+		
 	}
 	
 	private void initRTPlot() {
@@ -566,6 +568,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putString("Auto Mode", auto.mode.toString());
 		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
 		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().cubeInIntake());
+		CasseroleDriverView.setDialValue("The potentiometer voltage is", ElbowControl.getInstance().potentiometer.getVoltage());
 	}
 	
 	

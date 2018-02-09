@@ -5,7 +5,7 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
-
+import edu.wpi.first.wpilibj.AnalogInput;
 
 /**
  * Class to control the elbow motor, which raises and lowers the intake arms
@@ -19,15 +19,16 @@ public class ElbowControl {
 	boolean curLowerCmd = false;
 	boolean upperLimitReached = false;
 	boolean lowerLimitReached = false;
+	double potentiometerVoltage;
 	
 	//Present value passed to motor. Positive means raise, negative means lower.
 	double curMotorCmd = 0;
 	
 	
-	DigitalInput upperLimitSw = null;
-	DigitalInput lowerLimitSw = null;
-	Spark elbowMotor = null;
+
 	
+	Spark elbowMotor = null;
+	AnalogInput potentiometer;
 	Calibration raiseSpeedCal = null;
 	Calibration lowerSpeedCal = null;
 	
@@ -42,29 +43,32 @@ public class ElbowControl {
 	private ElbowControl() {
 		CrashTracker.logClassInitStart(this.getClass());
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
-		upperLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_UP_LIMIT_SW);
-		lowerLimitSw = new DigitalInput(RobotConstants.DI_ELBOW_DOWN_LIMIT_SW);
 		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.5, 0.0, 1.0);
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
+		potentiometer = new AnalogInput(1);
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	
+	
 	public void sampleSensors() {
+	potentiometerVoltage = potentiometer.getVoltage();
+	
+		//Read Potentiometer
+			
 		
-		//Read Limit Switches
-		if(upperLimitSw.get()) {
+	if(potentiometerVoltage >= 5) {
+		
 			upperLimitReached = true;
 		} else {
 			upperLimitReached = false;
 		}
 		
-		if(lowerLimitSw.get()) {
+	if(potentiometerVoltage <= 0) {
 			lowerLimitReached = true;
 		} else {
 			lowerLimitReached = false;
 		}
 	}
-	
 	public void update() {
 
 		//calculate motor command
