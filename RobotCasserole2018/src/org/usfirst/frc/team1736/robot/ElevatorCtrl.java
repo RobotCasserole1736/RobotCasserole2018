@@ -289,7 +289,7 @@ public class ElevatorCtrl {
 		return upperLimitSwitch.get();
 	}
 	
-	public boolean getLowerLimitSwitch() {
+	public boolean getLowerlimitSwitch() {
 		return lowerLimitSwitch.get();
 	}
 		
