@@ -23,7 +23,7 @@ public class AutoEventEjectCube extends AutoEvent {
 	@Override
 	public void userUpdate() {
 		currentTime = Timer.getFPGATimestamp();
-		autoTime = startTime - currentTime;
+		autoTime = currentTime - startTime;
 		if(autoTime > 1.0) {
 			IntakeControl.getInstance().setEjectDesired(false);
 			weAreDone = true;
