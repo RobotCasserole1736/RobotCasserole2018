@@ -122,6 +122,10 @@ public class PathPlannerAutoEvent extends AutoEvent {
         if(timestep >= path.numFinalPoints) {
         	timestep = (int) (path.numFinalPoints - 1);
         	done = true;
+        }la
+        
+        if (timestep == 0) {
+        	timestep = 1;
         }
         
         //Interpret the path planner outputs into commands which are meaningful.
