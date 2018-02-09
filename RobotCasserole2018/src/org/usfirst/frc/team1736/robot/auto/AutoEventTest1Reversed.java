@@ -20,7 +20,7 @@ public class AutoEventTest1Reversed extends AutoEvent {
 
 	};
 	
-	private static final double time = 5.0;
+	private final double time = 5.0;
 
 	public AutoEventTest1Reversed() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time, true);

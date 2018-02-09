@@ -12,7 +12,7 @@ import org.usfirst.frc.team1736.robot.Drivetrain;
 public class AutoEventSwitchRight extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private static final double[][] waypoints = new double[][] {
+	private final double[][] waypoints = new double[][] {
 		{0, 0},
 		{0, 2},
 		{-2, 5},
@@ -21,7 +21,7 @@ public class AutoEventSwitchRight extends AutoEvent {
 		{-5, 11},
 	};
 	
-	private static final double time = 6.0;
+	private final double time = 6.0;
 
 	public AutoEventSwitchRight() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
