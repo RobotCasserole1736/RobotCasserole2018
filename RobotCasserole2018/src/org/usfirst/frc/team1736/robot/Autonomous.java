@@ -44,6 +44,7 @@ public class Autonomous {
 	double delayTime_s = 0;
 	
 	AutoModes mode = AutoModes.UNKNOWN;
+	AutoModes prevMode = AutoModes.UNKNOWN;
 
 	public Autonomous() {
 		CrashTracker.logClassInitStart(this.getClass());
@@ -56,6 +57,7 @@ public class Autonomous {
 		String action       = CasseroleDriverView.getAutoSelectorVal("Action");
 		String delayTimeStr = CasseroleDriverView.getAutoSelectorVal("Delay");
 		autoModeName = startPos + " " + action + " delay by " + delayTimeStr;
+		prevMode = mode;
 		//CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
 		
 		//Map delay times
@@ -181,72 +183,76 @@ public class Autonomous {
 		} else {
 			mode = AutoModes.UNKNOWN;
 			autoModeName += " THIS IS UNIMPLEMENTED!";
-		}
-
+		}		
 		
 	}
 
 	public void executeAutonomus() {
-		String msg = "[Auto] Initalizing " + autoModeName + " auton routine.";
-		CrashTracker.logGenericMessage(msg);
-		System.out.print(msg);
-
-		AutoSequencer.clearAllEvents();
 		
-		//Set up initial delay
-		if(delayTime_s != 0.0) {
-			AutoSequencer.addEvent(new AutoEventWait(delayTime_s));
-		}
-		
-		//Set up each mode
-		switch(mode) {
+		if(!(mode == prevMode)) {
 			
-			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
-				AutoSequencer.addEvent(new AutoEventSwitchLeft_Center());
-				break;
-				
-			case LEFT_SWITCH_FROM_LEFT: //switch only if on left and own left
-				AutoSequencer.addEvent(new AutoEventSwitchLeft());
-				break;
-				
-			case RIGHT_SWITCH_FROM_CENTER: //switch only if in center and own right
-				AutoSequencer.addEvent(new AutoEventSwitchRight_Center());
-				break;
-				
-			case RIGHT_SWITCH_FROM_RIGHT: //switch only if on right and own right
-				AutoSequencer.addEvent(new AutoEventSwitchRight());
-				break;
-				
-			case LEFT_SCALE_FROM_LEFT: // scale only left
-				AutoSequencer.addEvent(new AutoEventScaleLeft());
-				break;
-				
-			case RIGHT_SCALE_FROM_RIGHT: // scale only right
-				AutoSequencer.addEvent(new AutoEventScaleRight());
-				break;
+			String msg = "[Auto] Initalizing " + autoModeName + " auton routine.";
+			CrashTracker.logGenericMessage(msg);
+			System.out.print(msg);
+	
+			AutoSequencer.clearAllEvents();
 			
-			case CROSS_BASELINE: //drive forward
-				AutoSequencer.addEvent(new AutoEventCrossBaseLine());
-				break;
+			//Set up initial delay
+			if(delayTime_s != 0.0) {
+				AutoSequencer.addEvent(new AutoEventWait(delayTime_s));
+			}
+			
+			//Set up each mode
+			switch(mode) {
+				
+				case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
+					AutoSequencer.addEvent(new AutoEventSwitchLeft_Center());
+					break;
 					
-			case TEST_MODE_1: //Test Mode 1
-				AutoSequencer.addEvent(new AutoEventTest1());
-				AutoSequencer.addEvent(new AutoEventWait(1.5));
-				AutoSequencer.addEvent(new AutoEventTest1Reversed());
-				break;
-
-			case TEST_MODE_2: //Test Mode 2
-				AutoSequencer.addEvent(new AutoEventTest2());
-				break;
-			
-			case DO_NOTHING: //Do nothing
-				break;
+				case LEFT_SWITCH_FROM_LEFT: //switch only if on left and own left
+					AutoSequencer.addEvent(new AutoEventSwitchLeft());
+					break;
+					
+				case RIGHT_SWITCH_FROM_CENTER: //switch only if in center and own right
+					AutoSequencer.addEvent(new AutoEventSwitchRight_Center());
+					break;
+					
+				case RIGHT_SWITCH_FROM_RIGHT: //switch only if on right and own right
+					AutoSequencer.addEvent(new AutoEventSwitchRight());
+					break;
+					
+				case LEFT_SCALE_FROM_LEFT: // scale only left
+					AutoSequencer.addEvent(new AutoEventScaleLeft());
+					break;
+					
+				case RIGHT_SCALE_FROM_RIGHT: // scale only right
+					AutoSequencer.addEvent(new AutoEventScaleRight());
+					break;
 				
-			default: // Do nothing
-				DriverStation.reportError("Unimplemented autonomous mode requested! Tell software team they got auto mode " + mode.toString() , false);
-				break;
-		}
-
+				case CROSS_BASELINE: //drive forward
+					AutoSequencer.addEvent(new AutoEventCrossBaseLine());
+					break;
+						
+				case TEST_MODE_1: //Test Mode 1
+					AutoSequencer.addEvent(new AutoEventTest1());
+					AutoSequencer.addEvent(new AutoEventWait(1.5));
+					AutoSequencer.addEvent(new AutoEventTest1Reversed());
+					break;
+	
+				case TEST_MODE_2: //Test Mode 2
+					AutoSequencer.addEvent(new AutoEventTest2());
+					break;
+				
+				case DO_NOTHING: //Do nothing
+					break;
+					
+				default: // Do nothing
+					DriverStation.reportError("Unimplemented autonomous mode requested! Tell software team they got auto mode " + mode.toString() , false);
+					break;
+			}
+		}else {}
+	}
+	public void start() {
 		AutoSequencer.start();
 	}
 	
