@@ -457,7 +457,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
-		CsvLogger.addLoggingFieldDouble("Potentiometer current", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
+		CsvLogger.addLoggingFieldDouble("Potentiometer_Voltage", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
 
 
 	}
@@ -569,7 +569,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putString("Auto Mode", auto.mode.toString());
 		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
 		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().cubeInIntake());
-		CasseroleWebStates.putDouble("The potentiometer voltage is", ElbowControl.getInstance().potentiometer.getVoltage());
+		CasseroleWebStates.putDouble("Potentiometer_Voltage (V)", ElbowControl.getInstance().potentiometer.getVoltage());
 	}
 	
 	
