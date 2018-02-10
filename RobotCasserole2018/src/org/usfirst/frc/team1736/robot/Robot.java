@@ -442,7 +442,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("Elev_Des_Height", "in", "getElevDesiredHeight_in", ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Act_Height", "in", "getElevActualHeight_in",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_Reached", "bit", "getUpperlimitSwitch",  ElevatorCtrl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerlimitSwitch",  ElevatorCtrl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerLimitSwitch",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Zeroed", "bit", "getIsZeroed",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Climb_Enabled_Cmd", "cmd", "getClimbEnabledCmd", Climb.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Left_Winch_Cmd", "cmd", "getLeftWinchCmd", Climb.getInstance());
@@ -455,7 +455,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
-		//CsvLogger.addLoggingFieldBoolean("Left_Intake_Cmd", "cmd", "getRightMotorCmd", IntakeControl,);
+		CsvLogger.addLoggingFieldDouble("Left_Intake_Cmd", "cmd", "getLeftMotorCmd", IntakeControl.getInstance());
 
 
 
@@ -521,7 +521,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Brownout", "bit");
 		CasseroleWebPlots.addNewSignal("Left_Intake_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("Right_Intake_Cmd", "cmd");
-		CasseroleWebPlots.addNewSignal("Elevator_Cmd", "feet");
+		CasseroleWebPlots.addNewSignal("Elevator_Cmd", "cmd");
 	}
 	
 	
@@ -552,7 +552,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Brownout", time, RobotController.isBrownedOut()?1.0:0.0);
 		CasseroleWebPlots.addSample("Left_Intake_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
 		CasseroleWebPlots.addSample("Right_Intake_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
-		CasseroleWebPlots.addSample("Elevator_Height_Desired", time, ElevatorCtrl.getInstance().getElevDesiredHeight_in());
+		CasseroleWebPlots.addSample("Elevator_Cmd", time, ElevatorCtrl.getInstance().getMotorCmd());
 	}
 
 	

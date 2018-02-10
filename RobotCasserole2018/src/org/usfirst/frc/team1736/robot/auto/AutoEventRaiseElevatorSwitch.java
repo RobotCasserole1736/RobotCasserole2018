@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.Timer;
 public class AutoEventRaiseElevatorSwitch extends AutoEvent {
 	
 	private double startTime = 0.0;
+	private double currentTime = 0.0;
+	private double elapsedTime = 0.0;
 	private boolean weAreDone;
 
 	@Override
@@ -19,13 +21,18 @@ public class AutoEventRaiseElevatorSwitch extends AutoEvent {
 
 	@Override
 	public void userUpdate() {
-		ElevatorCtrl.getInstance().setIndexDesired(Elevator_index.Switch1);
-		if(ElevatorCtrl.getInstance().getUpperlimitSwitch() || ElevatorCtrl.getInstance().isAtDesiredHeight()) {
-			weAreDone = true;
+		currentTime = Timer.getFPGATimestamp();
+		elapsedTime = currentTime - startTime;
+		if(elapsedTime > 0.5) {
+			ElevatorCtrl.getInstance().setIndexDesired(Elevator_index.Switch1);
+			if(ElevatorCtrl.getInstance().getUpperlimitSwitch() || ElevatorCtrl.getInstance().isAtDesiredHeight()) {
+				weAreDone = true;
+			} else {
+				weAreDone = false;
+			}
 		} else {
 			weAreDone = false;
 		}
-			
 		
 	}
 
