@@ -14,6 +14,7 @@ Robot Casserole robot source code for the 2018 FRC game, First PowerUp.
 The Driver View web site is used to help test and tweak our code, and used to help drive team during match. The driver view is a javascript/HTML based viewer of data logs captured from the robot during operation. These data logs are then used to tweak code before, during, and after competition. 
 
 me selecting auto mode in driver view
+
 ![demo](Screenshots/Driver View.gif)
 
 ## Main Source Code
