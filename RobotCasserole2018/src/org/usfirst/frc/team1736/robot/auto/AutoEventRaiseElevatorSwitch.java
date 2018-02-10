@@ -1,18 +1,15 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
-import org.usfirst.frc.team1736.robot.IntakeControl;
+import org.usfirst.frc.team1736.robot.ElevatorCtrl;
+import org.usfirst.frc.team1736.robot.Elevator_index;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class AutoEventEjectCube extends AutoEvent {
+public class AutoEventRaiseElevatorSwitch extends AutoEvent {
 	
-	
-	private double currentTime = 0.0;
 	private double startTime = 0.0;
-	private double elapsedTime = 0.0;
-	boolean weAreDone;
-	
+	private boolean weAreDone;
 
 	@Override
 	public void userStart() {
@@ -22,26 +19,26 @@ public class AutoEventEjectCube extends AutoEvent {
 
 	@Override
 	public void userUpdate() {
-		currentTime = Timer.getFPGATimestamp();
-		elapsedTime = currentTime - startTime;
-		if(elapsedTime > 1.0) {
-			IntakeControl.getInstance().setEjectDesired(false);
+		ElevatorCtrl.getInstance().setIndexDesired(Elevator_index.Switch1);
+		if(ElevatorCtrl.getInstance().getUpperlimitSwitch() || ElevatorCtrl.getInstance().isAtDesiredHeight()) {
 			weAreDone = true;
 		} else {
-			IntakeControl.getInstance().setEjectDesired(true);
 			weAreDone = false;
 		}
+			
 		
 	}
 
 	@Override
 	public void userForceStop() {
-		IntakeControl.getInstance().setEjectDesired(false);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public boolean isTriggered() {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

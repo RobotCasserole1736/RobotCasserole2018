@@ -137,7 +137,7 @@ public class ElevatorCtrl {
 			//Super-de-duper simple bang-bang control of elevator in closed loop
 			desiredHeight = enumToDesiredHeight(indexModeDesired);
 
-			if(isInDeadzone()) {
+			if(isAtDesiredHeight()) {
 				//Deadzone, don't run motor.
 				curMotorCmd = 0;
 			}else if(desiredHeight >= actualHeight) {
@@ -297,7 +297,7 @@ public class ElevatorCtrl {
 		return isZeroed;	
 	}
 	
-	public boolean isInDeadzone() {
+	public boolean isAtDesiredHeight() {
 		return (Math.abs(desiredHeight - actualHeight) < ElevCtrlDeadzoneCal.get());
 	}
 }

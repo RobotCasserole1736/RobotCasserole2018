@@ -487,7 +487,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
 		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
 		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().getCurrentLimitExceeded());
-		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isInDeadzone()); 
+		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isAtDesiredHeight()); 
 		CasseroleDriverView.setBoolean("Elbow In Transit", !(ElbowControl.getInstance().isLowerLimitReached() || ElbowControl.getInstance().isUpperLimitReached()));
 		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperlimitSwitch());
 		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerLimitSwitch());
@@ -521,6 +521,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Brownout", "bit");
 		CasseroleWebPlots.addNewSignal("Left_Intake_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("Right_Intake_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Elevator_Cmd", "feet");
 	}
 	
 	
@@ -551,6 +552,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Brownout", time, RobotController.isBrownedOut()?1.0:0.0);
 		CasseroleWebPlots.addSample("Left_Intake_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
 		CasseroleWebPlots.addSample("Right_Intake_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
+		CasseroleWebPlots.addSample("Elevator_Height_Desired", time, ElevatorCtrl.getInstance().getElevDesiredHeight_in());
 	}
 
 	
