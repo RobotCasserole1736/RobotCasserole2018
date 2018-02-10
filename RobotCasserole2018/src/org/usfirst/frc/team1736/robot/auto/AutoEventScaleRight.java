@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
+import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 
 /**
@@ -9,14 +10,14 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 public class AutoEventScaleRight extends AutoEvent {
 	PathPlannerAutoEvent driveForward; 
 
-	private static final double[][] waypoints = new double[][] {
+	private final double[][] waypoints = new double[][] {
 		{0, 0},
 		{0, 20}, 
 		{-1, 22}, 
 		{-1.5, 23}
 	};
 	
-	private static final double time = 4.0;
+	private final double time = 4.0;
 
 	public AutoEventScaleRight() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
@@ -48,5 +49,8 @@ public class AutoEventScaleRight extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventScaleRight autoEvent = new AutoEventScaleRight();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }

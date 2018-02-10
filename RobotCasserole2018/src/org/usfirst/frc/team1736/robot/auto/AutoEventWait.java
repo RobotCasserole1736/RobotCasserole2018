@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
+import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.robot.Drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -43,5 +44,4 @@ public class AutoEventWait extends AutoEvent {
 	public boolean isDone() {
 		return Timer.getFPGATimestamp() >= endTime;
 	}
-
 }

@@ -4,6 +4,9 @@ import org.usfirst.frc.team1736.lib.AutoSequencer.AutoSequencer;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
+import org.usfirst.frc.team1736.robot.auto.AutoEventEjectCube;
+import org.usfirst.frc.team1736.robot.auto.AutoEventRaiseElevatorScale;
+import org.usfirst.frc.team1736.robot.auto.AutoEventRaiseElevatorSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft;
@@ -43,6 +46,7 @@ public class Autonomous {
 	double delayTime_s = 0;
 	
 	AutoModes mode = AutoModes.UNKNOWN;
+	AutoModes prevMode = AutoModes.UNKNOWN;
 
 	public Autonomous() {
 		CrashTracker.logClassInitStart(this.getClass());
@@ -55,6 +59,7 @@ public class Autonomous {
 		String action       = CasseroleDriverView.getAutoSelectorVal("Action");
 		String delayTimeStr = CasseroleDriverView.getAutoSelectorVal("Delay");
 		autoModeName = startPos + " " + action + " delay by " + delayTimeStr;
+		prevMode = mode;
 		//CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
 		
 		//Map delay times
@@ -180,48 +185,50 @@ public class Autonomous {
 		} else {
 			mode = AutoModes.UNKNOWN;
 			autoModeName += " THIS IS UNIMPLEMENTED!";
-		}
-
+		}		
 		
 	}
 
 	public void executeAutonomus() {
-		String msg = "[Auto] Initalizing " + autoModeName + " auton routine.";
-		CrashTracker.logGenericMessage(msg);
-		System.out.print(msg);
-
-		AutoSequencer.clearAllEvents();
 		
-		//Set up initial delay
-		if(delayTime_s != 0.0) {
-			AutoSequencer.addEvent(new AutoEventWait(delayTime_s));
-		}
-		
-		//Set up each mode
-		switch(mode) {
+		if(!(mode == prevMode)) {
+			switch(mode) {
 			
 			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
-				AutoSequencer.addEvent(new AutoEventSwitchLeft_Center());
+				AutoEventSwitchLeft_Center parentLSWC = new AutoEventSwitchLeft_Center();
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parentLSWC.addChildEvent(new AutoEventRaiseElevatorSwitch());
+				AutoSequencer.addEvent(parentLSWC);
 				break;
 				
 			case LEFT_SWITCH_FROM_LEFT: //switch only if on left and own left
-				AutoSequencer.addEvent(new AutoEventSwitchLeft());
+				AutoEventSwitchLeft parentLSWL =new AutoEventSwitchLeft();
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parentLSWL.addChildEvent(new AutoEventRaiseElevatorSwitch());
 				break;
 				
 			case RIGHT_SWITCH_FROM_CENTER: //switch only if in center and own right
-				AutoSequencer.addEvent(new AutoEventSwitchRight_Center());
+				AutoEventSwitchRight_Center parentRSWC = new AutoEventSwitchRight_Center();
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parentRSWC.addChildEvent(new AutoEventRaiseElevatorSwitch());
 				break;
 				
 			case RIGHT_SWITCH_FROM_RIGHT: //switch only if on right and own right
-				AutoSequencer.addEvent(new AutoEventSwitchRight());
+				AutoEventSwitchRight parentRSWR = new AutoEventSwitchRight();
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parentRSWR.addChildEvent(new AutoEventRaiseElevatorSwitch());
 				break;
 				
 			case LEFT_SCALE_FROM_LEFT: // scale only left
-				AutoSequencer.addEvent(new AutoEventScaleLeft());
+				AutoEventScaleLeft parentLSCL = new AutoEventScaleLeft();
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parentLSCL.addChildEvent(new AutoEventRaiseElevatorScale());
 				break;
 				
 			case RIGHT_SCALE_FROM_RIGHT: // scale only right
-				AutoSequencer.addEvent(new AutoEventScaleRight());
+				AutoEventScaleRight parentRSCR = new AutoEventScaleRight();
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parentRSCR.addChildEvent(new AutoEventRaiseElevatorScale());
 				break;
 			
 			case CROSS_BASELINE: //drive forward
@@ -229,8 +236,8 @@ public class Autonomous {
 				break;
 					
 			case TEST_MODE_1: //Test Mode 1
-				AutoSequencer.addEvent(new AutoEventTest1());
-				AutoSequencer.addEvent(new AutoEventWait(1.5));
+				//AutoSequencer.addEvent(new AutoEventTest1());
+				//AutoSequencer.addEvent(new AutoEventWait(1.5));
 				AutoSequencer.addEvent(new AutoEventTest1Reversed());
 				break;
 
@@ -244,8 +251,12 @@ public class Autonomous {
 			default: // Do nothing
 				DriverStation.reportError("Unimplemented autonomous mode requested! Tell software team they got auto mode " + mode.toString() , false);
 				break;
+			}
 		}
+	}
 
+
+	public void start() {
 		AutoSequencer.start();
 	}
 	

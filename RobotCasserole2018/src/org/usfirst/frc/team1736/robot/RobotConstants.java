@@ -10,7 +10,7 @@ public class RobotConstants {
 	public static final int PWM_INTAKE_LEFT = 0;
 	public static final int PWM_INTAKE_RIGHT = 1;
 	public static final int PWM_ELEVATOR_ONE = 2;
-	public static final int PWM_ELEVATOR_TWO = 3;
+	//public static final int PWM_UNUSED = 3;  UNUSED
 	public static final int PWM_CLIMBER_LEFT_ONE = 4;
 	public static final int PWM_CLIMBER_LEFT_TWO = 5;
 	public static final int PWM_CLIMBER_RIGHT_ONE = 6;

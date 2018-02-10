@@ -187,7 +187,7 @@ public class Robot extends TimedRobot {
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
-			
+			auto.executeAutonomus();
 
 			//Update data viewers only
 			updateDriverView();
@@ -219,8 +219,7 @@ public class Robot extends TimedRobot {
 			Gyro.getInstance().reset();
 			
 			// Update autonomous selection and start
-			auto.updateAutoSelection();
-			auto.executeAutonomus();
+			auto.start();
 			
 			
 			//Start up a new data log
@@ -444,7 +443,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("Elev_Des_Height", "in", "getElevDesiredHeight_in", ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Act_Height", "in", "getElevActualHeight_in",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_Reached", "bit", "getUpperlimitSwitch",  ElevatorCtrl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerlimitSwitch",  ElevatorCtrl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerLimitSwitch",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Zeroed", "bit", "getIsZeroed",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Climb_Enabled_Cmd", "cmd", "getClimbEnabledCmd", Climb.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Left_Winch_Cmd", "cmd", "getLeftWinchCmd", Climb.getInstance());
@@ -457,7 +456,14 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
+
 		CsvLogger.addLoggingFieldDouble("Potentiometer_Voltage", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
+
+		CsvLogger.addLoggingFieldDouble("Left_Intake_Cmd", "cmd", "getLeftMotorCmd", IntakeControl.getInstance());
+		CsvLogger.addLoggingFieldDouble("Right_Intake_Cmd", "cmd", "getRightMotorCmd", IntakeControl.getInstance());
+		CsvLogger.addLoggingFieldDouble("Elevator_Cmd", "cmd", "getMotorCmd", ElevatorCtrl.getInstance());
+		
+
 
 
 	}
@@ -488,10 +494,10 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setDialValue("Robot Speed (fps)", Drivetrain.getInstance().getSpeedFtpS());
 		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
 		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().getCurrentLimitExceeded());
-		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isInDeadzone()); 
+		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isAtDesiredHeight()); 
 		CasseroleDriverView.setBoolean("Elbow In Transit", !(ElbowControl.getInstance().isLowerLimitReached() || ElbowControl.getInstance().isUpperLimitReached()));
 		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperlimitSwitch());
-		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerLimitSwitch());
+		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerlimitSwitch());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
 		
 	}
@@ -520,6 +526,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "in");
 		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
 		CasseroleWebPlots.addNewSignal("Brownout", "bit");
+		CasseroleWebPlots.addNewSignal("Left_Intake_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Right_Intake_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Elevator_Cmd", "cmd");
 	}
 	
 	
@@ -548,7 +557,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().getElevDesiredHeight_in());
 		CasseroleWebPlots.addSample("Pose_Angle", time, Gyro.getInstance().getAngle());
 		CasseroleWebPlots.addSample("Brownout", time, RobotController.isBrownedOut()?1.0:0.0);
-
+		CasseroleWebPlots.addSample("Left_Intake_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
+		CasseroleWebPlots.addSample("Right_Intake_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
+		CasseroleWebPlots.addSample("Elevator_Cmd", time, ElevatorCtrl.getInstance().getMotorCmd());
 	}
 
 	

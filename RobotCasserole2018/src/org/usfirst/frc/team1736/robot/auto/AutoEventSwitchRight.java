@@ -1,9 +1,8 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
-import org.usfirst.frc.team1736.lib.PathPlanner.CasserolePath;
+import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
-import org.usfirst.frc.team1736.robot.Drivetrain;
 
 /**
  * go to switch on right.
@@ -11,7 +10,7 @@ import org.usfirst.frc.team1736.robot.Drivetrain;
 public class AutoEventSwitchRight extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private static final double[][] waypoints = new double[][] {
+	private final double[][] waypoints = new double[][] {
 		{0, 0},
 		{0, 2},
 		{-2, 5},
@@ -20,7 +19,7 @@ public class AutoEventSwitchRight extends AutoEvent {
 		{-5, 11},
 	};
 	
-	private static final double time = 6.0;
+	private final double time = 6.0;
 
 	public AutoEventSwitchRight() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
@@ -51,5 +50,8 @@ public class AutoEventSwitchRight extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventSwitchRight autoEvent = new AutoEventSwitchRight();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }

@@ -56,7 +56,7 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		CrashTracker.logClassInitStart(this.getClass());
-		boolean useRealGearbox = true;
+		boolean useRealGearbox = false;
 		
 		if(useRealGearbox) {
 			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
@@ -83,7 +83,7 @@ public class Drivetrain {
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
 		
-		curLimitEnable = new Calibration("DT Enable Current Limit", 0, 0, 1.0);
+		curLimitEnable = new Calibration("DT Enable Current Limit", 1.0, 0, 1.0);
 		headingGainCal = new Calibration("DT Heading Comp P Gain", 4.0);
 
 		CrashTracker.logClassInitEnd(this.getClass());

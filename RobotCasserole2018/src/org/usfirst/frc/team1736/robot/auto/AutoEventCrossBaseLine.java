@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
+import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 
 
@@ -15,7 +16,7 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 		{0, 10}
 	};
 	
-	private static final double time = 4.0;
+	private final double time = 4.0;
 
 	public AutoEventCrossBaseLine() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
@@ -46,5 +47,8 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventCrossBaseLine autoEvent = new AutoEventCrossBaseLine();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }

@@ -30,7 +30,6 @@ public class ElevatorCtrl {
 	
 	//Physical devices
 	private Spark motor1;
-	private Spark motor2;
 	DigitalInput upperLimitSwitch = null;
 	DigitalInput lowerLimitSwitch = null;
 	private Encoder elevatorEncoder;
@@ -70,7 +69,6 @@ public class ElevatorCtrl {
 		//Init physical devices
 		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
-		motor2 = new Spark(RobotConstants.PWM_ELEVATOR_TWO);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
 		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_LOWER_LIMIT_SW);	
 		
@@ -137,7 +135,7 @@ public class ElevatorCtrl {
 			//Super-de-duper simple bang-bang control of elevator in closed loop
 			desiredHeight = enumToDesiredHeight(indexModeDesired);
 
-			if(isInDeadzone()) {
+			if(isAtDesiredHeight()) {
 				//Deadzone, don't run motor.
 				curMotorCmd = 0;
 			}else if(desiredHeight >= actualHeight) {
@@ -165,7 +163,6 @@ public class ElevatorCtrl {
 		
 		//Actually output command to motors
 		motor1.set(curMotorCmd);
-		motor2.set(curMotorCmd);
 	}
 	
 	public void setIndexDesired (Elevator_index cmd) {
@@ -289,7 +286,7 @@ public class ElevatorCtrl {
 		return upperLimitSwitch.get();
 	}
 	
-	public boolean getLowerLimitSwitch() {
+	public boolean getLowerlimitSwitch() {
 		return lowerLimitSwitch.get();
 	}
 		
@@ -297,7 +294,7 @@ public class ElevatorCtrl {
 		return isZeroed;	
 	}
 	
-	public boolean isInDeadzone() {
+	public boolean isAtDesiredHeight() {
 		return (Math.abs(desiredHeight - actualHeight) < ElevCtrlDeadzoneCal.get());
 	}
 }

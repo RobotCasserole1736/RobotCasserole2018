@@ -86,6 +86,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
 	        		waypoints[ii][jj] *= -1;
 	        	}
 	        }
+	   
         }
         
         path = new FalconPathPlanner(waypoints);
@@ -96,9 +97,14 @@ public class PathPlannerAutoEvent extends AutoEvent {
 		path.setPathAlpha(0.5);
 		path.setVelocityAlpha(0.01);
 		path.setVelocityBeta(0.9);
+		
+		if (pathCalculated == false) {
+            path.calculate(time_duration_s, taskRate, DT_TRACK_WIDTH_FT);
+            timestep = 0;
+            pathCalculated = true;
+		}
+
     }
-
-
     /**
      * On the first loop, calculates velocities needed to take the path specified. Later loops will
      * assign these velocities to the drivetrain at the proper time.
@@ -106,12 +112,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
     double startTime = 0;
     public void userUpdate() {
     	double tmp;
-        if (pathCalculated == false) {
-            path.calculate(time_duration_s, taskRate, DT_TRACK_WIDTH_FT);
-            timestep = 0;
-            pathCalculated = true;
-            startTime = Timer.getFPGATimestamp();
-        }
+        
         
         
         //For _when_ loop timing isn't exact 20ms, and we need to skip setpoints,
@@ -122,6 +123,10 @@ public class PathPlannerAutoEvent extends AutoEvent {
         if(timestep >= path.numFinalPoints) {
         	timestep = (int) (path.numFinalPoints - 1);
         	done = true;
+        }
+        
+        if (timestep == 0) {
+        	timestep = 1;
         }
         
         //Interpret the path planner outputs into commands which are meaningful.
@@ -175,13 +180,14 @@ public class PathPlannerAutoEvent extends AutoEvent {
 
 	@Override
 	public void userStart() {
-		path.calculate(time_duration_s, taskRate,DT_TRACK_WIDTH_FT);
-        pathCalculated = true;
-        done = false;
-        timestep = 0;
+		if (pathCalculated == false) {
+            path.calculate(time_duration_s, taskRate, DT_TRACK_WIDTH_FT);
+            timestep = 0;
+            pathCalculated = true;
+       
         
+		}
         startTime = Timer.getFPGATimestamp();
-        
 	}
 	
 	private double FT_PER_SEC_TO_RPM(double ftps_in) {
