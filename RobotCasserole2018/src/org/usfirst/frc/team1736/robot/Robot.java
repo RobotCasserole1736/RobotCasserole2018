@@ -186,7 +186,7 @@ public class Robot extends TimedRobot {
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
-			
+			auto.executeAutonomus();
 
 			//Update data viewers only
 			updateDriverView();
@@ -218,8 +218,7 @@ public class Robot extends TimedRobot {
 			Gyro.getInstance().reset();
 			
 			// Update autonomous selection and start
-			auto.updateAutoSelection();
-			auto.executeAutonomus();
+			auto.start();
 			
 			
 			//Start up a new data log

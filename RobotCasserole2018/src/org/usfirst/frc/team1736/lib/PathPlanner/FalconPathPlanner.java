@@ -707,41 +707,7 @@ public class FalconPathPlanner {
 
         if (!GraphicsEnvironment.isHeadless()) {
 
-            FalconLinePlot fig1 = new FalconLinePlot(path.nodeOnlyPath, Color.blue, Color.green);
-            fig1.yGridOn();
-            fig1.xGridOn();
-            fig1.setYLabel("Y (feet)");
-            fig1.setXLabel("X (feet)");
-            fig1.setTitle(
-                    "Top Down View of FRC Field \n shows global position of robot path, along with left and right wheel trajectories");
-
-            // force graph to show 1/2 field dimensions of 24ft x 27 feet
-            fig1.setXTic(-27, 27, 1);
-            fig1.setYTic(0, 30, 1);
-            fig1.addData(path.smoothPath, Color.red, Color.blue);
-            
-            fig1.addData(path.leftPath, Color.magenta);
-            fig1.addData(path.rightPath, Color.magenta);
-
-            
-            FalconLinePlot fig2 = new FalconLinePlot(path.smoothCenterVelocity, null, Color.blue);
-            fig2.yGridOn();
-            fig2.xGridOn();
-            fig2.setYLabel("Velocity (ft/sec)");
-            fig2.setXLabel("time (seconds)");
-            fig2.setTitle("Velocity Profile for Left and Right Wheels \n Left = Cyan, Right = Magenta");
-            fig2.addData(path.smoothRightVelocity, Color.magenta);
-            fig2.addData(path.smoothLeftVelocity, Color.cyan);
-            
-            FalconLinePlot fig3 = new FalconLinePlot(path.heading, null, Color.blue);
-            fig3.yGridOn();
-            fig3.xGridOn();
-            fig3.setYLabel("Pose Angle (deg)");
-            fig3.setXLabel("time (seconds)");
-            fig3.setTitle("desired heading profile");
-
-
-
+        	plotPath(path);
 
         }
 
@@ -753,7 +719,43 @@ public class FalconPathPlanner {
 
 
     }
+public static void plotPath(FalconPathPlanner path) {
+    FalconLinePlot fig1 = new FalconLinePlot(path.nodeOnlyPath, Color.blue, Color.green);
+    fig1.yGridOn();
+    fig1.xGridOn();
+    fig1.setYLabel("Y (feet)");
+    fig1.setXLabel("X (feet)");
+    fig1.setTitle(
+            "Top Down View of FRC Field \n shows global position of robot path, along with left and right wheel trajectories");
 
+    // force graph to show 1/2 field dimensions of 24ft x 27 feet
+    fig1.setXTic(-27, 27, 1);
+    fig1.setYTic(0, 30, 1);
+    fig1.addData(path.smoothPath, Color.red, Color.blue);
+    
+    fig1.addData(path.leftPath, Color.magenta);
+    fig1.addData(path.rightPath, Color.magenta);
+
+    
+    FalconLinePlot fig2 = new FalconLinePlot(path.smoothCenterVelocity, null, Color.blue);
+    fig2.yGridOn();
+    fig2.xGridOn();
+    fig2.setYLabel("Velocity (ft/sec)");
+    fig2.setXLabel("time (seconds)");
+    fig2.setTitle("Velocity Profile for Left and Right Wheels \n Left = Cyan, Right = Magenta");
+    fig2.addData(path.smoothRightVelocity, Color.magenta);
+    fig2.addData(path.smoothLeftVelocity, Color.cyan);
+    
+    FalconLinePlot fig3 = new FalconLinePlot(path.heading, null, Color.blue);
+    fig3.yGridOn();
+    fig3.xGridOn();
+    fig3.setYLabel("Pose Angle (deg)");
+    fig3.setXLabel("time (seconds)");
+    fig3.setTitle("desired heading profile");
+
+
+
+	}
 }
 
 

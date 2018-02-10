@@ -52,5 +52,8 @@ public class AutoEventSwitchRight extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventSwitchRight autoEvent = new AutoEventSwitchRight();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }

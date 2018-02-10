@@ -47,6 +47,7 @@ public class Autonomous {
 	double delayTime_s = 0;
 	
 	AutoModes mode = AutoModes.UNKNOWN;
+	AutoModes prevMode = AutoModes.UNKNOWN;
 
 	public Autonomous() {
 		CrashTracker.logClassInitStart(this.getClass());
@@ -59,6 +60,7 @@ public class Autonomous {
 		String action       = CasseroleDriverView.getAutoSelectorVal("Action");
 		String delayTimeStr = CasseroleDriverView.getAutoSelectorVal("Delay");
 		autoModeName = startPos + " " + action + " delay by " + delayTimeStr;
+		prevMode = mode;
 		//CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
 		
 		//Map delay times
@@ -184,25 +186,14 @@ public class Autonomous {
 		} else {
 			mode = AutoModes.UNKNOWN;
 			autoModeName += " THIS IS UNIMPLEMENTED!";
-		}
-
+		}		
 		
 	}
 
 	public void executeAutonomus() {
-		String msg = "[Auto] Initalizing " + autoModeName + " auton routine.";
-		CrashTracker.logGenericMessage(msg);
-		System.out.print(msg);
-
-		AutoSequencer.clearAllEvents();
 		
-		//Set up initial delay
-		if(delayTime_s != 0.0) {
-			AutoSequencer.addEvent(new AutoEventWait(delayTime_s));
-		}
-		
-		//Set up each mode
-		switch(mode) {
+		if(!(mode == prevMode)) {
+			switch(mode) {
 			
 			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
 				AutoEventSwitchLeft_Center parentLSWC = new AutoEventSwitchLeft_Center();
@@ -261,8 +252,12 @@ public class Autonomous {
 			default: // Do nothing
 				DriverStation.reportError("Unimplemented autonomous mode requested! Tell software team they got auto mode " + mode.toString() , false);
 				break;
+			}
 		}
+	}
 
+
+	public void start() {
 		AutoSequencer.start();
 	}
 	
