@@ -15,7 +15,8 @@ The Driver View web site is used to help test and tweak our code, and used to he
 
 me selecting auto mode in driver view
 
-![demo](GIFs/Driver View GIf.gif)
+![Driver View GIF](GIFs/Driver View GIF.gif)
+
 
 ## Main Source Code
 The source code this year, included code for: raising and lowerign an elevator, intaking, ejecting, and throwing a power cube, and programming a west coast drive-train to move. If you care to look at it look [here](https://github.com/RobotCasserole1736/RobotCasserole2018/tree/master/RobotCasserole2018/src/org/usfirst/frc/team1736/robot) 
@@ -24,3 +25,4 @@ The source code this year, included code for: raising and lowerign an elevator, 
 The log file snagger is a python script used to  communticate with the roborio and grab all csv logs in a certain directory and put them in a log viewer where we can view them when the robot does somthing wacky.
 
 ## Autonomous Routines
+The autonomous routines we had this year were: crossing the basseline, going and placing a cube on the switch, and driving and placing a cube on the scale. To help us have smooth auto routines, we use a falcon path planner, this uses a set of waypoints and creates a smooth path for the robot to follow. 
