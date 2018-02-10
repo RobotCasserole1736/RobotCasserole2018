@@ -16,11 +16,13 @@ public class DriverController {
 			driveCtrl = new DriverController();
 		return driveCtrl;
 	}
+	
 	private DriverController() {
 		CrashTracker.logClassInitStart(this.getClass());
 		driveController = new XboxController(0);
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
+	
 	// assuming that positive is forward Cmd whereas negative is reverse
 	public double getDriverForwardReverseCommand() {
 		double driverLeftYValue = -1 * driveController.getY(Hand.kLeft);
