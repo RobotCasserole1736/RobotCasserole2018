@@ -21,10 +21,9 @@ package org.usfirst.frc.team1736.lib.WebServer;
  */
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
-import org.json.simple.JSONObject;
+
 
 /**
  * DESCRIPTION: <br>
@@ -70,7 +69,6 @@ public class CasseroleDriverView {
      * @param min_acceptable_in Lower limit of green display area on drawn dial.
      * @param max_acceptable_in Upper limit of green display area on drawn dial.
      */
-    @SuppressWarnings("unchecked")
 	public static void newDial(String name_in, double min_in, double max_in, double step_in, double min_acceptable_in,
             double max_acceptable_in) {
     	
@@ -92,7 +90,6 @@ public class CasseroleDriverView {
      *        drawn on top of the already-rotated image.
      * @param name_in Name of the web stream. Internal uses only, currently...
      */
-    @SuppressWarnings("unchecked")
 	public static void newWebcam(String name_in, String url_in, double marker_x, double marker_y,
             double img_rotate_deg) {
     	
@@ -110,7 +107,6 @@ public class CasseroleDriverView {
      * @param name_in Name of the value to display. Also used to reference the value when updating
      *        it.
      */
-    @SuppressWarnings("unchecked")
 	public static void newStringBox(String name_in) {
     	
     	DriverViewStringBox newStringbox = new DriverViewStringBox( name_in );
@@ -131,7 +127,6 @@ public class CasseroleDriverView {
      * @param color_in Color to display. Currently, only supported values are "red", "yellow", and
      *        "green".
      */
-    @SuppressWarnings("unchecked")
 	public static void newBoolean(String name_in, String color_in) {
 
     	DriverViewBoolean newBoolean = new DriverViewBoolean( name_in, color_in );
@@ -143,7 +138,6 @@ public class CasseroleDriverView {
      * @param name_in
      * @param options_in
      */
-    @SuppressWarnings("unchecked")
 	public static void newAutoSelector(String name_in, String[] options_in) {
 
     	DriverViewAutoSelector newAutoSelector = new DriverViewAutoSelector( name_in, options_in );
@@ -220,7 +214,6 @@ public class CasseroleDriverView {
      * @param name_in
      * @param options_in
      */
-    @SuppressWarnings("unchecked")
 	public static String getAutoSelectorVal(String name_in) {
     	
     	if(asObjects.containsKey(name_in)){

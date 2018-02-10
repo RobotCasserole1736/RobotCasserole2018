@@ -24,7 +24,7 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import org.usfirst.frc.team1736.lib.sensors.ADXRS453_Gyro;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+
 
 /**
  * This class is intended to just be a simple singleton wrapper around our gyro. It can implement methods specific to our gyro (such as inverting the angle)

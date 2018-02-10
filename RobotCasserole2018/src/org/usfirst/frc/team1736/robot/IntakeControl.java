@@ -1,13 +1,12 @@
 package org.usfirst.frc.team1736.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
+
 
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.PWMSpeedController;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 public class IntakeControl {
 	private static IntakeControl singularInstance = null;

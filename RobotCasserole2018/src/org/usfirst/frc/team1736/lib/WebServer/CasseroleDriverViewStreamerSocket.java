@@ -26,7 +26,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 
 /**
  * DESCRIPTION: <br>

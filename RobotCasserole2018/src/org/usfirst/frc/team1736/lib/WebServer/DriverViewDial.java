@@ -20,7 +20,6 @@ public class DriverViewDial extends DriverViewObject {
     private double min_acceptable;
     private double max_acceptable;
     
-    private double cur_val;
 	
 	public DriverViewDial(String name_in, double min_in, double max_in, double step_in, double min_acceptable_in,
             double max_acceptable_in){
@@ -49,7 +48,7 @@ public class DriverViewDial extends DriverViewObject {
         step = step_in;
         min_acceptable = min_acceptable_in;
         max_acceptable = max_acceptable_in;
-        cur_val = min_in;
+        double cur_val = min_in;
         
         //Create the JSON object for defining the init data for the dial
         dialJsonInitObj = new JSONObject();
@@ -91,7 +90,7 @@ public class DriverViewDial extends DriverViewObject {
 	}
 
 	public void setVal(double value) {
-		cur_val = value;
+		double cur_val = value;
 		dialJsonUpdateObj.put("value", String.format(VAL_DISPLAY_FORMATTER, value));
 	}
 	
