@@ -12,14 +12,14 @@ import org.usfirst.frc.team1736.robot.Drivetrain;
 public class AutoEventScaleLeft extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private static final double[][] waypoints = new double[][] {
+	private final double[][] waypoints = new double[][] {
 		{0, 0},
 		{0, 20}, 
 		{1, 22}, 
 		{1.5, 23}
 	};
 	
-	private static final double time = 4.0;
+	private final double time = 4.0;
 
 	public AutoEventScaleLeft() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);

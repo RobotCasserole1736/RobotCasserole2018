@@ -17,7 +17,7 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 		{0, 10}
 	};
 	
-	private static final double time = 4.0;
+	private final double time = 4.0;
 
 	public AutoEventCrossBaseLine() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);

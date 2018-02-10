@@ -230,8 +230,8 @@ public class Autonomous {
 				break;
 					
 			case TEST_MODE_1: //Test Mode 1
-				AutoSequencer.addEvent(new AutoEventTest1());
-				AutoSequencer.addEvent(new AutoEventWait(1.5));
+				//AutoSequencer.addEvent(new AutoEventTest1());
+				//AutoSequencer.addEvent(new AutoEventWait(1.5));
 				AutoSequencer.addEvent(new AutoEventTest1Reversed());
 				break;
 

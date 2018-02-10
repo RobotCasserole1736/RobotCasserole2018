@@ -124,6 +124,10 @@ public class PathPlannerAutoEvent extends AutoEvent {
         	done = true;
         }
         
+        if (timestep == 0) {
+        	timestep = 1;
+        }
+        
         //Interpret the path planner outputs into commands which are meaningful.
         double leftCommand_RPM  = FT_PER_SEC_TO_RPM(path.smoothLeftVelocity[timestep][1]);
         double rightCommand_RPM = FT_PER_SEC_TO_RPM(path.smoothRightVelocity[timestep][1]);
