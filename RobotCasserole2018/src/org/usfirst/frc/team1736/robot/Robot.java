@@ -456,7 +456,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
 		CsvLogger.addLoggingFieldDouble("Left_Intake_Cmd", "cmd", "getLeftMotorCmd", IntakeControl.getInstance());
-
+		CsvLogger.addLoggingFieldDouble("Right_Intake_Cmd", "cmd", "getRightMotorCmd", IntakeControl.getInstance());
+		CsvLogger.addLoggingFieldDouble("Elevator_Cmd", "cmd", "getMotorCmd", ElevatorCtrl.getInstance());
 
 
 	}
