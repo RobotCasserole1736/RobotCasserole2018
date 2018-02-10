@@ -31,7 +31,6 @@ package org.usfirst.frc.team1736.robot;
 import java.util.Date;
 
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
-import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
@@ -45,13 +44,10 @@ import edu.wpi.cscore.VideoMode.PixelFormat;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.can.CANStatus;
 
 
 /**
@@ -184,11 +180,13 @@ public class Robot extends TimedRobot {
 			//Update appropriate subsystems
 			IntakeControl.getInstance().sampleSensors();
 			ElevatorCtrl.getInstance().sampleSensors();
+			ElbowControl.getInstance().sampleSensors();
+			
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
 			auto.executeAutonomus();
-			ElbowControl.getInstance().sampleSensors();
+			
 			
 			//Update data viewers only
 			updateDriverView();
@@ -249,10 +247,10 @@ public class Robot extends TimedRobot {
 			
 			//Sample sensors
 			GravityIndicator.getInstance().update();
+			ElbowControl.getInstance().sampleSensors();
 			ElevatorCtrl.getInstance().sampleSensors();
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
-			ElbowControl.getInstance().sampleSensors();
 			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
 			
 			//Update autonomous sequencer
@@ -324,10 +322,11 @@ public class Robot extends TimedRobot {
 			//Sample Sensors
 			GravityIndicator.getInstance().update();
 			ElevatorCtrl.getInstance().sampleSensors();
+			ElbowControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
-			ElbowControl.getInstance().sampleSensors();
+			
 			
 			//Map Driver & Operator inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
@@ -458,10 +457,6 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
 		CsvLogger.addLoggingFieldDouble("Potentiometer_Voltage", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
-		CsvLogger.addLoggingFieldDouble("Left_Intake_Cmd", "cmd", "getLeftMotorCmd", IntakeControl.getInstance());
-		CsvLogger.addLoggingFieldDouble("Right_Intake_Cmd", "cmd", "getRightMotorCmd", IntakeControl.getInstance());
-		CsvLogger.addLoggingFieldDouble("Elevator_Cmd", "cmd", "getMotorCmd", ElevatorCtrl.getInstance());
-
 
 	}
 	
