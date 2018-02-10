@@ -53,5 +53,8 @@ public class AutoEventTest1 extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventTest1 autoEvent = new AutoEventTest1();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }

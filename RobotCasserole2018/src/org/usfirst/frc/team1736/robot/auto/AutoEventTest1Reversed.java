@@ -54,5 +54,8 @@ public class AutoEventTest1Reversed extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventTest1Reversed autoEvent = new AutoEventTest1Reversed();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }

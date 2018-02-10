@@ -53,5 +53,8 @@ public class AutoEventSwitchLeft_Center extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventSwitchLeft_Center autoEvent = new AutoEventSwitchLeft_Center();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }

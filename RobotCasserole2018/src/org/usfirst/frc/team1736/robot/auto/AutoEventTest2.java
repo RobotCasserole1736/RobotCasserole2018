@@ -58,5 +58,4 @@ public class AutoEventTest2 extends AutoEvent {
 		startTime = Timer.getFPGATimestamp();
 
 	}
-
 }

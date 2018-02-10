@@ -50,5 +50,8 @@ public class AutoEventScaleLeft extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-
+    public static void main(String[] args) {
+		AutoEventScaleLeft autoEvent = new AutoEventScaleLeft();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+	}
 }
