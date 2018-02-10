@@ -15,7 +15,7 @@ The Driver View web site is used to help test and tweak our code, and used to he
 
 me selecting auto mode in driver view
 
-![demo](Screenshots/Driver View.gif)
+![demo](Screenshots/Driver View GIf.gif)
 
 ## Main Source Code
 The source code this year, included code for: raising and lowerign an elevator, intaking, ejecting, and throwing a power cube, and programming a west coast drive-train to move. If you care to look at it look [here](https://github.com/RobotCasserole1736/RobotCasserole2018/tree/master/RobotCasserole2018/src/org/usfirst/frc/team1736/robot) 
