@@ -113,8 +113,6 @@ public class PathPlannerAutoEvent extends AutoEvent {
     public void userUpdate() {
     	double tmp;
         
-        
-        
         //For _when_ loop timing isn't exact 20ms, and we need to skip setpoints,
         // calculate the proper timestep based on FPGA timestamp.
         tmp = (Timer.getFPGATimestamp()-startTime)/taskRate;
@@ -125,6 +123,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
         	done = true;
         }
         
+        //Be sure we skip the first timestep. The planner produces a bogus all-zeros point for it
         if (timestep == 0) {
         	timestep = 1;
         }
@@ -184,9 +183,8 @@ public class PathPlannerAutoEvent extends AutoEvent {
             path.calculate(time_duration_s, taskRate, DT_TRACK_WIDTH_FT);
             timestep = 0;
             pathCalculated = true;
-       
-        
 		}
+		
         startTime = Timer.getFPGATimestamp();
 	}
 	

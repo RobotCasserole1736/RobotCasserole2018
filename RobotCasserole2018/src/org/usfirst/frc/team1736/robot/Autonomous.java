@@ -44,6 +44,7 @@ public class Autonomous {
 	String autoModeName = "Not Initalized";
 	
 	double delayTime_s = 0;
+	double prevDelayTime_s = 0;
 	
 	AutoModes mode = AutoModes.UNKNOWN;
 	AutoModes prevMode = AutoModes.UNKNOWN;
@@ -60,7 +61,8 @@ public class Autonomous {
 		String delayTimeStr = CasseroleDriverView.getAutoSelectorVal("Delay");
 		autoModeName = startPos + " " + action + " delay by " + delayTimeStr;
 		prevMode = mode;
-		//CrashTracker.logGenericMessage("[Auto] New mode selected: " + autoModeName);
+		prevDelayTime_s = delayTime_s;
+		
 		
 		//Map delay times
 		if(delayTimeStr.compareTo(DELAY_OPTIONS[0]) == 0) { //No Delay
@@ -189,9 +191,17 @@ public class Autonomous {
 		
 	}
 
-	public void executeAutonomus() {
+	public void calculatePaths() {
 		
-		if(!(mode == prevMode)) {
+		if((mode != prevMode) || (delayTime_s != prevDelayTime_s)) {
+			
+			//Indicate we have a new auto mode
+			String msg = "[Auto] New mode selected: " + autoModeName;
+			CrashTracker.logGenericMessage(msg);
+			System.out.println(msg);
+			
+			AutoSequencer.clearAllEvents();
+			
 			switch(mode) {
 			
 			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
@@ -236,8 +246,8 @@ public class Autonomous {
 				break;
 					
 			case TEST_MODE_1: //Test Mode 1
-				//AutoSequencer.addEvent(new AutoEventTest1());
-				//AutoSequencer.addEvent(new AutoEventWait(1.5));
+				AutoSequencer.addEvent(new AutoEventTest1());
+				AutoSequencer.addEvent(new AutoEventWait(1.5));
 				AutoSequencer.addEvent(new AutoEventTest1Reversed());
 				break;
 
@@ -253,6 +263,8 @@ public class Autonomous {
 				break;
 			}
 		}
+		
+		System.out.println("[Auto] Path calculation completed.");
 	}
 
 

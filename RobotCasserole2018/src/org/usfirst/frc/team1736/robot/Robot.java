@@ -185,7 +185,7 @@ public class Robot extends TimedRobot {
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
-			auto.executeAutonomus();
+			auto.calculatePaths();
 			
 			
 			//Update data viewers only
@@ -218,6 +218,8 @@ public class Robot extends TimedRobot {
 			Gyro.getInstance().reset();
 			
 			// Update autonomous selection and start
+			auto.updateAutoSelection();
+			auto.calculatePaths();
 			auto.start();
 			
 			
@@ -518,9 +520,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "in");
 		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
 		CasseroleWebPlots.addNewSignal("Brownout", "bit");
-		CasseroleWebPlots.addNewSignal("Left_Intake_Cmd", "cmd");
-		CasseroleWebPlots.addNewSignal("Right_Intake_Cmd", "cmd");
-		CasseroleWebPlots.addNewSignal("Elevator_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Intake_Left_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Intake_Right_Cmd", "cmd");
 	}
 	
 	
@@ -549,9 +550,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().getElevDesiredHeight_in());
 		CasseroleWebPlots.addSample("Pose_Angle", time, Gyro.getInstance().getAngle());
 		CasseroleWebPlots.addSample("Brownout", time, RobotController.isBrownedOut()?1.0:0.0);
-		CasseroleWebPlots.addSample("Left_Intake_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
-		CasseroleWebPlots.addSample("Right_Intake_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
-		CasseroleWebPlots.addSample("Elevator_Cmd", time, ElevatorCtrl.getInstance().getMotorCmd());
+		CasseroleWebPlots.addSample("Intake_Left_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
+		CasseroleWebPlots.addSample("Intake_Right_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
 	}
 
 	

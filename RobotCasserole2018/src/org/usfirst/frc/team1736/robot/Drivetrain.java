@@ -60,13 +60,13 @@ public class Drivetrain {
 		
 		if(useRealGearbox) {
 			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
-					                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE1_SRX, 
-					                  RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE2_SRX,
-					                  "left");
+					                      RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE1_SRX, 
+					                      RobotConstants.CANID_DRIVETRAIN_LEFT_SLAVE2_SRX,
+					                      "left");
 			rightGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_RIGHT_MASTER_SRX, 
-					                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX,
-					                   RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX,
-					                   "right");
+					                       RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX,
+					                       RobotConstants.CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX,
+					                       "right");
 		} else {
 			leftGearbox  = new SimGearbox();
 			rightGearbox = new SimGearbox();
@@ -159,13 +159,14 @@ public class Drivetrain {
 			rightGearbox.setMotorCommand(rightMotorCommand);
 			
 		} else {
+			
 			//Closed loop logic
 			double headingCompVal = 0;
 			
 			//Calc heading compensation. Simple P controller. Sorta.
 			if(Gyro.getInstance().isOnline()) {
 				//Switch-mode gains since the in-motion correction is more agressive than stand still logic and causes instability
-				if(Math.abs(curLeftSpeedCmd_RPM) > 10 ||Math.abs(curRightSpeedCmd_RPM) > 10 ) {
+				if(Math.abs(curLeftSpeedCmd_RPM) > 5 ||Math.abs(curRightSpeedCmd_RPM) > 5 ) {
 					headingCompVal = (Gyro.getInstance().getAngle() - curHeadingCmd_deg) * headingGainCal.get();
 				} else {
 					headingCompVal = 0;
