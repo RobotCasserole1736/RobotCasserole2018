@@ -112,7 +112,6 @@ public class PathPlannerAutoEvent extends AutoEvent {
     double startTime = 0;
     public void userUpdate() {
     	double tmp;
-            startTime = Timer.getFPGATimestamp();
         
         
         
@@ -181,11 +180,11 @@ public class PathPlannerAutoEvent extends AutoEvent {
             path.calculate(time_duration_s, taskRate, DT_TRACK_WIDTH_FT);
             timestep = 0;
             pathCalculated = true;
+       
         
+		}
         startTime = Timer.getFPGATimestamp();
-        
 	}
-}
 	
 	private double FT_PER_SEC_TO_RPM(double ftps_in) {
 		return ftps_in / (2*Math.PI*Drivetrain.WHEEL_ROLLING_RADIUS_FT) * 60;
