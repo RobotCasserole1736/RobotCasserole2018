@@ -3,7 +3,7 @@ package org.usfirst.frc.team1736.robot;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.AnalogInput;
 
@@ -105,6 +105,7 @@ public class ElbowControl {
 	
 	public double getMotorCmd() {
 		return curMotorCmd;
+		
 	}
 
 }
