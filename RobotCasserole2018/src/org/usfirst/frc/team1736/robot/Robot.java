@@ -188,7 +188,8 @@ public class Robot extends TimedRobot {
 			FieldSetupString.getInstance().update();
 			auto.updateAutoSelection();
 			auto.executeAutonomus();
-
+			ElbowControl.getInstance().sampleSensors();
+			
 			//Update data viewers only
 			updateDriverView();
 			updateWebStates();
@@ -251,7 +252,7 @@ public class Robot extends TimedRobot {
 			ElevatorCtrl.getInstance().sampleSensors();
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
-			ElbowControl.getInstance();
+			ElbowControl.getInstance().sampleSensors();
 			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
 			
 			//Update autonomous sequencer
@@ -326,7 +327,7 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
 			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
-			
+			ElbowControl.getInstance().sampleSensors();
 			
 			//Map Driver & Operator inputs to drivetrain open-loop commands
 			Drivetrain.getInstance().setForwardReverseCommand(DriverController.getInstance().getDriverForwardReverseCommand());
@@ -443,7 +444,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("Elev_Des_Height", "in", "getElevDesiredHeight_in", ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Act_Height", "in", "getElevActualHeight_in",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_Reached", "bit", "getUpperlimitSwitch",  ElevatorCtrl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerLimitSwitch",  ElevatorCtrl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerlimitSwitch",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Zeroed", "bit", "getIsZeroed",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Climb_Enabled_Cmd", "cmd", "getClimbEnabledCmd", Climb.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Left_Winch_Cmd", "cmd", "getLeftWinchCmd", Climb.getInstance());
@@ -456,11 +457,10 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
+		CsvLogger.addLoggingFieldDouble("Potentiometer_Voltage", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Left_Intake_Cmd", "cmd", "getLeftMotorCmd", IntakeControl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Right_Intake_Cmd", "cmd", "getRightMotorCmd", IntakeControl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elevator_Cmd", "cmd", "getMotorCmd", ElevatorCtrl.getInstance());
-		CsvLogger.addLoggingFieldDouble("Potentiometer current", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
-		CsvLogger.addLoggingFieldDouble("Potentiometer_Voltage", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
 
 
 	}
@@ -577,7 +577,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putString("Auto Mode", auto.mode.toString());
 		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
 		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().cubeInIntake());
-		CasseroleWebStates.putDouble("Potentiometer_Voltage (V)", ElbowControl.getInstance().potentiometer.getVoltage());
+		CasseroleWebStates.putDouble("Potentiometer_Voltage (V)", ElbowControl.getInstance().getPotentiometerVoltage());
 	}
 	
 	
