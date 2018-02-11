@@ -22,8 +22,8 @@ public class ElbowControl {
 	double potentiometerVoltage;
 	
 	//Cutoffs
-	final double LOWER_LIMIT_VOLTAGE = 4.5;
-	final double UPPER_LIMIT_VOLTAGE = 0.5;
+	final double LOWER_LIMIT_VOLTAGE = 0.5;
+	final double UPPER_LIMIT_VOLTAGE = 4.5;
 	
 	//Present value passed to motor. Positive means raise, negative means lower.
 	double curMotorCmd = 0;

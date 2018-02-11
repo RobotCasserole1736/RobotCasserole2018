@@ -277,9 +277,11 @@ public class Autonomous {
 				DriverStation.reportError("Unimplemented autonomous mode requested! Tell software team they got auto mode " + mode.toString() , false);
 				break;
 			}
+			
+			System.out.println("[Auto] Path calculation completed.");
 		}
 		
-		System.out.println("[Auto] Path calculation completed.");
+
 	}
 
 

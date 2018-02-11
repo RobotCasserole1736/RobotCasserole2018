@@ -403,7 +403,7 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getRAMUsage", this);
 		CsvLogger.addLoggingFieldDouble("RIO_Main_Loop_Exec_Time", "ms", "getLoopExeTime_ms", this);
 		CsvLogger.addLoggingFieldDouble("RIO_Main_Loop_Period", "ms", "getLoopPeriod_ms", this);
-		CsvLogger.addLoggingFieldDouble("RIO_RAM_Usage", "%", "getCANBusUtilizationPct", this);
+		CsvLogger.addLoggingFieldDouble("RIO_CAN_Bus_Load", "%", "getCANBusUtilizationPct", this);
 		CsvLogger.addLoggingFieldDouble("Bat_ESR", "ohms", "getBattESR", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("Bat_Voc", "V", "getBattVoc", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Angle","deg", "getRobotGravityAngle", this);
@@ -523,6 +523,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Brownout", "bit");
 		CasseroleWebPlots.addNewSignal("Intake_Left_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("Intake_Right_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Elbow_Cmd", "cmd");
+		CasseroleWebPlots.addNewSignal("Elbow_Pot_Val", "V");
 	}
 	
 	
@@ -553,6 +555,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Brownout", time, RobotController.isBrownedOut()?1.0:0.0);
 		CasseroleWebPlots.addSample("Intake_Left_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
 		CasseroleWebPlots.addSample("Intake_Right_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
+		CasseroleWebPlots.addSample("Elbow_Cmd", time, ElbowControl.getInstance().getMotorCmd());
+		CasseroleWebPlots.addSample("Elbow_Pot_Val", time, ElbowControl.getInstance().getPotentiometerVoltage());
+		
 	}
 
 	
