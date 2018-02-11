@@ -127,12 +127,9 @@ public class AutoSequencer {
 
             // Check if active event has completed. Move on to the next one if this one is done.
             // Note this sequence guarantees each event's update is called at least once.
-            if (activeEvent.isDone()) {
+            if (activeEvent.isDone() && allChildrenDone(activeEvent)) {
             	//This event is done - determine if we are done with auto, or need to do the next event.
             	
-                activeEvent.forceStopAllChildren(); // Just in case the user is sloppy and leaves
-                                                    // child events running when the parent
-                                                    // finishes.
                 globalEventIndex++;
                 
                 // See what our new current event is.
@@ -148,15 +145,31 @@ public class AutoSequencer {
                 activeEvent.userStart();
             }
             
-        if(globalUpdateCount % 50 == 0){
-        	System.out.println("[Auto] Running. timestep = " + Double.toString(globalUpdateCount*0.02) + "s | ActualTime = " + Double.toString(Timer.getFPGATimestamp()));
-        }
-
+	        if(globalUpdateCount % 50 == 0){
+	        	System.out.println("[Auto] Running. timestep = " + Double.toString(globalUpdateCount*0.02) + "s | ActualTime = " + Double.toString(Timer.getFPGATimestamp()));
+	        }
 
         }
         globalUpdateCount++;
         
 
+    }
+    
+    /**
+     * Checks if all children of an event are no longer running
+     * @param event
+     * @return
+     */
+    private static boolean allChildrenDone(AutoEvent event) {
+        if (event.childEvents.size() > 0) {
+            for (AutoEvent child : event.childEvents) {
+            	if(child.isRunning) {
+            		return false;
+            	}
+            }
+        }
+        	
+        return true;
     }
 
 

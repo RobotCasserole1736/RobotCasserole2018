@@ -165,7 +165,7 @@ public class Drivetrain {
 			
 			//Calc heading compensation. Simple P controller. Sorta.
 			if(Gyro.getInstance().isOnline()) {
-				//Switch-mode gains since the in-motion correction is more agressive than stand still logic and causes instability
+				//Switch-mode gains since the in-motion correction is more aggressive than stand still logic and causes instability
 				if(Math.abs(curLeftSpeedCmd_RPM) > 5 ||Math.abs(curRightSpeedCmd_RPM) > 5 ) {
 					headingCompVal = (Gyro.getInstance().getAngle() - curHeadingCmd_deg) * headingGainCal.get();
 				} else {

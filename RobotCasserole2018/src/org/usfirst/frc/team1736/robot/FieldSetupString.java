@@ -28,56 +28,57 @@ public class FieldSetupString {
 		
 		
 		public void update() {
-			String gameData;
+			String gameData = "";
 			try {
+				prevGameData = gameData;
 				gameData = DriverStation.getInstance().getGameSpecificMessage();
-			if(gameData.length() >= 2) {	
-				if(gameData.charAt(0) == 'L') {
-					left_Switch_Owned = true;
-					right_Switch_Owned = false;
-				} else if(gameData.charAt(0) == 'R') {
-					left_Switch_Owned = false;
-					right_Switch_Owned = true;
+				
+				if(gameData.length() >= 2) {	
+					
+					if(gameData.charAt(0) == 'L') {
+						left_Switch_Owned = true;
+						right_Switch_Owned = false;
+					} else if(gameData.charAt(0) == 'R') {
+						left_Switch_Owned = false;
+						right_Switch_Owned = true;
+					} else {
+						right_Switch_Owned = false;
+						left_Switch_Owned = false;
+					}
+					
+					if(gameData.charAt(1) == 'L')
+					{
+						left_Scale_Owned = true;
+						right_Scale_Owned = false;
+					} else if(gameData.charAt(1) == 'R') {
+						right_Scale_Owned = true;
+						left_Scale_Owned = false;
+					}else {
+						right_Scale_Owned = false;
+						left_Scale_Owned = false;
+					}	
+					
 				} else {
-					right_Switch_Owned = false;
 					left_Switch_Owned = false;
+					right_Switch_Owned = false;
+					left_Scale_Owned = false;
+					right_Scale_Owned = false;
 				}
-				if(gameData.charAt(1) == 'L')
-				{
-					left_Scale_Owned = true;
-					right_Scale_Owned = false;
-				} else if(gameData.charAt(1) == 'R') {
-					right_Scale_Owned = true;
-					left_Scale_Owned = false;
-				}else {
-					right_Scale_Owned = false;
-					left_Scale_Owned = false;
-				}	
-			}
-			else {
-				left_Switch_Owned = false;
-				right_Switch_Owned = false;
-				left_Scale_Owned = false;
-				right_Scale_Owned = false;
-			}
 			
-				//(left_Switch_Owned == true || right_Switch_Owned == true) && (left_Scale_Owned == true || right_Scale_Owned == true)
 			
 				if(gameData.compareTo(prevGameData) != 0 && (left_Switch_Owned == true || right_Switch_Owned == true) && (left_Scale_Owned == true || right_Scale_Owned == true)) {
+					//New string, and some ownership was found. Good game data
 					CrashTracker.logGenericMessage("got new game data:" + gameData);
 				}
 				else if(gameData.compareTo(prevGameData) != 0 && (left_Switch_Owned == false && right_Switch_Owned == false) && (left_Scale_Owned == false && right_Scale_Owned == false)) {
+					//New string, but no ownership. Must have been a bogus string
 					CrashTracker.logGenericMessage("got unexpected game data:" + gameData);
 				}
 				else {
 					//When no new strings are received nothing is returned
 				}
 				
-				prevGameData = gameData;
-				
-				
-				
-				
+
 			} catch (Throwable t) {
 				String msg = "Error parsing string data\n" + t.getMessage() + "\n" + t.getStackTrace();
 				CrashTracker.logGenericMessage(msg);

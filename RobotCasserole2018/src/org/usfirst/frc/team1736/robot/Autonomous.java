@@ -206,15 +206,17 @@ public class Autonomous {
 			
 			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
 				AutoEventSwitchLeft_Center parentLSWC = new AutoEventSwitchLeft_Center();
-				AutoSequencer.addEvent(new AutoEventEjectCube());
 				parentLSWC.addChildEvent(new AutoEventRaiseElevatorSwitch());
 				AutoSequencer.addEvent(parentLSWC);
+				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 				
 			case LEFT_SWITCH_FROM_LEFT: //switch only if on left and own left
 				AutoEventSwitchLeft parentLSWL =new AutoEventSwitchLeft();
-				AutoSequencer.addEvent(new AutoEventEjectCube());
 				parentLSWL.addChildEvent(new AutoEventRaiseElevatorSwitch());
+				AutoSequencer.addEvent(parentLSWL);
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				
 				break;
 				
 			case RIGHT_SWITCH_FROM_CENTER: //switch only if in center and own right

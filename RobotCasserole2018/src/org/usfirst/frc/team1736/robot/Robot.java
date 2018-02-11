@@ -104,6 +104,8 @@ public class Robot extends TimedRobot {
 		ElevatorCtrl.getInstance();
 		FieldSetupString.getInstance();
 		IntakeControl.getInstance();
+		GravityIndicator.getInstance();
+		Gyro.getInstance();
 		
 		
 		//Init physical robot devices
@@ -146,7 +148,6 @@ public class Robot extends TimedRobot {
 			
 			//Ensure Auto is not running
 			auto.stop();
-			auto.update();
 			
 			
 		}
@@ -172,21 +173,21 @@ public class Robot extends TimedRobot {
 			//Close out whatever log may have been being recorded
 			CsvLogger.close();
 			
-			
 			//Allow for drivetrain PID gains to be changed
 			Drivetrain.getInstance().updatePIDGains();
 			
-			
-			//Update appropriate subsystems
+			//Update appropriate subsystem sensor inputs
 			IntakeControl.getInstance().sampleSensors();
 			ElevatorCtrl.getInstance().sampleSensors();
 			ElbowControl.getInstance().sampleSensors();
-			
+
+			//Update the right subset of subsystems - remember we're disabled!
 			GravityIndicator.getInstance().update();
 			FieldSetupString.getInstance().update();
+			
+			//Recalculate auto paths
 			auto.updateAutoSelection();
 			auto.calculatePaths();
-			
 			
 			//Update data viewers only
 			updateDriverView();
@@ -253,7 +254,7 @@ public class Robot extends TimedRobot {
 			ElevatorCtrl.getInstance().sampleSensors();
 			IntakeControl.getInstance().sampleSensors();
 			IntakeControl.getInstance().setMotorCurrents(pdp.getCurrent(RobotConstants.PDP_INTAKE_LEFT), pdp.getCurrent(RobotConstants.PDP_INTAKE_RIGHT));
-			Drivetrain.getInstance().setSystemVoltageCurrent( pdp.getVoltage(), pdp.getTotalCurrent());
+			Drivetrain.getInstance().setSystemVoltageCurrent(pdp.getVoltage(), pdp.getTotalCurrent());
 			
 			//Update autonomous sequencer
 			auto.update();
