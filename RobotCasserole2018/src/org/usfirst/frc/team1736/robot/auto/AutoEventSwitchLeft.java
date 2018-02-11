@@ -20,7 +20,7 @@ public class AutoEventSwitchLeft extends AutoEvent {
 		{5, 11}
 	};
 	
-	private final double time = 6.0;
+	private final double time = 4.0;
 
 	public AutoEventSwitchLeft() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);

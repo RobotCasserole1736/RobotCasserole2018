@@ -21,11 +21,12 @@ public class ElbowControl {
 	boolean lowerLimitReached = false;
 	double potentiometerVoltage;
 	
+	//Cutoffs
+	final double LOWER_LIMIT_VOLTAGE = 4.5;
+	final double UPPER_LIMIT_VOLTAGE = 0.5;
+	
 	//Present value passed to motor. Positive means raise, negative means lower.
 	double curMotorCmd = 0;
-	
-	
-
 	
 	Spark elbowMotor = null;
 	AnalogInput potentiometer;
@@ -51,24 +52,22 @@ public class ElbowControl {
 	
 		
 	public void sampleSensors() {
-	potentiometerVoltage = potentiometer.getVoltage();
-	
 		//Read Potentiometer
-			
-		
-	if(potentiometerVoltage >= 5) {
-		
+		potentiometerVoltage = potentiometer.getVoltage();
+
+		if(potentiometerVoltage >= UPPER_LIMIT_VOLTAGE) {
 			upperLimitReached = true;
 		} else {
 			upperLimitReached = false;
 		}
 		
-	if(potentiometerVoltage <= 0) {
+		if(potentiometerVoltage <= LOWER_LIMIT_VOLTAGE) {
 			lowerLimitReached = true;
 		} else {
 			lowerLimitReached = false;
 		}
 	}
+	
 	public void update() {
 
 		//calculate motor command

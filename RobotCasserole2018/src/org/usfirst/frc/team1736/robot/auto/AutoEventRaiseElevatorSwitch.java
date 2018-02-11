@@ -11,8 +11,14 @@ public class AutoEventRaiseElevatorSwitch extends AutoEvent {
 	private double startTime = 0.0;
 	private double currentTime = 0.0;
 	private double elapsedTime = 0.0;
-	private boolean weAreDone;
-
+	private boolean weAreDone = false;
+	private final double delayTime;
+	
+	
+	public AutoEventRaiseElevatorSwitch(double delay_in) {
+		delayTime = delay_in;
+	}
+	
 	@Override
 	public void userStart() {
 		startTime = Timer.getFPGATimestamp();
@@ -23,7 +29,8 @@ public class AutoEventRaiseElevatorSwitch extends AutoEvent {
 	public void userUpdate() {
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
-		if(elapsedTime > 0.5) {
+		
+		if(elapsedTime > delayTime) {
 			ElevatorCtrl.getInstance().setIndexDesired(Elevator_index.Switch1);
 			if(ElevatorCtrl.getInstance().getUpperlimitSwitch() || ElevatorCtrl.getInstance().isAtDesiredHeight()) {
 				weAreDone = true;

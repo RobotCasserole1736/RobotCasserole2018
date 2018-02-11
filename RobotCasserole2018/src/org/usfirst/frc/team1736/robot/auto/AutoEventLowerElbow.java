@@ -1,11 +1,12 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
+import org.usfirst.frc.team1736.robot.ElbowControl;
 import org.usfirst.frc.team1736.robot.IntakeControl;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class AutoEventEjectCube extends AutoEvent {
+public class AutoEventLowerElbow extends AutoEvent {
 	
 	
 	private double currentTime = 0.0;
@@ -24,11 +25,15 @@ public class AutoEventEjectCube extends AutoEvent {
 	public void userUpdate() {
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
-		if(elapsedTime > 1.0) {
-			IntakeControl.getInstance().setEjectDesired(false);
+		
+
+		if(elapsedTime > 2.0 || ElbowControl.getInstance().isLowerLimitReached()) {
+			//We've finished lowering
+			ElbowControl.getInstance().setLowerDesired(false);
 			weAreDone = true;
 		} else {
-			IntakeControl.getInstance().setEjectDesired(true);
+			//Still need to keep on lowering.
+			ElbowControl.getInstance().setLowerDesired(true);
 			weAreDone = false;
 		}
 		
@@ -36,7 +41,7 @@ public class AutoEventEjectCube extends AutoEvent {
 
 	@Override
 	public void userForceStop() {
-		IntakeControl.getInstance().setEjectDesired(false);
+		ElbowControl.getInstance().setLowerDesired(false);
 	}
 
 	@Override
