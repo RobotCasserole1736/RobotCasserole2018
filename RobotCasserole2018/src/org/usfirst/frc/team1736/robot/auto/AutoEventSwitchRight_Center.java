@@ -1,10 +1,8 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
-import org.usfirst.frc.team1736.lib.PathPlanner.CasserolePath;
 import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
-import org.usfirst.frc.team1736.robot.Drivetrain;
 
 /**
  * go to switch on right if in center start position.
