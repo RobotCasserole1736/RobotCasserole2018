@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1736.robot;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 public class CIMCurrentEstimator {
 	
