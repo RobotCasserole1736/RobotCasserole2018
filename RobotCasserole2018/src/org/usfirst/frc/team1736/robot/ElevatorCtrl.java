@@ -12,7 +12,7 @@ public class ElevatorCtrl {
 	private static ElevatorCtrl  singularInstance = null;
 	
 	//Input Commands
-	private Elevator_index indexModeDesired;
+	private ElevatorIndex indexModeDesired;
 	private boolean continuousModeDesired;
 	private double continuousModeCmd;
 	private double curMotorCmd;
@@ -24,8 +24,8 @@ public class ElevatorCtrl {
 	public boolean isZeroed = false;
 
 	//Travel limit reached check booleans
-	boolean upperLimitSwitchReached = false;
-	boolean lowerLimitSwitchReached = false;
+	boolean upperTravelLimitReached = false;
+	boolean lowerTravelLimitReached = false;
 	
 	
 	//Physical devices
@@ -92,15 +92,15 @@ public class ElevatorCtrl {
 	public void sampleSensors() {
 		//Check if we've hit the upper or lower limits of travel yet
 		if(upperLimitSwitch.get()) {
-			upperLimitSwitchReached = true;
+			upperTravelLimitReached = true;
 		} else {
-			upperLimitSwitchReached = false;
+			upperTravelLimitReached = false;
 		}
 		
 		if(lowerLimitSwitch.get()) {
-			lowerLimitSwitchReached = true;
+			lowerTravelLimitReached = true;
 		} else {
-			lowerLimitSwitchReached = false;
+			lowerTravelLimitReached = false;
 		}
 		
 		//Read in present elevator height
@@ -110,30 +110,32 @@ public class ElevatorCtrl {
 	
 	public void update() {
 		//Check for zeroed condition
-		if(lowerLimitSwitchReached == true) {
+		if(lowerTravelLimitReached == true) {
 			elevatorEncoder.reset();
 			isZeroed = true;
 		}
 
-		
-		if (continuousModeDesired == true || isZeroed == false) {
+		if(isZeroed == false) {
+			//Uncalibrated mode - like continuous, but don't trust the encoder reading
+			
+			//Open Loop control - Operator commands motor directly
+			curMotorCmd = continuousModeCmd;
+			
+		} else if (continuousModeDesired == true ) {
 			
 			//Continuous mode - used whenever the driver wants control, or the encoder has not yet been zeroed.
 			
 			//Open Loop control - Operator commands motor directly
 			curMotorCmd = continuousModeCmd;
 			
-			if(isZeroed == true) {
-				//Keep the closed loop command set to the nearest height
-				indexModeDesired = desiredHightToEmun(getElevActualHeight_in());
-			}
+			//Keep the closed loop command set to the nearest height
+			indexModeDesired = desiredHightToEmun(getElevActualHeight_in());
 
 		} else {
 			
 			//Indexed mode - the default case where the driver just presses buttons.
 			
 			//Super-de-duper simple bang-bang control of elevator in closed loop
-			desiredHeight = enumToDesiredHeight(indexModeDesired);
 
 			if(isAtDesiredHeight()) {
 				//Deadzone, don't run motor.
@@ -149,13 +151,13 @@ public class ElevatorCtrl {
 		
 		
 		//Limit motor speed if we've hit either limit.
-		if(upperLimitSwitchReached == true) {
+		if(upperTravelLimitReached == true) {
 			if(curMotorCmd >= 0) {
 				curMotorCmd = 0;
 			}
 		}
 		
-		if(lowerLimitSwitchReached == true){
+		if(lowerTravelLimitReached == true){
 			if(curMotorCmd <= 0) {
 				curMotorCmd = 0;
 			}
@@ -165,13 +167,14 @@ public class ElevatorCtrl {
 		motor1.set(curMotorCmd);
 	}
 	
-	public void setIndexDesired (Elevator_index cmd) {
-		if(cmd != Elevator_index.nothingUnderscoreNew) {
+	public void setIndexDesired (ElevatorIndex cmd) {
+		if(cmd != ElevatorIndex.NO_NEW_SELECTION) {
 			indexModeDesired = cmd;
+			desiredHeight = enumToDesiredHeight(indexModeDesired);
 		}
 	}
 	
-	public void setContMode (boolean modecommand) {
+	public void setContModeDesired (boolean modecommand) {
 		continuousModeDesired = modecommand;
 	}
 	
@@ -191,26 +194,26 @@ public class ElevatorCtrl {
 	 * @param cmd enum height command
 	 * @return height, in inches.
 	 */
-	private double enumToDesiredHeight(Elevator_index cmd) {
-		if(cmd == Elevator_index.Bottom) {
+	private double enumToDesiredHeight(ElevatorIndex cmd) {
+		if(cmd == ElevatorIndex.BOTTOM) {
 			currentHeightCmd = FloorPosCal.get();
 		}
-		else if(cmd == Elevator_index.Exchange) {
+		else if(cmd == ElevatorIndex.EXCHANGE) {
 			currentHeightCmd = ExchangePosCal.get();
 		}
-		else if(cmd == Elevator_index.ScaleUnderscoreDown) {
+		else if(cmd == ElevatorIndex.SCALE_DOWN) {
 			currentHeightCmd = ScaleDownPosCal.get();
 		}
-		else if(cmd == Elevator_index.ScaleUnderscoreBalanced) {
+		else if(cmd == ElevatorIndex.SCALE_BALANCED) {
 			currentHeightCmd = ScaleBalancedPosCal.get();
 		}
-		else if(cmd == Elevator_index.ScaleUnderscoreUp) {
+		else if(cmd == ElevatorIndex.SCALE_UP) {
 			currentHeightCmd = ScaleUpPosCal.get();
 		}
-		else if(cmd == Elevator_index.Switch1) {
+		else if(cmd == ElevatorIndex.SWITCH) {
 			currentHeightCmd = SwitchPosCal.get();
 		}
-		else if(cmd == Elevator_index.nothingUnderscoreNew){
+		else if(cmd == ElevatorIndex.NO_NEW_SELECTION){
 			//do nothing
 		}
 		else {
@@ -224,8 +227,8 @@ public class ElevatorCtrl {
 	 * @param height height in inches
 	 * @return the enum of the nearest level to the given height
 	 */
-	Elevator_index desiredHightToEmun(double height) {
-		Elevator_index returnValue = (Elevator_index.Bottom);
+	ElevatorIndex desiredHightToEmun(double height) {
+		ElevatorIndex returnValue = (ElevatorIndex.BOTTOM);
 		double mindist = 100; //a sufficiently large number
 		
 		//Check every possible height to see which one the 
@@ -233,37 +236,37 @@ public class ElevatorCtrl {
 		double calculation1 = Math.abs(FloorPosCal.get() - height);
 		if(calculation1 < mindist) {
 			mindist = calculation1;
-			returnValue = Elevator_index.Bottom;
+			returnValue = ElevatorIndex.BOTTOM;
 		}
 		
 		double calculation2 = Math.abs(ExchangePosCal.get() - height);
 		if(calculation2 < mindist) {
 			mindist = calculation2; 
-			returnValue = Elevator_index.Exchange;
+			returnValue = ElevatorIndex.EXCHANGE;
 		}
 		 
 	 	double calculation3 = Math.abs(SwitchPosCal.get() - height);
 		if(calculation3 > mindist) {
 			mindist = calculation3;
-			returnValue =  Elevator_index.Switch1;
+			returnValue =  ElevatorIndex.SWITCH;
 		}
 		 
 		double calculation4 = Math.abs(ScaleDownPosCal.get() - height);
 		if(calculation4 > mindist) {
 			mindist = calculation4; 
-			returnValue =  Elevator_index.ScaleUnderscoreDown;
+			returnValue =  ElevatorIndex.SCALE_DOWN;
 		}
 		 
 		double calculation5 = Math.abs(ScaleBalancedPosCal.get() - height);
 		if(calculation5 > mindist) {
 			mindist = calculation5; 
-			returnValue =  Elevator_index.ScaleUnderscoreBalanced;
+			returnValue =  ElevatorIndex.SCALE_BALANCED;
 		}
 		 
 		double calculation6 = Math.abs(ScaleUpPosCal.get() - height);
 		if(calculation6 > mindist) {
 			 mindist = calculation6;
-			 returnValue =  Elevator_index.ScaleUnderscoreUp;
+			 returnValue =  ElevatorIndex.SCALE_UP;
 		}
 		 
 		 
@@ -282,12 +285,12 @@ public class ElevatorCtrl {
 		return desiredHeight;
 	}
 	
-	public boolean getUpperlimitSwitch() {
-		return upperLimitSwitch.get();
+	public boolean getLowerTravelLimitReached() {
+		return lowerTravelLimitReached;
 	}
 	
-	public boolean getLowerlimitSwitch() {
-		return lowerLimitSwitch.get();
+	public boolean getUpperTravelLimitReached() {
+		return upperTravelLimitReached;
 	}
 		
 	public boolean getIsZeroed(){

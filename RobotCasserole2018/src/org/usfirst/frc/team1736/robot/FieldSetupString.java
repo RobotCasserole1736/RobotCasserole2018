@@ -30,7 +30,6 @@ public class FieldSetupString {
 		public void update() {
 			String gameData = "";
 			try {
-				prevGameData = gameData;
 				gameData = DriverStation.getInstance().getGameSpecificMessage();
 				
 				if(gameData.length() >= 2) {	
@@ -68,15 +67,17 @@ public class FieldSetupString {
 			
 				if(gameData.compareTo(prevGameData) != 0 && (left_Switch_Owned == true || right_Switch_Owned == true) && (left_Scale_Owned == true || right_Scale_Owned == true)) {
 					//New string, and some ownership was found. Good game data
-					CrashTracker.logGenericMessage("got new game data:" + gameData);
+					CrashTracker.logGenericMessage("got new game data: " + gameData);
 				}
 				else if(gameData.compareTo(prevGameData) != 0 && (left_Switch_Owned == false && right_Switch_Owned == false) && (left_Scale_Owned == false && right_Scale_Owned == false)) {
 					//New string, but no ownership. Must have been a bogus string
-					CrashTracker.logGenericMessage("got unexpected game data:" + gameData);
+					CrashTracker.logGenericMessage("got unexpected game data: " + gameData);
 				}
 				else {
 					//When no new strings are received nothing is returned
 				}
+				
+				prevGameData = gameData;
 				
 
 			} catch (Throwable t) {

@@ -186,6 +186,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
 		}
 		
         startTime = Timer.getFPGATimestamp();
+        done = false;
 	}
 	
 	private double FT_PER_SEC_TO_RPM(double ftps_in) {

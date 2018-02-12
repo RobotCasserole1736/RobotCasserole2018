@@ -62,6 +62,9 @@ public abstract class AutoEvent {
 
     /** True when this event is active, false if not. */
     public boolean isRunning;
+    
+    /** True when this event has finished running once, false if not */
+    public boolean completed;
 
     public ArrayList<AutoEvent> childEvents;
 

@@ -5,6 +5,6 @@ package org.usfirst.frc.team1736.robot;
  * @author Chris Gerth
  *
  */
-public enum Elevator_index {
-		Bottom, Switch1, ScaleUnderscoreDown, ScaleUnderscoreBalanced, ScaleUnderscoreUp, Exchange, nothingUnderscoreNew;
+public enum ElevatorIndex {
+		BOTTOM, SWITCH, SCALE_DOWN, SCALE_BALANCED, SCALE_UP, EXCHANGE, NO_NEW_SELECTION;
 	}

@@ -105,21 +105,21 @@ public class OperatorController {
 		return operaterRightJoy;
 	}
 	
-	public Elevator_index getElevaterCmd() {
+	public ElevatorIndex getElevaterCmd() {
 		int operaterDownArrow = operatorController.getPOV();
-		Elevator_index ReturnValue;
-		ReturnValue = Elevator_index.nothingUnderscoreNew;
+		ElevatorIndex ReturnValue;
+		ReturnValue = ElevatorIndex.NO_NEW_SELECTION;
 		if(operaterDownArrow == 0) {
-			ReturnValue = Elevator_index.ScaleUnderscoreUp;
+			ReturnValue = ElevatorIndex.SCALE_UP;
 		}
 		if(operaterDownArrow == 90) {
-			ReturnValue = Elevator_index.Switch1;
+			ReturnValue = ElevatorIndex.SWITCH;
 		}
 		if(operaterDownArrow == 180) {
-			ReturnValue = Elevator_index.Bottom;
+			ReturnValue = ElevatorIndex.BOTTOM;
 		}
 		if(operaterDownArrow == 270) {
-			ReturnValue = Elevator_index.Exchange;
+			ReturnValue = ElevatorIndex.EXCHANGE;
 		}
 		return ReturnValue;
 	}

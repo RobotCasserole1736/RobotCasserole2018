@@ -2,27 +2,30 @@ package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
 import org.usfirst.frc.team1736.robot.ElevatorCtrl;
-import org.usfirst.frc.team1736.robot.Elevator_index;
+import org.usfirst.frc.team1736.robot.ElevatorIndex;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class AutoEventRaiseElevatorSwitch extends AutoEvent {
+public class AutoEventMoveElevator extends AutoEvent {
 	
 	private double startTime = 0.0;
 	private double currentTime = 0.0;
 	private double elapsedTime = 0.0;
+	private final ElevatorIndex targetLevel;
 	private boolean weAreDone = false;
 	private final double delayTime;
 	
+	private final double HEIGHT_SEEK_TIMEOUT_S = 5.0;
 	
-	public AutoEventRaiseElevatorSwitch(double delay_in) {
+	
+	public AutoEventMoveElevator(double delay_in, ElevatorIndex level_in) {
 		delayTime = delay_in;
+		targetLevel = level_in;
 	}
 	
 	@Override
 	public void userStart() {
 		startTime = Timer.getFPGATimestamp();
-		
 	}
 
 	@Override
@@ -31,8 +34,9 @@ public class AutoEventRaiseElevatorSwitch extends AutoEvent {
 		elapsedTime = currentTime - startTime;
 		
 		if(elapsedTime > delayTime) {
-			ElevatorCtrl.getInstance().setIndexDesired(Elevator_index.Switch1);
-			if(ElevatorCtrl.getInstance().getUpperlimitSwitch() || ElevatorCtrl.getInstance().isAtDesiredHeight()) {
+			ElevatorCtrl.getInstance().setContModeDesired(false);
+			ElevatorCtrl.getInstance().setIndexDesired(targetLevel);
+			if(ElevatorCtrl.getInstance().isAtDesiredHeight() || (elapsedTime) > (delayTime + HEIGHT_SEEK_TIMEOUT_S)) {
 				weAreDone = true;
 			} else {
 				weAreDone = false;
@@ -45,14 +49,14 @@ public class AutoEventRaiseElevatorSwitch extends AutoEvent {
 
 	@Override
 	public void userForceStop() {
-		// TODO Auto-generated method stub
+		ElevatorCtrl.getInstance().setContModeDesired(true);
+		ElevatorCtrl.getInstance().setContModeCmd(0);
 		
 	}
 
 	@Override
 	public boolean isTriggered() {
-		// TODO Auto-generated method stub
-		return false;
+		return true; //always ready to go!
 	}
 
 	@Override

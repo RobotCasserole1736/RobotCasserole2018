@@ -7,8 +7,7 @@ import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
 import org.usfirst.frc.team1736.robot.auto.AutoEventEjectCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLowerElbow;
-import org.usfirst.frc.team1736.robot.auto.AutoEventRaiseElevatorScale;
-import org.usfirst.frc.team1736.robot.auto.AutoEventRaiseElevatorSwitch;
+import org.usfirst.frc.team1736.robot.auto.AutoEventMoveElevator;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft;
@@ -206,11 +205,17 @@ public class Autonomous {
 			
 			AutoSequencer.clearAllEvents();
 			
+			//Add wait event if needed
+			if(delayTime_s != 0.0) {
+				AutoSequencer.addEvent(new AutoEventWait(delayTime_s));
+			}
+			
+			//Add other action events
 			switch(mode) {
 			
 			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
 				parent = new AutoEventSwitchLeft_Center();
-				parent.addChildEvent(new AutoEventRaiseElevatorSwitch(3.0));
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -218,7 +223,7 @@ public class Autonomous {
 				
 			case LEFT_SWITCH_FROM_LEFT: //switch only if on left and own left
 				parent =new AutoEventSwitchLeft();
-				parent.addChildEvent(new AutoEventRaiseElevatorSwitch(3.0));
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -226,7 +231,7 @@ public class Autonomous {
 				
 			case RIGHT_SWITCH_FROM_CENTER: //switch only if in center and own right
 				parent = new AutoEventSwitchRight_Center();
-				parent.addChildEvent(new AutoEventRaiseElevatorSwitch(3.0));
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -234,7 +239,7 @@ public class Autonomous {
 				
 			case RIGHT_SWITCH_FROM_RIGHT: //switch only if on right and own right
 				parent = new AutoEventSwitchRight();
-				parent.addChildEvent(new AutoEventRaiseElevatorSwitch(3.0));
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -242,7 +247,7 @@ public class Autonomous {
 				
 			case LEFT_SCALE_FROM_LEFT: // scale only left
 				parent = new AutoEventScaleLeft();
-				parent.addChildEvent(new AutoEventRaiseElevatorScale(3.0));
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -250,7 +255,7 @@ public class Autonomous {
 				
 			case RIGHT_SCALE_FROM_RIGHT: // scale only right
 				parent = new AutoEventScaleRight();
-				parent.addChildEvent(new AutoEventRaiseElevatorScale(3.0));
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -278,7 +283,9 @@ public class Autonomous {
 				break;
 			}
 			
-			System.out.println("[Auto] Path calculation completed.");
+			msg = "[Auto] Path calculation completed.";
+			System.out.println(msg);
+			CrashTracker.logGenericMessage(msg);
 		}
 		
 
@@ -286,6 +293,8 @@ public class Autonomous {
 
 
 	public void start() {
+		CrashTracker.logGenericMessage("[Auto] Final Auto Mode Selection: " + autoModeName);
+		CrashTracker.logGenericMessage("[Auto] Running routine " + mode.toString());
 		AutoSequencer.start();
 	}
 	

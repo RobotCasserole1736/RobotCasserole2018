@@ -53,6 +53,12 @@ public class AutoSequencer {
     public static void addEvent(AutoEvent event_in) {
         events.add(event_in);
         System.out.println("[Auto] New event registered - " + event_in.getClass().getName());
+        if(event_in.childEvents.size() > 0) {
+        	System.out.println("[Auto] Child Events: ");
+        	for(AutoEvent child : event_in.childEvents) {
+        		System.out.println("[Auto]       " + child.getClass().getName());
+        	}
+        }
     }
     
     public static void clearAllEvents() {
@@ -72,8 +78,7 @@ public class AutoSequencer {
 
         if (events.size() > 0) {
             activeEvent = events.get(globalEventIndex);
-            System.out.println("[Auto] Starting new auto event " + activeEvent.getClass().getName());
-            activeEvent.userStart();
+            startEvent(activeEvent);
         }
     }
 
@@ -89,8 +94,9 @@ public class AutoSequencer {
             // Force stop this event and its children
             activeEvent.forceStopAllChildren();
             activeEvent.userForceStop();
+            System.out.println("[Auto] Stopped.");
         }
-        System.out.println("[Auto] Stopping...");
+        
 
         // Set activeEvent to nothing running state.
         activeEvent = null;
@@ -110,17 +116,23 @@ public class AutoSequencer {
                 for (AutoEvent child : activeEvent.childEvents) {
 
                     // Evaluate if child needs to start running
-                    if (child.isRunning == false & child.isTriggered()) {
-                        child.isRunning = true;
-                    }
-                    // Call update if the child is running
-                    if (child.isRunning == true) {
-                        child.update();
-                    }
-                    // Evaluate if the child needs to be stopped
-                    if (child.isRunning == true & child.isDone()) {
-                        child.isRunning = false;
-                    }
+                	if(!child.completed) {
+	                    if (child.isRunning == false & child.isTriggered()) {
+	                        child.isRunning = true;
+	                        System.out.println("[Auto] Starting new child auto event " + child.getClass().getName());
+	                        child.userStart();
+	                    }
+	                    // Call update if the child is running
+	                    if (child.isRunning == true) {
+	                        child.update();
+	                    }
+	                    // Evaluate if the child needs to be stopped
+	                    if (child.isRunning == true & child.isDone()) {
+	                        child.isRunning = false;
+	                        child.completed = true;
+	                        System.out.println("[Auto] Finished child auto event " + child.getClass().getName());
+	                    }
+                	}
 
                 }
             }
@@ -141,8 +153,7 @@ public class AutoSequencer {
                 } 
                 
                 activeEvent = events.get(globalEventIndex);
-                System.out.println("[Auto] Starting new auto event " + activeEvent.getClass().getName());
-                activeEvent.userStart();
+                startEvent(activeEvent);
             }
             
 	        if(globalUpdateCount % 50 == 0){
@@ -170,6 +181,22 @@ public class AutoSequencer {
         }
         	
         return true;
+    }
+    
+    /**
+     * Performs all actions required to start an event.
+     * @param event
+     */
+    private static void startEvent(AutoEvent event) {
+        System.out.println("[Auto] Starting new auto event " + activeEvent.getClass().getName());
+        activeEvent.userStart();
+    	
+        if (event.childEvents.size() > 0) {
+            for (AutoEvent child : event.childEvents) {
+            	child.completed = false;
+            	child.isRunning = false;
+            }
+        }
     }
 
 

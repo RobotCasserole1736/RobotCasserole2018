@@ -180,6 +180,24 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().sampleSensors();
 			ElevatorCtrl.getInstance().sampleSensors();
 			ElbowControl.getInstance().sampleSensors();
+			
+			//Set zero-state inputs
+			Drivetrain.getInstance().setForwardReverseCommand(0);
+			Drivetrain.getInstance().setRotateCommand(0);
+			ElbowControl.getInstance().setLowerDesired(false);
+			ElbowControl.getInstance().setRaiseDesired(false);
+			IntakeControl.getInstance().setIntakeDesired(false);
+			IntakeControl.getInstance().setEjectDesired(false);
+			IntakeControl.getInstance().setIntakeOvrdDesired(false);
+			IntakeControl.getInstance().setThrowDesired(false);
+			ElevatorCtrl.getInstance().setContModeDesired(true);
+			ElevatorCtrl.getInstance().setContModeCmd(0);
+			ElevatorCtrl.getInstance().setIndexDesired(ElevatorIndex.BOTTOM);
+			Climb.getInstance().setLeftWinchCmd(0);
+			Climb.getInstance().setRightWinchCmd(0);
+			Climb.getInstance().setReleaseLatchCmd(false);
+			Climb.getInstance().setHookReleaseCmd(false);
+			
 
 			//Update the right subset of subsystems - remember we're disabled!
 			GravityIndicator.getInstance().update();
@@ -340,7 +358,7 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setEjectDesired(OperatorController.getInstance().getEjectCmd());
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
 			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
-			ElevatorCtrl.getInstance().setContMode(OperatorController.getInstance().getElevCntrlModeCmd());
+			ElevatorCtrl.getInstance().setContModeDesired(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorCtrl.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
 			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
@@ -445,8 +463,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("Elev_Motor_Cmd", "cmd", "getMotorCmd", ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Des_Height", "in", "getElevDesiredHeight_in", ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Act_Height", "in", "getElevActualHeight_in",  ElevatorCtrl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_Reached", "bit", "getUpperlimitSwitch",  ElevatorCtrl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerlimitSwitch",  ElevatorCtrl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_Reached", "bit", "getUpperTravelLimitReached",  ElevatorCtrl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerTravelLimitReached",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Zeroed", "bit", "getIsZeroed",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Climb_Enabled_Cmd", "cmd", "getClimbEnabledCmd", Climb.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Left_Winch_Cmd", "cmd", "getLeftWinchCmd", Climb.getInstance());
@@ -491,8 +509,8 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().getCurrentLimitExceeded());
 		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isAtDesiredHeight()); 
 		CasseroleDriverView.setBoolean("Elbow In Transit", !(ElbowControl.getInstance().isLowerLimitReached() || ElbowControl.getInstance().isUpperLimitReached()));
-		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperlimitSwitch());
-		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerlimitSwitch());
+		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getLowerTravelLimitReached());
+		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getUpperTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
 		
 	}
@@ -557,7 +575,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Intake_Right_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
 		CasseroleWebPlots.addSample("Elbow_Cmd", time, ElbowControl.getInstance().getMotorCmd());
 		CasseroleWebPlots.addSample("Elbow_Pot_Val", time, ElbowControl.getInstance().getPotentiometerVoltage());
-		
 	}
 
 	
@@ -596,7 +613,7 @@ public class Robot extends TimedRobot {
 	}
 	
 	public double getCANBusUtilizationPct() {
-		return RobotController.getCANStatus().percentBusUtilization;
+		return RobotController.getCANStatus().percentBusUtilization*100;
 	}
 	
 	public double getLoopExeTime_ms() {

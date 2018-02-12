@@ -2,6 +2,7 @@ package org.usfirst.frc.team1736.lib.WebServer;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.Semaphore;
 
 public class PlotSignal {
 
@@ -11,7 +12,8 @@ public class PlotSignal {
 	
 	boolean acq_active;
 	
-	Queue<PlotSample> sample_queue;
+	Queue<PlotSample> sample_queue; 
+	Semaphore queueMutex; //Used to ensure operations on sample_queue are atomic
 	
 	/**
 	 * Class which describes one line on a plot
@@ -25,6 +27,8 @@ public class PlotSignal {
 		
 		acq_active = false;
 		
+		queueMutex = new Semaphore(1); //Mutex = Semaphore with 1 resource
+		
 		sample_queue = new LinkedList<PlotSample>();
 	}
 	
@@ -37,7 +41,13 @@ public class PlotSignal {
 	 */
 	public void addSample(double time_in, double value_in){
 		if(acq_active){
-			sample_queue.add(new PlotSample(time_in, value_in));
+			try {
+				queueMutex.acquire();
+				sample_queue.add(new PlotSample(time_in, value_in));
+				queueMutex.release();
+			} catch (InterruptedException e) {
+				//Execution interrupted while waiting for acquisition. Nothing to do besides release.
+			}
 		}
 	}
 	
@@ -61,14 +71,18 @@ public class PlotSignal {
 	 * has no new data.
 	 */
 	public PlotSample[] getAllSamples(){
-		int size = sample_queue.size();
-		PlotSample[] retval;
-		if(size > 0){
-			retval = new PlotSample[size];
-			sample_queue.toArray(retval);
-			sample_queue.clear();
-		} else {
-			retval = null;
+		PlotSample[] retval = null;
+		try {
+			queueMutex.acquire();
+			int size = sample_queue.size();
+			if(size > 0){
+				retval = new PlotSample[size];
+				sample_queue.toArray(retval);
+				sample_queue.clear();
+			} 
+			queueMutex.release();
+		} catch (InterruptedException e) {
+			//Execution interrupted while waiting for acquisition. Nothing to do besides release.
 		}
 		return retval;
 	}
@@ -77,7 +91,13 @@ public class PlotSignal {
 	 * Discards all samples from the buffer
 	 */
 	public void clearBuffer(){
-		sample_queue.clear();
+		try {
+			queueMutex.acquire();
+			sample_queue.clear();
+			queueMutex.release();
+		} catch (InterruptedException e) {
+			//Execution interrupted while waiting for acquisition. Nothing to do besides release.
+		}
 	}
 	
 	/**
