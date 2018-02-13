@@ -80,17 +80,10 @@ public class OperatorController {
 		return operatorR3;
 	}
 
-	//Right now this both getClimbEnabledCmd and getRaiseClimberCmd are on the Left Bumper. This will probably change later.
 	public boolean getClimbEnabledCmd() {
 		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
 		return operaterLeftBumper;
 		
-	}
-	//still waiting on confirmation that we need this
-	public boolean getRaiseCLimberCmd() {
-		boolean operaterLeftBumper = operatorController.getBumper(Hand.kLeft);
-		return operaterLeftBumper;	
-
 	}
 	
 	public double getPullLeftWinchCmd() {
