@@ -509,8 +509,8 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().getCurrentLimitExceeded());
 		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isAtDesiredHeight()); 
 		CasseroleDriverView.setBoolean("Elbow In Transit", !(ElbowControl.getInstance().isLowerLimitReached() || ElbowControl.getInstance().isUpperLimitReached()));
-		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getLowerTravelLimitReached());
-		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getUpperTravelLimitReached());
+		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperTravelLimitReached());
+		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
 		
 	}

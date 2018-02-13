@@ -46,6 +46,8 @@ public class ElevatorCtrl {
 	Calibration UpMotorCmdCal = null;
 	Calibration DownMotorCmdCal = null;
 	Calibration ElevCtrlDeadzoneCal = null;
+	
+	Calibration HoldCmd = null;
 
 	//Constants
 	public final double ELEV_ENC_PULSES_PER_REV = 1024;
@@ -79,9 +81,10 @@ public class ElevatorCtrl {
 		ScaleBalancedPosCal = new Calibration("Elev Scale balanced postion (in)", 66.0, 0.0, 84.0);
 		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 77.0, 0.0, 84.0);
 		ExchangePosCal = new Calibration("Elev Exchange position (in)", 4.0, 0.0, 84.0);
-		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cd)", 0.5, 0.0, 1.0);
+		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cmd)", 0.5, 0.0, 1.0);
 		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 0.5, 0.0, 1.0);
 		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
+		HoldCmd = new Calibration("Elev Hold cmd (cmd)", 0.0, 0.0, 1.0);
 		
 
 		CrashTracker.logClassInitEnd(this.getClass());
@@ -149,6 +152,12 @@ public class ElevatorCtrl {
 			}
 		}
 		
+		if(isAtDesiredHeight()) {
+			curMotorCmd = curMotorCmd + HoldCmd.get();
+			if(curMotorCmd > 1) {
+				curMotorCmd = 1.0;
+			}
+		}
 		
 		//Limit motor speed if we've hit either limit.
 		if(upperTravelLimitReached == true) {
