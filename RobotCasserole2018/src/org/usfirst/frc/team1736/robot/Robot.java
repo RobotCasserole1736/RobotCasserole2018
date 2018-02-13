@@ -493,9 +493,10 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Elevator Upper Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Lower Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Not Zeroed", "yellow");
+		CasseroleDriverView.newBoolean("Cube In Intake", "green");
 		
 		
-		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180); //no worky yet??
+		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180); //must use firefox. No idea why.
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
 		CasseroleDriverView.newAutoSelector("Delay", Autonomous.DELAY_OPTIONS);
@@ -512,6 +513,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getLowerTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getUpperTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
+		CasseroleDriverView.setBoolean("Cube In Intake", IntakeControl.getInstance().cubeInIntake());
 		
 	}
 	
@@ -585,15 +587,25 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
 		CasseroleWebStates.putDouble("RIO Main Loop Exec Time (ms)", getLoopExeTime_ms());
 		CasseroleWebStates.putString("RioTimeandDate", new Date().toString());
-		CasseroleWebStates.putBoolean("leftSwitchState", FieldSetupString.getInstance(). left_Switch_Owned);
-		CasseroleWebStates.putBoolean("rightSwitchState", FieldSetupString.getInstance().right_Switch_Owned);
-		CasseroleWebStates.putBoolean("leftScaleState", FieldSetupString.getInstance().left_Scale_Owned);
-		CasseroleWebStates.putBoolean("RightScaleState", FieldSetupString.getInstance().right_Scale_Owned);
+		CasseroleWebStates.putBoolean("Field Left Switch Owned", FieldSetupString.getInstance(). left_Switch_Owned);
+		CasseroleWebStates.putBoolean("Field Right Switch Owned", FieldSetupString.getInstance().right_Switch_Owned);
+		CasseroleWebStates.putBoolean("Field Left Scale Owned", FieldSetupString.getInstance().left_Scale_Owned);
+		CasseroleWebStates.putBoolean("Field Right Scale Owned", FieldSetupString.getInstance().right_Scale_Owned);
+		CasseroleWebStates.putDouble("Elevator Act Height (in)",ElevatorCtrl.getInstance().getElevActualHeight_in());
+		CasseroleWebStates.putDouble("Elevator Des Height (in)",ElevatorCtrl.getInstance().getElevDesiredHeight_in());
+		CasseroleWebStates.putBoolean("Elevator Zeroed",ElevatorCtrl.getInstance().getIsZeroed());
+		CasseroleWebStates.putBoolean("Elevator Lower Limit",ElevatorCtrl.getInstance().getLowerTravelLimitReached());
+		CasseroleWebStates.putBoolean("Elevator Upper Limit",ElevatorCtrl.getInstance().getUpperTravelLimitReached());
+		CasseroleWebStates.putDouble("Elevator Motor Cmd",ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleWebStates.putBoolean("Elbow_Lower_Limit_Reached", ElbowControl.getInstance().isLowerLimitReached());
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
 		CasseroleWebStates.putString("Auto Mode", auto.mode.toString());
-		CasseroleWebStates.putBoolean("Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
+		CasseroleWebStates.putBoolean("Climber Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
+		CasseroleWebStates.putDouble("Climber Latch Angle Cmd", Climb.getInstance().getLatchAngleCmd());
+		CasseroleWebStates.putBoolean("Climber Enabled", Climb.getInstance().getClimbEnabledCmd());
+		CasseroleWebStates.putDouble("Climber Left Motor Cmd", Climb.getInstance().getLeftWinchCmd());
+		CasseroleWebStates.putDouble("Climber Right Motor Cmd", Climb.getInstance().getRightWinchCmd());
 		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().cubeInIntake());
 		CasseroleWebStates.putDouble("Potentiometer_Voltage (V)", ElbowControl.getInstance().getPotentiometerVoltage());
 	}

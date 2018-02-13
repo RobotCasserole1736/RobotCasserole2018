@@ -156,6 +156,7 @@ public class ElevatorCtrl {
 				curMotorCmd = 0;
 			}
 		}
+
 		
 		if(lowerTravelLimitReached == true){
 			if(curMotorCmd <= 0) {

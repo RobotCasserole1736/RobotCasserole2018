@@ -23,8 +23,10 @@ public class Climb {
 	private boolean currClimbEnabledCmd = false;
 	private boolean currReleaseLatchCmd = false;
 	private boolean currHookReleaseCmd = false;
-	private double LATCH_ANGLE_RELEASED = 90; 
-	private double LATCH_ANGLE_CLOSED = 0;
+	private double latchAngleCmd = 0;
+	
+	private final double LATCH_ANGLE_RELEASED = 90; 
+	private final double LATCH_ANGLE_CLOSED = 0;
 	
 	
 	private Spark leftWinchMotor1;
@@ -48,7 +50,8 @@ public class Climb {
 		hookRelease = new Relay(RobotConstants.RELAY_HOOK_RELEASE, Relay.Direction.kForward);
 		
 		//Init latches and hook release to unreleased
-		releaseLatch.set(LATCH_ANGLE_CLOSED);
+		latchAngleCmd = LATCH_ANGLE_CLOSED;
+		releaseLatch.set(latchAngleCmd);
 		hookRelease.set(Relay.Value.kOff);
 		
 		leftWinchMotor1 = new Spark (RobotConstants.PWM_CLIMBER_LEFT_ONE);
@@ -70,10 +73,12 @@ public class Climb {
 		
 		//Interpret commands for latch/hook release 
 		if(currReleaseLatchCmd == true) {
-			releaseLatch.set(LATCH_ANGLE_RELEASED);
+			latchAngleCmd = LATCH_ANGLE_RELEASED;
 		}else {
-			releaseLatch.set(LATCH_ANGLE_CLOSED);
+			latchAngleCmd = LATCH_ANGLE_CLOSED;
 		}
+		
+		releaseLatch.set(latchAngleCmd);
 
 		if(currHookReleaseCmd == true) {
 			hookRelease.set(Relay.Value.kOn);
@@ -124,6 +129,9 @@ public class Climb {
 	}
 	public boolean getClimbEnabledCmd() {
 		return currClimbEnabledCmd;
+	}
+	public double getLatchAngleCmd() {
+		return latchAngleCmd;
 	}
 	
 }
