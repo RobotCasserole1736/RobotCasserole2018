@@ -100,7 +100,7 @@ public class Calibration {
     public Calibration(String name_in, double default_val_in, double min_in, double max_in) {
 
         /* default stuff and stuff */
-        name = name_in.trim().replace(" ", "_").replace("-", "_");
+        name = name_in.trim().replace(" ", "_").replace("-", "_").replace( "(", "_").replace(")", "_");
         min_cal = min_in;
         max_cal = max_in;
 

@@ -84,7 +84,7 @@ public class ElevatorCtrl {
 		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cmd)", 0.5, 0.0, 1.0);
 		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 0.5, 0.0, 1.0);
 		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
-		HoldCmd = new Calibration("Elev Hold cmd cmd", 0.0, 0.0, 1.0);
+		HoldCmd = new Calibration("Elev Hold cmd ", 0.0, 0.0, 1.0);
 		
 
 		CrashTracker.logClassInitEnd(this.getClass());
