@@ -15,7 +15,7 @@ The Driver View web site is used to help test and tweak our code, and used to he
 
 me selecting auto mode in driver view
 
-![Driver View GIF](GIFs/Driver View GIF.gif)
+![Driver View GIF](https://github.com/RobotCasserole1736/RobotCasserole2018/blob/master/GIFs/Driver%20View%20GIf.gif)
 
 
 ## Main Source Code
