@@ -13,10 +13,21 @@ Robot Casserole robot source code for the 2018 FRC game, First PowerUp.
 ## Driver View Website
 The Driver View web site is used to help test and tweak our code, and used to help drive team during match. The driver view is a javascript/HTML based viewer of data logs captured from the robot during operation. These data logs are then used to tweak code before, during, and after competition. 
 
-me selecting auto mode in driver view
+Me selecting auto mode in driver view
 
 ![Driver View GIF](https://github.com/RobotCasserole1736/RobotCasserole2018/blob/master/GIFs/Driver%20View%20GIf.gif)
 
+Me checking that my request was noticed in state data
+
+![State Data GIF](https://github.com/RobotCasserole1736/RobotCasserole2018/blob/Jack_Making_GIFs_for_ReadMe/GIFs/state%20data%20GIF.gif)
+
+Me changing a value in calibrations
+
+![Calibraton GIF](https://github.com/RobotCasserole1736/RobotCasserole2018/blob/Jack_Making_GIFs_for_ReadMe/GIFs/calibration%20GIF.gif)
+
+Me testing code in plot views
+
+![Plot Views GIF](https://github.com/RobotCasserole1736/RobotCasserole2018/blob/Jack_Making_GIFs_for_ReadMe/GIFs/plot%20view%20GIF.gif)
 
 ## Main Source Code
 The source code this year, included code for: raising and lowerign an elevator, intaking, ejecting, and throwing a power cube, and programming a west coast drive-train to move. If you care to look at it look [here](https://github.com/RobotCasserole1736/RobotCasserole2018/tree/master/RobotCasserole2018/src/org/usfirst/frc/team1736/robot) 
