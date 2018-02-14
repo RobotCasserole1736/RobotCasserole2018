@@ -73,7 +73,6 @@ public class Drivetrain {
 		}
 		
 		leftGearbox.setInverted(true);
-		
 		rightGearbox.setInverted(false);
 		
 		//Set up current limiting & battery estimation
