@@ -30,7 +30,8 @@ public class Autonomous {
 			                                                  "Drive Fwd Only", 
 			                                                  "Do Nothing", 
 			                                                  "TEST MODE 1", 
-			                                                  "TEST MODE 2"};
+			                                                  "TEST MODE 2",
+			                                                  "Two Cube"};
 	
 	public static final String[] START_POS_MODES = new String[]{"Left", 
 			                                                    "Center", 
@@ -112,7 +113,44 @@ public class Autonomous {
 				}
 			
 			}
+			//Two cube modes
+		} else if (action.compareTo(ACTION_MODES[7])==0) {
+			
+			if(startPos.compareTo(START_POS_MODES[0])==0) { //Starting from Left
 				
+				if (FieldSetupString.getInstance().left_Switch_Owned && FieldSetupString.getInstance().left_Scale_Owned == true) {
+					mode = AutoModes.TWO_CUBE_LEFT;
+					
+				} else if(FieldSetupString.getInstance().left_Switch_Owned) {
+					mode = AutoModes.LEFT_SWITCH_FROM_LEFT;
+					
+				} else if(FieldSetupString.getInstance().left_Scale_Owned) {
+					mode = AutoModes.LEFT_SCALE_FROM_LEFT;
+				
+				} else {
+					mode = AutoModes.CROSS_BASELINE; //On left but do not own switch
+				}
+			} else if(startPos.compareTo(START_POS_MODES[1])==0) { //Starting Center 
+				
+
+					mode = AutoModes.CROSS_BASELINE; //In center but no switch ownership detected and can't do two cube from center.
+				
+			} else if(startPos.compareTo(START_POS_MODES[2])==0) { //Starting from Right
+				
+				if (FieldSetupString.getInstance().right_Switch_Owned && FieldSetupString.getInstance().right_Scale_Owned == true) {
+					mode = AutoModes.TWO_CUBE_RIGHT;
+				} else if(FieldSetupString.getInstance().right_Switch_Owned) {
+					mode = AutoModes.RIGHT_SWITCH_FROM_RIGHT;
+				} else if(FieldSetupString.getInstance().right_Scale_Owned) {
+					mode = AutoModes.RIGHT_SCALE_FROM_RIGHT;
+				} else {
+					mode = AutoModes.CROSS_BASELINE; //On right but do not own switch
+				}
+			
+			}
+			
+			
+			
 			
 		//Switch Only Modes
 		} else if (action.compareTo(ACTION_MODES[1])==0) {
@@ -274,7 +312,14 @@ public class Autonomous {
 			case TEST_MODE_2: //Test Mode 2
 				AutoSequencer.addEvent(new AutoEventTest2());
 				break;
+				
+			case TWO_CUBE_LEFT:
+				
+				break;
 			
+			case TWO_CUBE_RIGHT:
+				
+				break;	
 			case DO_NOTHING: //Do nothing
 				break;
 				
