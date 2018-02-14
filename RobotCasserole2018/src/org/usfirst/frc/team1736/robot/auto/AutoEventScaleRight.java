@@ -12,9 +12,10 @@ public class AutoEventScaleRight extends AutoEvent {
 
 	private final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 20}, 
-		{-1, 22}, 
-		{-1.5, 23}
+		{0, 200}, 
+		{-20, 220},
+		{-41.5, 245}, 
+		{-41.5, 266}
 	};
 	
 	private final double time = 4.0;
