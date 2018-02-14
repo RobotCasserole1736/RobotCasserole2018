@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
+import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 
 public class AutoEventBackUp extends AutoEvent {
@@ -13,8 +14,7 @@ public class AutoEventBackUp extends AutoEvent {
 	
 	private final double time = 2.0;
 
-	@Override
-	public void userStart() {
+	public AutoEventBackUp() {
 		driveBackward = new PathPlannerAutoEvent(waypoints, time, true);
 		
 	}
@@ -44,6 +44,13 @@ public class AutoEventBackUp extends AutoEvent {
 	}
 	
 	public static void main(String[] args) {
+		AutoEventBackUp autoEvent = new AutoEventBackUp();
+		FalconPathPlanner.plotPath(autoEvent.driveBackward.path);
+	}
+
+	@Override
+	public void userStart() {
+		driveBackward.userStart();
 		
 	}
 
