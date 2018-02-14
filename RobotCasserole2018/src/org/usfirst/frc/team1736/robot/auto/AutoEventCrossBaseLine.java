@@ -13,7 +13,7 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 
 	private static final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 10}
+		{0, 120}
 	};
 	
 	private final double time = 4.0;
