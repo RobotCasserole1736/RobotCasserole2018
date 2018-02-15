@@ -12,7 +12,11 @@ public class AutoEventIntakeCube extends AutoEvent {
 	private double startTime = 0.0;
 	private double elapsedTime = 0.0;
 	boolean weAreDone = false;
+	private double duration = 0.0;
 	
+	public AutoEventIntakeCube(double duration_in) {
+		duration = duration_in;
+	}
 
 	@Override
 	public void userStart() {
@@ -24,7 +28,7 @@ public class AutoEventIntakeCube extends AutoEvent {
 	public void userUpdate() {
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
-		if(elapsedTime > 1.0) {
+		if(elapsedTime > duration) {
 			IntakeControl.getInstance().setIntakeDesired(false);
 			weAreDone = true;
 		} else {

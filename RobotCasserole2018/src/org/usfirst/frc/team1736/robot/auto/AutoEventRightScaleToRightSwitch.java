@@ -18,7 +18,7 @@ public class AutoEventRightScaleToRightSwitch extends AutoEvent {
 		{7,37}
 	};
 	
-	private final double time = 4.0;
+	public static final double time = 4.0;
 
 	public AutoEventRightScaleToRightSwitch() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
