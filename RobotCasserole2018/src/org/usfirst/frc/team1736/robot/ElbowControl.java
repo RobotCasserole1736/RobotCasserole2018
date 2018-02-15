@@ -46,7 +46,7 @@ public class ElbowControl {
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
 		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.5, 0.0, 1.0);
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
-		potentiometer = new AnalogInput(0);
+		potentiometer = new AnalogInput(RobotConstants.AI_ELBOW_ANGLE_POT);
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	
