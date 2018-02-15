@@ -12,9 +12,9 @@ public class AutoEventTest1 extends AutoEvent {
 
 	private final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 20}, 
-		{1, 22}, 
-		{1.5, 23}
+		{0, 240}, 
+		{12, 264}, 
+		{18, 276}
 	};
 	
 	private final double time = 5.0;

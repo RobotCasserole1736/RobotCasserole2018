@@ -12,9 +12,9 @@ public class AutoEventTest1Reversed extends AutoEvent {
 
 	private final double[][] waypoints = new double[][] {
 		{0,0},
-		{-0.5,-1},
-		{-1.5,-3},
-		{-1.5,-23}
+		{-6,-12},
+		{-18,-36},
+		{-18,-276}
 
 	};
 	

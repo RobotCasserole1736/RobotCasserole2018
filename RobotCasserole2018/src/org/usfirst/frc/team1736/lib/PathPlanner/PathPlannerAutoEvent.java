@@ -49,7 +49,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
     /**
      * Constructor. Set up the parameters of the planner here.
      * 
-     * @param waypoints_in Set of x/y points which define the path the robot should take.
+     * @param waypoints_in Set of x/y points which define the path the robot should take. In Inches.
      * @param timeAllowed_in Number of seconds the path traversal should take. Must be long enough
      *        to allow the path planner to output realistic speeds.         
      */
@@ -61,7 +61,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
     /**
      * Constructor. Set up the parameters of the planner here.
      * 
-     * @param waypoints_in Set of x/y points which define the path the robot should take.
+     * @param waypoints_in Set of x/y points which define the path the robot should take. Assumes Inches
      * @param timeAllowed_in Number of seconds the path traversal should take. Must be long enough
      *        to allow the path planner to output realistic speeds. 
      * @param reversed set to True if you desire the robot to travel backward through the provided path        
@@ -87,6 +87,13 @@ public class PathPlannerAutoEvent extends AutoEvent {
 	        	}
 	        }
 	   
+        }
+        
+        //Convert all waypoints from inches to ft
+        for(int ii = 0; ii < waypoints.length; ii++) {
+        	for(int jj = 0; jj < waypoints[ii].length; jj++) {
+        		waypoints[ii][jj] *= 1.0/12.0;
+        	}
         }
         
         path = new FalconPathPlanner(waypoints);

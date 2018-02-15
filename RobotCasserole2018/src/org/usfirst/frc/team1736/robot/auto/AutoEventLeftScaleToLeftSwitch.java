@@ -8,17 +8,19 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 /**
  * drive straight and stuff.
  */
-public class AutoEventCrossBaseLine extends AutoEvent {
+public class AutoEventLeftScaleToLeftSwitch extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
 	private static final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 120}
+		{0,10},
+		{-7,35},
+		{-7,37}
 	};
 	
-	private final double time = 4.0;
+	public static final double time = 4.0;
 
-	public AutoEventCrossBaseLine() {
+	public AutoEventLeftScaleToLeftSwitch() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
 	}
 
@@ -48,7 +50,7 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 		driveForward.userStart();
 	}
     public static void main(String[] args) {
-		AutoEventCrossBaseLine autoEvent = new AutoEventCrossBaseLine();
+		AutoEventLeftScaleToLeftSwitch autoEvent = new AutoEventLeftScaleToLeftSwitch();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
 	}
 }
