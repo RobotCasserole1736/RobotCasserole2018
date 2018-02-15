@@ -118,7 +118,7 @@ public class Autonomous {
 			
 			if(startPos.compareTo(START_POS_MODES[0])==0) { //Starting from Left
 				
-				if (FieldSetupString.getInstance().left_Switch_Owned && FieldSetupString.getInstance().left_Scale_Owned == true) {
+				if (FieldSetupString.getInstance().left_Switch_Owned && FieldSetupString.getInstance().left_Scale_Owned) {
 					mode = AutoModes.TWO_CUBE_LEFT;
 					
 				} else if(FieldSetupString.getInstance().left_Switch_Owned) {
@@ -128,7 +128,7 @@ public class Autonomous {
 					mode = AutoModes.LEFT_SCALE_FROM_LEFT;
 				
 				} else {
-					mode = AutoModes.CROSS_BASELINE; //On left but do not own switch
+					mode = AutoModes.CROSS_BASELINE; 
 				}
 			} else if(startPos.compareTo(START_POS_MODES[1])==0) { //Starting Center 
 				
@@ -137,20 +137,20 @@ public class Autonomous {
 				
 			} else if(startPos.compareTo(START_POS_MODES[2])==0) { //Starting from Right
 				
-				if (FieldSetupString.getInstance().right_Switch_Owned && FieldSetupString.getInstance().right_Scale_Owned == true) {
+				if (FieldSetupString.getInstance().right_Switch_Owned && FieldSetupString.getInstance().right_Scale_Owned) {
 					mode = AutoModes.TWO_CUBE_RIGHT;
+					
 				} else if(FieldSetupString.getInstance().right_Switch_Owned) {
 					mode = AutoModes.RIGHT_SWITCH_FROM_RIGHT;
+					
 				} else if(FieldSetupString.getInstance().right_Scale_Owned) {
 					mode = AutoModes.RIGHT_SCALE_FROM_RIGHT;
+					
 				} else {
-					mode = AutoModes.CROSS_BASELINE; //On right but do not own switch
+					mode = AutoModes.CROSS_BASELINE; 
 				}
 			
 			}
-			
-			
-			
 			
 		//Switch Only Modes
 		} else if (action.compareTo(ACTION_MODES[1])==0) {
