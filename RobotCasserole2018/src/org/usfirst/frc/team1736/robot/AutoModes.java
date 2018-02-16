@@ -11,5 +11,8 @@ public enum AutoModes {
 	TEST_MODE_1,
 	TEST_MODE_2,
 	DO_NOTHING,
+	TWO_CUBE_LEFT,
+	TWO_CUBE_RIGHT,
 	UNKNOWN
+	
 }

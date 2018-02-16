@@ -4,22 +4,23 @@ import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
 import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 
-
 /**
- * drive straight and stuff.
+ * go to scale on left.
  */
-public class AutoEventCrossBaseLine extends AutoEvent {
+public class AutoEventSixInchForward extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private static final double[][] waypoints = new double[][] {
+	private final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 120}
+		{0, 6}, 
+		
 	};
 	
-	private final double time = 4.0;
+	private final double time = 2.0;
 
-	public AutoEventCrossBaseLine() {
+	public AutoEventSixInchForward() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
+		driveForward.path.setVelocityAlpha(0.001);
 	}
 
 	@Override
@@ -27,7 +28,6 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 		driveForward.userUpdate();
 		// shotCTRL.setDesiredShooterState(ShooterStates.PREP_TO_SHOOT);
 	}
-
 	@Override
 	public void userForceStop() {
 		driveForward.userForceStop();
@@ -48,7 +48,7 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 		driveForward.userStart();
 	}
     public static void main(String[] args) {
-		AutoEventCrossBaseLine autoEvent = new AutoEventCrossBaseLine();
+		AutoEventSixInchForward autoEvent = new AutoEventSixInchForward();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
 	}
 }
