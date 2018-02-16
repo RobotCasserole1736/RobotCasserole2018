@@ -360,6 +360,7 @@ public class Robot extends TimedRobot {
 			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
 			ElevatorCtrl.getInstance().setContModeDesired(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorCtrl.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
+			Climb.getInstance().setClimbEnabledCmd(OperatorController.getInstance().getClimbEnabledCmd());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
 			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
 			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
