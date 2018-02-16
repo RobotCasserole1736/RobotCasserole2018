@@ -155,8 +155,8 @@ public class IntakeControl {
 			leftMotorCmd = leftIntakeMotorCal.get();
 			rightMotorCmd = rightIntakeMotorCal.get();
 		} else if(ejectDesired) {
-			leftMotorCmd = leftEjectMotorCal.get();
-			rightMotorCmd = rightEjectMotorCal.get();
+			leftMotorCmd = -1 * leftEjectMotorCal.get();
+			rightMotorCmd = -1 * rightEjectMotorCal.get();
 		} else if(intakeOvrdDesired) {
 			leftMotorCmd = leftIntakeMotorCal.get();
 			rightMotorCmd = rightIntakeMotorCal.get();
