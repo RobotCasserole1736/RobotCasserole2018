@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
 		ecuStats = new CasseroleRIOLoadMonitor();
 
 		//Set up and start webcam stream
-		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
+		driverAssistCam = new UsbCamera("CheapWideAngleCam", 180);
 		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 640, 480, 10);
 		driverStream = new MjpegServer("DriverCamServer", 1180);
 		driverStream.setSource(driverAssistCam);
