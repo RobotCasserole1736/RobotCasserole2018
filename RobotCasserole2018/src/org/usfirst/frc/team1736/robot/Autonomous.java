@@ -4,12 +4,17 @@ import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoSequencer;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
+import org.usfirst.frc.team1736.robot.auto.AutoEventBackUp;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
 import org.usfirst.frc.team1736.robot.auto.AutoEventEjectCube;
+import org.usfirst.frc.team1736.robot.auto.AutoEventIntakeCube;
+import org.usfirst.frc.team1736.robot.auto.AutoEventLeftScaleToLeftSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLowerElbow;
 import org.usfirst.frc.team1736.robot.auto.AutoEventMoveElevator;
+import org.usfirst.frc.team1736.robot.auto.AutoEventRightScaleToRightSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleRight;
+import org.usfirst.frc.team1736.robot.auto.AutoEventSixInchForward;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight;
@@ -17,6 +22,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest1;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest1Reversed;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest2;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTurn180Degrees;
 import org.usfirst.frc.team1736.robot.auto.AutoEventWait;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -118,7 +124,7 @@ public class Autonomous {
 			
 			if(startPos.compareTo(START_POS_MODES[0])==0) { //Starting from Left
 				
-				if (FieldSetupString.getInstance().left_Switch_Owned && FieldSetupString.getInstance().left_Scale_Owned == true) {
+				if (FieldSetupString.getInstance().left_Switch_Owned && FieldSetupString.getInstance().left_Scale_Owned) {
 					mode = AutoModes.TWO_CUBE_LEFT;
 					
 				} else if(FieldSetupString.getInstance().left_Switch_Owned) {
@@ -128,7 +134,7 @@ public class Autonomous {
 					mode = AutoModes.LEFT_SCALE_FROM_LEFT;
 				
 				} else {
-					mode = AutoModes.CROSS_BASELINE; //On left but do not own switch
+					mode = AutoModes.CROSS_BASELINE; 
 				}
 			} else if(startPos.compareTo(START_POS_MODES[1])==0) { //Starting Center 
 				
@@ -137,20 +143,20 @@ public class Autonomous {
 				
 			} else if(startPos.compareTo(START_POS_MODES[2])==0) { //Starting from Right
 				
-				if (FieldSetupString.getInstance().right_Switch_Owned && FieldSetupString.getInstance().right_Scale_Owned == true) {
+				if (FieldSetupString.getInstance().right_Switch_Owned && FieldSetupString.getInstance().right_Scale_Owned) {
 					mode = AutoModes.TWO_CUBE_RIGHT;
+					
 				} else if(FieldSetupString.getInstance().right_Switch_Owned) {
 					mode = AutoModes.RIGHT_SWITCH_FROM_RIGHT;
+					
 				} else if(FieldSetupString.getInstance().right_Scale_Owned) {
 					mode = AutoModes.RIGHT_SCALE_FROM_RIGHT;
+					
 				} else {
-					mode = AutoModes.CROSS_BASELINE; //On right but do not own switch
+					mode = AutoModes.CROSS_BASELINE; 
 				}
 			
 			}
-			
-			
-			
 			
 		//Switch Only Modes
 		} else if (action.compareTo(ACTION_MODES[1])==0) {
@@ -314,11 +320,39 @@ public class Autonomous {
 				break;
 				
 			case TWO_CUBE_LEFT:
-				
+				parent = new AutoEventScaleLeft();
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventLowerElbow());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parent = new AutoEventBackUp();
+				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventTurn180Degrees());
+				parent = new AutoEventLeftScaleToLeftSwitch();
+				parent.addChildEvent(new AutoEventIntakeCube(AutoEventLeftScaleToLeftSwitch.time));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(new AutoEventSixInchForward());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 			
 			case TWO_CUBE_RIGHT:
-				
+				parent = new AutoEventScaleRight();
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventLowerElbow());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parent = new AutoEventBackUp();
+				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventTurn180Degrees());
+				parent = new AutoEventRightScaleToRightSwitch();
+				parent.addChildEvent(new AutoEventIntakeCube(AutoEventRightScaleToRightSwitch.time));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(new AutoEventSixInchForward());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;	
 			case DO_NOTHING: //Do nothing
 				break;

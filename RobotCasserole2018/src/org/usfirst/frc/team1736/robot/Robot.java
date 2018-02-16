@@ -487,6 +487,7 @@ public class Robot extends TimedRobot {
 	private void initDriverView() {
 		CasseroleDriverView.newDial("Robot Angle (deg)", -90, 90, 15, -10, 10);
 		CasseroleDriverView.newDial("Robot Speed (fps)", 0, 15, 1, 0, 13);
+		CasseroleDriverView.newDial("Actual Elevator Height", 0, 80, 10, 0, 80);
 		CasseroleDriverView.newBoolean("DT Current High", "yellow");
 		CasseroleDriverView.newBoolean("Intake Current High", "red");
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
@@ -515,6 +516,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
 		CasseroleDriverView.setBoolean("Cube In Intake", IntakeControl.getInstance().cubeInIntake());
+		CasseroleDriverView.setDialValue("Actual Elevator Height", ElevatorCtrl.getInstance().getElevActualHeight_in());
 		
 	}
 	

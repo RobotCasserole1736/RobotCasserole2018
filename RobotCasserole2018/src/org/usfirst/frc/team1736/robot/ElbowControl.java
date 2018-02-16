@@ -22,8 +22,8 @@ public class ElbowControl {
 	double potentiometerVoltage;
 	
 	//Cutoffs
-	final double LOWER_LIMIT_VOLTAGE = 0.5;
-	final double UPPER_LIMIT_VOLTAGE = 4.5;
+	final double LOWER_LIMIT_VOLTAGE = 1.3;
+	final double UPPER_LIMIT_VOLTAGE = 2.9;
 	
 	//Present value passed to motor. Positive means raise, negative means lower.
 	double curMotorCmd = 0;
@@ -46,7 +46,7 @@ public class ElbowControl {
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
 		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.5, 0.0, 1.0);
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
-		potentiometer = new AnalogInput(0);
+		potentiometer = new AnalogInput(RobotConstants.AI_ELBOW_ANGLE_POT);
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	

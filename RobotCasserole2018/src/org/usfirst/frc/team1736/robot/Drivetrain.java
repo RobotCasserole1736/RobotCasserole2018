@@ -34,8 +34,8 @@ public class Drivetrain {
 	Calibration headingGainCal;
 	
 	//Current Limiting Verification
-	CIMCurrentEstimator leftCurrentEst;
-	CIMCurrentEstimator rightCurrentEst;
+	MotorCurrentEstimator leftCurrentEst;
+	MotorCurrentEstimator rightCurrentEst;
 	double reductionFactor = 1.0;
 	BatteryParamEstimator bpe;
 	final static int BPE_length = 200; 
@@ -56,7 +56,7 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		CrashTracker.logClassInitStart(this.getClass());
-		boolean useRealGearbox = false;
+		boolean useRealGearbox = true;
 		
 		if(useRealGearbox) {
 			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 
@@ -73,12 +73,11 @@ public class Drivetrain {
 		}
 		
 		leftGearbox.setInverted(true);
-		
 		rightGearbox.setInverted(false);
 		
 		//Set up current limiting & battery estimation
-		leftCurrentEst = new CIMCurrentEstimator(3,0);
-		rightCurrentEst = new CIMCurrentEstimator(3,0);
+		leftCurrentEst = new MotorCurrentEstimator(2,1,0);
+		rightCurrentEst = new MotorCurrentEstimator(2,1,0);
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
