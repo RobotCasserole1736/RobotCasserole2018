@@ -43,8 +43,8 @@ public class GravityIndicator{
 		else if (angleY >= 0) {
 				angleB = -1*(rightRadian - angleY);
 		}
-		angleB = angleB-90;
 		finalOutput = Math.toDegrees(angleB);
+		finalOutput = finalOutput -90;
 	}	
 	
 	double getRobotAngle() {
