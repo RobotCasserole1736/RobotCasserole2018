@@ -35,8 +35,7 @@ public class RobotConstants {
 	// RoboRIO Input Ports 
 	/////////////////////////////////////////////////////////////////////////////////////
 	
-	//Analog Inputs
-	public static final int AI_ELBOW_ANGLE_POT = 0;
+	
 	
 	//Digital Inputs
 	public static final int DI_INTAKE_CUBE_PRESENT_SENSOR = 4;
@@ -44,6 +43,7 @@ public class RobotConstants {
 	public static final int DI_ELEVATER_ENCODER_B = 6;
 	public static final int DI_ELEVATER_LOWER_LIMIT_SW = 7;
 	public static final int DI_ELEVATER_UPPER_LIMIT_SW = 8;
+	public static final int DI_ELBOW_UPPER_LIMIT_SW = 3;
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// PDP Ports
