@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
 		ecuStats = new CasseroleRIOLoadMonitor();
 
 		//Set up and start webcam stream
-		driverAssistCam = new UsbCamera("CheapWideAngleCam", 180);
+		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
 		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 640, 480, 10);
 		driverStream = new MjpegServer("DriverCamServer", 1180);
 		driverStream.setSource(driverAssistCam);
@@ -498,7 +498,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Cube In Intake", "green");
 		
 		
-		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,180); //must use firefox. No idea why.
+		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,0); //must use firefox. No idea why.
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
 		CasseroleDriverView.newAutoSelector("Delay", Autonomous.DELAY_OPTIONS);

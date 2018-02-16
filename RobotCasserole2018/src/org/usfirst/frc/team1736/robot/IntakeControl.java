@@ -68,8 +68,8 @@ public class IntakeControl {
 		rightIntakeMotorCal = new Calibration("Intake Right Intake Cmd", 0.4, 0.0, 1.0);
 		leftEjectMotorCal   = new Calibration("Intake Left Eject Cmd",   0.4, 0.0, 1.0);
 		rightEjectMotorCal  = new Calibration("Intake Right Eject Cmd",  0.4, 0.0, 1.0);
-		leftThrowMotorCal   = new Calibration("Intake Left Throw Cmd",   0.4, 0.0, 1.0);
-		rightThrowMotorCal  = new Calibration("Intake Right Throw Cmd",  0.4, 0.0, 1.0);
+		leftThrowMotorCal   = new Calibration("Intake Left Throw Cmd",   1.0, 0.0, 1.0);
+		rightThrowMotorCal  = new Calibration("Intake Right Throw Cmd",  1.0, 0.0, 1.0);
 		
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
@@ -161,8 +161,8 @@ public class IntakeControl {
 			leftMotorCmd = leftIntakeMotorCal.get();
 			rightMotorCmd = rightIntakeMotorCal.get();
 		} else if(throwDesired) {
-			leftMotorCmd = leftThrowMotorCal.get();
-			rightMotorCmd = rightThrowMotorCal.get();
+			leftMotorCmd = -1*leftThrowMotorCal.get();
+			rightMotorCmd = -1*rightThrowMotorCal.get();
 		} else {
 			leftMotorCmd = 0;
 			rightMotorCmd = 0;
@@ -173,7 +173,7 @@ public class IntakeControl {
 		}
 		
 		leftMotor.set(leftMotorCmd);
-		rightMotor.set(rightMotorCmd);
+		rightMotor.set(-1*rightMotorCmd);
 	}
 	
 }
