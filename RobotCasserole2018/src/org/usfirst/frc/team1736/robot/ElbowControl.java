@@ -48,9 +48,9 @@ public class ElbowControl {
 	private ElbowControl() {
 		CrashTracker.logClassInitStart(this.getClass());
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
-		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.5, 0.0, 1.0);
-		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.5, 0.0, 1.0);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELBOW_UPPER_LIMIT_SW);
+		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.25, 0.0, 1.0);
+		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.25, 0.0, 1.0);
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
 	

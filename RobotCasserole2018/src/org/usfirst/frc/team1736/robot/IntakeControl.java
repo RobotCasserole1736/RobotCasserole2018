@@ -64,8 +64,8 @@ public class IntakeControl {
 		leftMotor = new Spark(RobotConstants.PWM_INTAKE_LEFT);
 		rightMotor = new Spark(RobotConstants.PWM_INTAKE_RIGHT);
 		
-		leftIntakeMotorCal  = new Calibration("Intake Left Intake Cmd",  0.4, 0.0, 1.0);
-		rightIntakeMotorCal = new Calibration("Intake Right Intake Cmd", 0.4, 0.0, 1.0);
+		leftIntakeMotorCal  = new Calibration("Intake Left Intake Cmd",  1.0, 0.0, 1.0);
+		rightIntakeMotorCal = new Calibration("Intake Right Intake Cmd", 1.0, 0.0, 1.0);
 		leftEjectMotorCal   = new Calibration("Intake Left Eject Cmd",   0.4, 0.0, 1.0);
 		rightEjectMotorCal  = new Calibration("Intake Right Eject Cmd",  0.4, 0.0, 1.0);
 		leftThrowMotorCal   = new Calibration("Intake Left Throw Cmd",   1.0, 0.0, 1.0);

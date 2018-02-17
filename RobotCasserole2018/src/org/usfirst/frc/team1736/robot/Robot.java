@@ -44,6 +44,7 @@ import edu.wpi.cscore.VideoMode.PixelFormat;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.Logging.CsvLogger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -120,7 +121,7 @@ public class Robot extends TimedRobot {
 
 		//Set up and start webcam stream
 		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
-		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 640, 480, 10);
+		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
 		driverStream = new MjpegServer("DriverCamServer", 1180);
 		driverStream.setSource(driverAssistCam);
 		
@@ -423,6 +424,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("RIO_Main_Loop_Exec_Time", "ms", "getLoopExeTime_ms", this);
 		CsvLogger.addLoggingFieldDouble("RIO_Main_Loop_Period", "ms", "getLoopPeriod_ms", this);
 		CsvLogger.addLoggingFieldDouble("RIO_CAN_Bus_Load", "%", "getCANBusUtilizationPct", this);
+		CsvLogger.addLoggingFieldBoolean("RIO_FPGA_Active", "bit", "getOutputsActive", this);
+		CsvLogger.addLoggingFieldBoolean("RIO_DS_Connected", "bit", "getDSConnected", this);
 		CsvLogger.addLoggingFieldDouble("Bat_ESR", "ohms", "getBattESR", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("Bat_Voc", "V", "getBattVoc", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Angle","deg", "getRobotGravityAngle", this);
@@ -438,6 +441,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R1_Current", "A", "getMasterMotorCurrent", Drivetrain.getInstance().rightGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R2_Current", "A", "getSlave1MotorCurrent", Drivetrain.getInstance().rightGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Motor_R3_Current", "A", "getSlave2MotorCurrent", Drivetrain.getInstance().rightGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Left_Meas_Current", "A", "getTotalCurrent", Drivetrain.getInstance().leftGearbox);
+		CsvLogger.addLoggingFieldDouble("DT_Right_Meas_Current", "A", "getTotalCurrent", Drivetrain.getInstance().rightGearbox);
 		CsvLogger.addLoggingFieldDouble("DT_Left_Motor_Cmd", "cmd", "getLeftMotorCommand", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Right_Motor_Cmd", "cmd", "getRightMotorCommand", Drivetrain.getInstance());
 		CsvLogger.addLoggingFieldDouble("DT_Left_Current_Est", "A", "getLeftCurrentEst", Drivetrain.getInstance());
@@ -618,6 +623,14 @@ public class Robot extends TimedRobot {
 
 	public double getRAMUsage() {
 		return ecuStats.totalMemUsedPct;
+	}
+	
+	public boolean getDSConnected() {
+		return DriverStation.getInstance().isDSAttached();
+	}
+	
+	public boolean getOutputsActive() {
+		return DriverStation.getInstance().isSysActive();
 	}
 	
 	public double getRobotGravityAngle() {
