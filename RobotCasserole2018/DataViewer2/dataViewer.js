@@ -7,7 +7,8 @@ var presets = [["PDP_Voltage (V)", "PDP_Total_Current (A)"],
                ["DT_Pose_Angle (deg)", "DT_Right_Wheel_Speed_Act_RPM (RPM)", "DT_Right_Wheel_Speed_Des_RPM (RPM)", "Net_Speed (fps)"],
 			   ["RIO_Main_Loop_Exec_Time (ms)", "RIO_Cpu_Load (%)", "RIO_RAM_Usage (%)"],
 			   ["DT_Right_Wheel_Speed_Act_RPM (RPM)", "DT_Right_Wheel_Speed_Des_RPM (RPM)", "DT_Left_Wheel_Speed_Act_RPM (RPM)", "DT_Left_Wheel_Speed_Des_RPM (RPM)"],
-			   ["DT_FwdRev_Cmd (cmd)", "DT_Rotate_Cmd (cmd)", "DT_Left_Motor_Cmd (cmd)", "DT_Right_Motor_Cmd (cmd)" ]];
+			   ["DT_FwdRev_Cmd (cmd)", "DT_Rotate_Cmd (cmd)", "DT_Left_Motor_Cmd (cmd)", "DT_Right_Motor_Cmd (cmd)" ],
+               ["Elev_Motor_Cmd (cmd)", "Elev_Des_Height (in)", "Elev_Act_Height (in)", "PDP_Current_Elevator_one (A)"]];
 
 var dflt_options =  {    
 
