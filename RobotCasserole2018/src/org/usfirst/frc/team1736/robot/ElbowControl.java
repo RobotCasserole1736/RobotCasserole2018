@@ -49,7 +49,7 @@ public class ElbowControl {
 		CrashTracker.logClassInitStart(this.getClass());
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
 		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELBOW_UPPER_LIMIT_SW);
-		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.25, 0.0, 1.0);
+		raiseSpeedCal = new Calibration("Elbow Raise Speed", 0.35, 0.0, 1.0);
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.25, 0.0, 1.0);
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
@@ -68,27 +68,30 @@ public class ElbowControl {
 	}
 	
 	public void update() {
+		//Default to off
+		curMotorCmd = 0;
 
 		//calculate motor command
 		if(upperLimitReached == false && curRaiseCmd == true) {
 			curMotorCmd = raiseSpeedCal.get(); 
+			
 		} else {
-			curMotorCmd = 0;
-		}
 		
-		if(curLowerCmd == true && prevLowerCmd == false) {
-			startTime = Timer.getFPGATimestamp();
-		}
-		
-		if(curLowerCmd == true) {
-			elapsedTime = Timer.getFPGATimestamp() - startTime;
-			if(elapsedTime < 0.25) {
-				curMotorCmd = -1*raiseSpeedCal.get();
+			if(curLowerCmd == true && prevLowerCmd == false) {
+				startTime = Timer.getFPGATimestamp();
+			}
+			
+			if(curLowerCmd == true) {
+				elapsedTime = Timer.getFPGATimestamp() - startTime;
+				if(elapsedTime < 0.25) {
+					curMotorCmd = -1*raiseSpeedCal.get();
+				} else {
+					curMotorCmd = 0;
+				}
 			} else {
 				curMotorCmd = 0;
 			}
-		} else {
-			curMotorCmd = 0;
+				
 		}
 		
 		//Set the motor command to the motor

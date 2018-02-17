@@ -494,7 +494,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("DT Current High", "yellow");
 		CasseroleDriverView.newBoolean("Intake Current High", "red");
 		CasseroleDriverView.newBoolean("Elevator In Transit", "green");
-		CasseroleDriverView.newBoolean("Elbow In Transit", "green");
+		CasseroleDriverView.newBoolean("Elbow Upper Limit", "green");
 		CasseroleDriverView.newBoolean("Elevator Upper Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Lower Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Not Zeroed", "yellow");
@@ -517,6 +517,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
+		CasseroleDriverView.setBoolean("Elbow Upper Limit", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleDriverView.setBoolean("Cube In Intake", IntakeControl.getInstance().cubeInIntake());
 		CasseroleDriverView.setDialValue("Actual Elevator Height", ElevatorCtrl.getInstance().getElevActualHeight_in());
 		

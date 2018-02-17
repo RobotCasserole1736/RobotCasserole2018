@@ -25,26 +25,17 @@ public class GravityIndicator{
 	public void update(){
 			
 		//Read input values from accel
-		double accelerometerX = robotAccelerometer.getX();
-		double accelerometerY = robotAccelerometer.getY();
+		double accelerometerX = -1* robotAccelerometer.getX();
+		double accelerometerZ = robotAccelerometer.getZ();
 			
 		//Do some trig
-		double tanAngleX = accelerometerY/accelerometerX;
-		double angleY = 0;
-		angleY = Math.atan(tanAngleX);
+		double tanAngleX = accelerometerZ/accelerometerX;
+		double angleY = Math.atan(tanAngleX);
 			
 		//Convert to degrees in the orientation we want
 		double rightRadian = Math.PI/2;
-		double angleB = 0;
-			
-		if (angleY <= 0){
-			angleB = rightRadian + angleY;
-		}
-		else if (angleY >= 0) {
-				angleB = -1*(rightRadian - angleY);
-		}
+		double angleB = angleY;
 		finalOutput = Math.toDegrees(angleB);
-		finalOutput = finalOutput -90;
 	}	
 	
 	double getRobotAngle() {
