@@ -12,7 +12,8 @@ public class ElevatorCtrl {
 	private static ElevatorCtrl  singularInstance = null;
 	
 	//Input Commands
-	private ElevatorIndex indexModeDesired;
+	private ElevatorIndex opIndexDesired;
+	private ElevatorIndex IndexDesired;
 	private boolean continuousModeDesired;
 	private double continuousModeCmd;
 	private double curMotorCmd;
@@ -36,7 +37,7 @@ public class ElevatorCtrl {
 	private Encoder elevatorEncoder;
 	
 	//Height calibrations
-	Calibration FloorPosCal = null;
+	Calibration BottomPosCal = null;
 	Calibration SwitchPosCal = null;
 	Calibration ScaleDownPosCal = null;
 	Calibration ScaleBalancedPosCal = null;
@@ -76,7 +77,7 @@ public class ElevatorCtrl {
 		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_LOWER_LIMIT_SW);	
 		
 		//Init Calibrations for positions & speeds
-		FloorPosCal = new Calibration("Elev Floor position (in)", 0.0, 0.0, 84.0);
+		BottomPosCal = new Calibration("Elev Floor position (in)", 0.0, 0.0, 84.0);
 		SwitchPosCal = new Calibration("Elev Switch position (in)", 20.0, 0.0,84.0);
 		ScaleDownPosCal = new Calibration("Elev Scale down Position (in)", 55.0, 0.0, 84.0);
 		ScaleBalancedPosCal = new Calibration("Elev Scale balanced postion (in)", 66.0, 0.0, 84.0);
@@ -136,11 +137,17 @@ public class ElevatorCtrl {
 			curMotorCmd = continuousModeCmd;
 			
 			//Keep the closed loop command set to the nearest height
-			indexModeDesired = desiredHightToEmun(getElevActualHeight_in());
+			IndexDesired = desiredHightToEmun(getElevActualHeight_in());
+			desiredHeight = enumToDesiredHeight(IndexDesired);
 
 		} else {
 			
 			//Indexed mode - the default case where the driver just presses buttons.
+			if(opIndexDesired != ElevatorIndex.NO_NEW_SELECTION) {
+				IndexDesired = opIndexDesired;
+			}
+			
+			desiredHeight = enumToDesiredHeight(IndexDesired);
 			
 			//Super-de-duper simple bang-bang control of elevator in closed loop
 
@@ -182,10 +189,7 @@ public class ElevatorCtrl {
 	}
 	
 	public void setIndexDesired (ElevatorIndex cmd) {
-		if(cmd != ElevatorIndex.NO_NEW_SELECTION) {
-			indexModeDesired = cmd;
-			desiredHeight = enumToDesiredHeight(indexModeDesired);
-		}
+		opIndexDesired = cmd;
 	}
 	
 	public void setContModeDesired (boolean modecommand) {
@@ -210,7 +214,7 @@ public class ElevatorCtrl {
 	 */
 	private double enumToDesiredHeight(ElevatorIndex cmd) {
 		if(cmd == ElevatorIndex.BOTTOM) {
-			currentHeightCmd = FloorPosCal.get();
+			currentHeightCmd = BottomPosCal.get();
 		}
 		else if(cmd == ElevatorIndex.EXCHANGE) {
 			currentHeightCmd = ExchangePosCal.get();
@@ -243,43 +247,44 @@ public class ElevatorCtrl {
 	 */
 	ElevatorIndex desiredHightToEmun(double height) {
 		ElevatorIndex returnValue = (ElevatorIndex.BOTTOM);
-		double mindist = 100; //a sufficiently large number
+		double mindist = 1000; //a sufficiently large number
+		double tmp;
 		
 		//Check every possible height to see which one the 
 		// current height is closes to.
-		double calculation1 = Math.abs(FloorPosCal.get() - height);
-		if(calculation1 < mindist) {
-			mindist = calculation1;
+		tmp = Math.abs(BottomPosCal.get() - height);
+		if(tmp < mindist) {
+			mindist = tmp;
 			returnValue = ElevatorIndex.BOTTOM;
 		}
 		
-		double calculation2 = Math.abs(ExchangePosCal.get() - height);
-		if(calculation2 < mindist) {
-			mindist = calculation2; 
+		tmp = Math.abs(ExchangePosCal.get() - height);
+		if(tmp < mindist) {
+			mindist = tmp; 
 			returnValue = ElevatorIndex.EXCHANGE;
 		}
 		 
-	 	double calculation3 = Math.abs(SwitchPosCal.get() - height);
-		if(calculation3 > mindist) {
-			mindist = calculation3;
+		tmp = Math.abs(SwitchPosCal.get() - height);
+		if(tmp < mindist) {
+			mindist = tmp;
 			returnValue =  ElevatorIndex.SWITCH;
 		}
 		 
-		double calculation4 = Math.abs(ScaleDownPosCal.get() - height);
-		if(calculation4 > mindist) {
-			mindist = calculation4; 
+		tmp = Math.abs(ScaleDownPosCal.get() - height);
+		if(tmp < mindist) {
+			mindist = tmp; 
 			returnValue =  ElevatorIndex.SCALE_DOWN;
 		}
 		 
-		double calculation5 = Math.abs(ScaleBalancedPosCal.get() - height);
-		if(calculation5 > mindist) {
-			mindist = calculation5; 
+		tmp = Math.abs(ScaleBalancedPosCal.get() - height);
+		if(tmp < mindist) {
+			mindist = tmp; 
 			returnValue =  ElevatorIndex.SCALE_BALANCED;
 		}
 		 
-		double calculation6 = Math.abs(ScaleUpPosCal.get() - height);
-		if(calculation6 > mindist) {
-			 mindist = calculation6;
+		tmp = Math.abs(ScaleUpPosCal.get() - height);
+		if(tmp < mindist) {
+			 mindist = tmp;
 			 returnValue =  ElevatorIndex.SCALE_UP;
 		}
 		 
