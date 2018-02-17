@@ -76,11 +76,13 @@ public class Drivetrain {
 		rightGearbox.setInverted(false);
 		
 		//Set up current limiting & battery estimation
-		leftCurrentEst = new MotorCurrentEstimator(2,1,0);
-		rightCurrentEst = new MotorCurrentEstimator(2,1,0);
+		leftCurrentEst = new MotorCurrentEstimator(2,  1, 1.0, 1.0);
+		rightCurrentEst = new MotorCurrentEstimator(2, 1, 1.0,  0.95);
+		
+		
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
-		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 7.5, 5.0, 12.0);
+		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 8.0, 5.0, 12.0);
 		
 		curLimitEnable = new Calibration("DT Enable Current Limit", 1.0, 0, 1.0);
 		headingGainCal = new Calibration("DT Heading Comp P Gain", 4.0);
