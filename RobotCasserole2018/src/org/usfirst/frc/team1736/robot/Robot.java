@@ -474,6 +474,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldBoolean("Climb_Enabled_Cmd", "cmd", "getClimbEnabledCmd", Climb.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Left_Winch_Cmd", "cmd", "getLeftWinchCmd", Climb.getInstance());
 		CsvLogger.addLoggingFieldDouble("Climb_Right_Winch_Cmd", "cmd", "getRightWinchCmd", Climb.getInstance());
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Latch", "A", "getCurrent", pdp, RobotConstants.PDP_LATCH);
+		CsvLogger.addLoggingFieldDouble("PDP_Current_Elevator_One", "A", "getCurrent", pdp, RobotConstants.PDP_ELEVATOR_ONE);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Intake_Left", "A", "getCurrent", pdp, RobotConstants.PDP_INTAKE_LEFT);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Intake_Right", "A", "getCurrent", pdp, RobotConstants.PDP_INTAKE_RIGHT);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Left_One", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_LEFT_ONE);
