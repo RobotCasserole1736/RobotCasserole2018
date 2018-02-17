@@ -44,7 +44,7 @@ public class Particle {
 		if (idx < upper & idx > lower) {
 			return On_Color;
 		} else {
-			return ;
+			return Off_Color;
 		}
 	}
 	

@@ -27,6 +27,7 @@ import java.util.TimerTask;
 import javax.swing.JFrame;
 
 import org.usfirst.frc.team1736.lib.LEDs.CasseroleLEDInterface;
+import org.usfirst.frc.team1736.lib.LEDs.Color;
 import org.usfirst.frc.team1736.lib.LEDs.DesktopTestLEDs;
 import org.usfirst.frc.team1736.lib.LEDs.DotStarsLEDStrip;
 import org.usfirst.frc.team1736.lib.LEDs.Particle;
@@ -74,8 +75,8 @@ public class LEDSequencer {
 		timerThread = new java.util.Timer("LED Sequencer Update");
 		timerThread.schedule(new LEDBackgroundUpdateTask(this), (long) (CasseroleLEDInterface.m_update_period_ms), (long) (CasseroleLEDInterface.m_update_period_ms));
 
-		for(int i = 0; i < particles.length; i++) {
-			particles [i] = new Particle();
+		for(int i = 0; i < particlesL1.length; i++) {
+			particlesL1 [i] = new Particle();
 		}		
 
 	}
@@ -460,23 +461,39 @@ public class LEDSequencer {
 			ledstrip.setLEDColor(led_idx, 0.1, 1, not_green_comp);
 		}
 	}
-
-	Particle[] particles = new Particle[4]; 
+	final int numL1Particles = 4;
+	Particle[] particlesL1 = new Particle[numL1Particles]; 
+	final int numL2Particles = 4;
+	Particle[] particlesL2 = new Particle[numL2Particles];
+	final int numL3Particles = 4;
+	Particle[] particlesL3 = new Particle[numL3Particles];
+	final int numL4Particles = 4;
+	Particle[] particlesL4 = new Particle[numL4Particles];
+	
 	private void fire() {
 		int H_Value = 0;
-		int S_Value = 100;
+		int S_Value = 1;
 		int Brightness = 0;
 		double bright = 0;
 		
 		
-			for(int i = 0; i < particles.length; i++) {
-				particles [i].move();		
+			for(int i = 0; i < particlesL1.length; i++) {
+				particlesL1 [i].move();		
 			}
+		int n = 0;
 			for(int led_idx = 0; led_idx < RobotConstants.NUM_LEDS_TOTAL / 2; led_idx++) {
-
+				Color led_color = new Color();
+				led_color.setLevel(0);
 				
-				for(int part_idx = 0; part_idx < particles.length; part_idx++) {
-					bright += particles[part_idx].Color
+				for(int i = 0; i < particlesL1.length; i ++) {
+					led_color.addToMe(particlesL1[i].ColorAt(led_idx));
+				}
+				
+				ledstrip.setLEDColorHSL(led_idx, led_color.getH_Value(), led_color.getS_Value(), led_color.getL_Value());
+				
+				
+				
+				
 				
 			}			
 		
