@@ -15,7 +15,7 @@ public class AutoEventMoveElevator extends AutoEvent {
 	private boolean weAreDone = false;
 	private final double delayTime;
 	
-	private final double HEIGHT_SEEK_TIMEOUT_S = 5.0;
+	private final double HEIGHT_SEEK_TIMEOUT_S = 8.0;
 	
 	
 	public AutoEventMoveElevator(double delay_in, ElevatorIndex level_in) {

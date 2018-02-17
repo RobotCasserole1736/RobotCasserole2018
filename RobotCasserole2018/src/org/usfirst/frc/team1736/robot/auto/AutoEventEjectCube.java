@@ -13,6 +13,8 @@ public class AutoEventEjectCube extends AutoEvent {
 	private double elapsedTime = 0.0;
 	boolean weAreDone = false;
 	
+	final double DURATION_S = 1.0;
+	
 
 	@Override
 	public void userStart() {
@@ -24,7 +26,7 @@ public class AutoEventEjectCube extends AutoEvent {
 	public void userUpdate() {
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
-		if(elapsedTime > 1.0) {
+		if(elapsedTime > DURATION_S) {
 			IntakeControl.getInstance().setEjectDesired(false);
 			weAreDone = true;
 		} else {
