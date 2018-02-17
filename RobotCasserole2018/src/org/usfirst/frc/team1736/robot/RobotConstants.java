@@ -26,9 +26,6 @@ public class RobotConstants {
 	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 15;
 	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX = 13;
 	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 14; 
-	
-	//Relay
-	public static final int RELAY_HOOK_RELEASE = 0;
 
 	
 	/////////////////////////////////////////////////////////////////////////////////////

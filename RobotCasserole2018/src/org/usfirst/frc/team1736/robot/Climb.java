@@ -34,7 +34,6 @@ public class Climb {
 	private Spark rightWinchMotor1;
 	private Spark rightWinchMotor2;
 	private Servo releaseLatch;
-	private Relay hookRelease;
 	
 	
 	public static synchronized Climb getInstance() {
@@ -47,12 +46,10 @@ public class Climb {
 	private Climb() {
 		CrashTracker.logClassInitStart(this.getClass());
 		releaseLatch = new Servo(RobotConstants.PWM_RELEASE_LATCH); 
-		hookRelease = new Relay(RobotConstants.RELAY_HOOK_RELEASE, Relay.Direction.kForward);
 		
 		//Init latches and hook release to unreleased
 		latchAngleCmd = LATCH_ANGLE_CLOSED;
 		releaseLatch.set(latchAngleCmd);
-		hookRelease.set(Relay.Value.kOff);
 		
 		leftWinchMotor1 = new Spark (RobotConstants.PWM_CLIMBER_LEFT_ONE);
 		leftWinchMotor2 = new Spark (RobotConstants.PWM_CLIMBER_LEFT_TWO);
@@ -80,12 +77,6 @@ public class Climb {
 		
 		releaseLatch.set(latchAngleCmd);
 
-		if(currHookReleaseCmd == true) {
-			hookRelease.set(Relay.Value.kOn);
-		}else {
-			hookRelease.set(Relay.Value.kOff);
-		}
-		
 		
 		if(!currClimbEnabledCmd) {
 			//Inhibit climb if not enabled
