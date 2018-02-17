@@ -478,7 +478,6 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Climber_Right_Two", "A", "getCurrent", pdp, RobotConstants.PDP_CLIMBER_RIGHT_TWO);
 		CsvLogger.addLoggingFieldDouble("PDP_Current_Elbow", "A", "getCurrent", pdp, RobotConstants.PDP_ELBOW);
 		CsvLogger.addLoggingFieldBoolean("Brownout_Active", "bit", "isBrownedOut", RobotController.class);
-		CsvLogger.addLoggingFieldDouble("Potentiometer_Voltage", "V", "getPotentiometerVoltage", ElbowControl.getInstance());
 
 	}
 	
@@ -579,7 +578,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Intake_Left_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
 		CasseroleWebPlots.addSample("Intake_Right_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
 		CasseroleWebPlots.addSample("Elbow_Cmd", time, ElbowControl.getInstance().getMotorCmd());
-		CasseroleWebPlots.addSample("Elbow_Pot_Val", time, ElbowControl.getInstance().getPotentiometerVoltage());
 	}
 
 	
@@ -610,7 +608,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("Climber Left Motor Cmd", Climb.getInstance().getLeftWinchCmd());
 		CasseroleWebStates.putDouble("Climber Right Motor Cmd", Climb.getInstance().getRightWinchCmd());
 		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().cubeInIntake());
-		CasseroleWebStates.putDouble("Potentiometer_Voltage (V)", ElbowControl.getInstance().getPotentiometerVoltage());
 	}
 	
 	
