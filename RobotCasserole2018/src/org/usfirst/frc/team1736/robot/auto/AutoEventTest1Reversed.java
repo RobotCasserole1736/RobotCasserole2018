@@ -21,10 +21,7 @@ public class AutoEventTest1Reversed extends AutoEvent {
 	private final double time = 5.0;
 
 	public AutoEventTest1Reversed() {
-		driveForward = new PathPlannerAutoEvent(waypoints, time, true);
-
-		driveForward.path.setVelocityAlpha(0.001);
-
+		driveForward = new PathPlannerAutoEvent(waypoints, time, true, 0.2, 0.5, 0.001, 0.9);
 	}
 
 	@Override

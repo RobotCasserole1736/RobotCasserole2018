@@ -19,8 +19,7 @@ public class AutoEventSixInchForward extends AutoEvent {
 	private final double time = 2.0;
 
 	public AutoEventSixInchForward() {
-		driveForward = new PathPlannerAutoEvent(waypoints, time);
-		driveForward.path.setVelocityAlpha(0.001);
+		driveForward = new PathPlannerAutoEvent(waypoints, time, false, 0.2, 0.5, 0.001, 0.9);
 	}
 
 	@Override
