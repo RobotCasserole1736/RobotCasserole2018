@@ -25,7 +25,7 @@ public class AutoEventLowerElbow extends AutoEvent {
 		elapsedTime = currentTime - startTime;
 		
 
-		if(elapsedTime > 2.0 || ElbowControl.getInstance().isLowerLimitReached()) {
+		if(elapsedTime > 0.75) {
 			//We've finished lowering
 			ElbowControl.getInstance().setLowerDesired(false);
 			weAreDone = true;

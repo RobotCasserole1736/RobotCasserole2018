@@ -111,10 +111,6 @@ public class ElbowControl {
 		return upperLimitReached;
 	}
 	
-	public boolean isLowerLimitReached() {
-		return lowerLimitReached;
-	}
-	
 	public double getMotorCmd() {
 		return curMotorCmd;
 		

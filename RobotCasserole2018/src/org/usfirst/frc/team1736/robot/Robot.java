@@ -455,7 +455,6 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Command", "cmd", "getDriverElbowLowerCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elbow_Motor_Command", "cmd", "getMotorCmd", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Upper_Limit_Reached", "bool", "isUpperLimitReached", ElbowControl.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Elbow_Lower_Limit_Reached", "bool", "isLowerLimitReached", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_Intake_Desired", "cmd", "getIntakeCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_Eject_Desired", "cmd", "getEjectCmd", OperatorController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_IntakeOvrd_Desired", "cmd", "getIntakeOverideCmd", OperatorController.getInstance());
@@ -515,7 +514,6 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("DT Current High", Drivetrain.getInstance().getCurrentHigh());
 		CasseroleDriverView.setBoolean("Intake Current High", IntakeControl.getInstance().getCurrentLimitExceeded());
 		CasseroleDriverView.setBoolean("Elevator In Transit", !ElevatorCtrl.getInstance().isAtDesiredHeight()); 
-		CasseroleDriverView.setBoolean("Elbow In Transit", !(ElbowControl.getInstance().isLowerLimitReached() || ElbowControl.getInstance().isUpperLimitReached()));
 		CasseroleDriverView.setBoolean("Elevator Upper Limit", ElevatorCtrl.getInstance().getUpperTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Lower Limit", ElevatorCtrl.getInstance().getLowerTravelLimitReached());
 		CasseroleDriverView.setBoolean("Elevator Not Zeroed", !ElevatorCtrl.getInstance().getIsZeroed());
@@ -604,7 +602,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putBoolean("Elevator Upper Limit",ElevatorCtrl.getInstance().getUpperTravelLimitReached());
 		CasseroleWebStates.putDouble("Elevator Motor Cmd",ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
-		CasseroleWebStates.putBoolean("Elbow_Lower_Limit_Reached", ElbowControl.getInstance().isLowerLimitReached());
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
 		CasseroleWebStates.putString("Auto Mode", auto.mode.toString());
 		CasseroleWebStates.putBoolean("Climber Hook Release Commanded", OperatorController.getInstance().getHookReleaseCmd());
