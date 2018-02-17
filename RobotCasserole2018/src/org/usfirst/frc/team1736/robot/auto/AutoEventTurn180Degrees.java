@@ -34,7 +34,7 @@ public class AutoEventTurn180Degrees extends AutoEvent {
 		elapsedTime = currentTime - startTime;
 		Drivetrain.getInstance().setLeftWheelSpeed(TURN_SPEED_RPM);
 		Drivetrain.getInstance().setRightWheelSpeed(-1 * TURN_SPEED_RPM);
-		if(Gyro.getInstance().getAngle() > targetAngle || elapsedTime > 5.0) {
+		if(Gyro.getInstance().getAngle() > targetAngle || elapsedTime > TIMEOUT_S) {
 			weAreDone = true;
 			Drivetrain.getInstance().setLeftWheelSpeed(0);
 			Drivetrain.getInstance().setRightWheelSpeed(0);
