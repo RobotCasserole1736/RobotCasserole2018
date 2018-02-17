@@ -26,6 +26,7 @@ public class ElevatorCtrl {
 	//Travel limit reached check booleans
 	boolean upperTravelLimitReached = false;
 	boolean lowerTravelLimitReached = false;
+	boolean prevLowerTravelLimitReached = false;
 	
 	
 	//Physical devices
@@ -93,6 +94,8 @@ public class ElevatorCtrl {
 	}
 	
 	public void sampleSensors() {
+		prevLowerTravelLimitReached = lowerTravelLimitReached;
+		
 		//Check if we've hit the upper or lower limits of travel yet
 		if(upperLimitSwitch.get()) {
 			upperTravelLimitReached = true;
@@ -113,7 +116,8 @@ public class ElevatorCtrl {
 	
 	public void update() {
 		//Check for zeroed condition
-		if(lowerTravelLimitReached == true) {
+		if(lowerTravelLimitReached != prevLowerTravelLimitReached) {
+			//We've actuated the switch. Must be moving but right at the bottom of the travel limit.
 			elevatorEncoder.reset();
 			isZeroed = true;
 		}
