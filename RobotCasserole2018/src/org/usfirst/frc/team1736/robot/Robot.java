@@ -194,6 +194,7 @@ public class Robot extends TimedRobot {
 			ElevatorCtrl.getInstance().setContModeDesired(true);
 			ElevatorCtrl.getInstance().setContModeCmd(0);
 			ElevatorCtrl.getInstance().setIndexDesired(ElevatorIndex.BOTTOM);
+			Climb.getInstance().setClimbEnabledCmd(false);
 			Climb.getInstance().setLeftWinchCmd(0);
 			Climb.getInstance().setRightWinchCmd(0);
 			Climb.getInstance().setReleaseLatchCmd(false);
