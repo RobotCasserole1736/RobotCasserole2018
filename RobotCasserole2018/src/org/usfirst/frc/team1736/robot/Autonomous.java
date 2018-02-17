@@ -22,6 +22,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest1;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest1Reversed;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest2;
+import org.usfirst.frc.team1736.robot.auto.AutoEventThrowCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTurn180Degrees;
 import org.usfirst.frc.team1736.robot.auto.AutoEventWait;
 
@@ -105,7 +106,7 @@ public class Autonomous {
 				} else if (FieldSetupString.getInstance().right_Switch_Owned) {
 					mode = AutoModes.RIGHT_SWITCH_FROM_CENTER;
 				} else {
-					mode = AutoModes.CROSS_BASELINE; //In center but no switch ownership detected.
+					mode = AutoModes.CROSS_BASELINE_FROM_CENTER; //In center but no switch ownership detected.
 				}
 				
 			} else if(startPos.compareTo(START_POS_MODES[2])==0) { //Starting from Right
@@ -216,7 +217,11 @@ public class Autonomous {
 
 		//Drive Forward Only Modes
 		}else if(action.compareTo(ACTION_MODES[3])==0) { 
-			mode = AutoModes.CROSS_BASELINE;
+			if(startPos.compareTo(START_POS_MODES[1])==0) {
+				mode = AutoModes.CROSS_BASELINE_FROM_CENTER; //center needs a special path
+			} else {
+				mode = AutoModes.CROSS_BASELINE;
+			}
 			
 		//Do Nothing Mode
 		}else if(action.compareTo(ACTION_MODES[4])==0) { 
@@ -259,7 +264,7 @@ public class Autonomous {
 			
 			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
 				parent = new AutoEventSwitchLeft_Center();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
+				//parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -267,7 +272,7 @@ public class Autonomous {
 				
 			case LEFT_SWITCH_FROM_LEFT: //switch only if on left and own left
 				parent =new AutoEventSwitchLeft();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
+				//parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -275,7 +280,7 @@ public class Autonomous {
 				
 			case RIGHT_SWITCH_FROM_CENTER: //switch only if in center and own right
 				parent = new AutoEventSwitchRight_Center();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
+				//parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -283,7 +288,7 @@ public class Autonomous {
 				
 			case RIGHT_SWITCH_FROM_RIGHT: //switch only if on right and own right
 				parent = new AutoEventSwitchRight();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
+				//parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -291,22 +296,26 @@ public class Autonomous {
 				
 			case LEFT_SCALE_FROM_LEFT: // scale only left
 				parent = new AutoEventScaleLeft();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				//parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
-				AutoSequencer.addEvent(new AutoEventEjectCube());
+				AutoSequencer.addEvent(new AutoEventThrowCube());
 				break;
 				
 			case RIGHT_SCALE_FROM_RIGHT: // scale only right
 				parent = new AutoEventScaleRight();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				//parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventLowerElbow());
-				AutoSequencer.addEvent(new AutoEventEjectCube());
+				AutoSequencer.addEvent(new AutoEventThrowCube());
 				break;
 			
 			case CROSS_BASELINE: //drive forward
 				AutoSequencer.addEvent(new AutoEventCrossBaseLine());
+				break;
+				
+			case CROSS_BASELINE_FROM_CENTER: //drive forward and to the right
+				AutoSequencer.addEvent(new AutoEventSwitchRight_Center());
 				break;
 					
 			case TEST_MODE_1: //Test Mode 1

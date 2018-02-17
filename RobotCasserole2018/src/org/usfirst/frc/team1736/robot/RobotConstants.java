@@ -39,11 +39,12 @@ public class RobotConstants {
 	
 	//Digital Inputs
 	public static final int DI_INTAKE_CUBE_PRESENT_SENSOR = 3;
+	public static final int DI_ELBOW_UPPER_LIMIT_SW = 4;
 	public static final int DI_ELEVATER_ENCODER_A = 5;
 	public static final int DI_ELEVATER_ENCODER_B = 6;
 	public static final int DI_ELEVATER_LOWER_LIMIT_SW = 7;
 	public static final int DI_ELEVATER_UPPER_LIMIT_SW = 8;
-	public static final int DI_ELBOW_UPPER_LIMIT_SW = 4;
+
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// PDP Ports

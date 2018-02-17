@@ -14,16 +14,16 @@ public class AutoEventSwitchLeft_Center extends AutoEvent {
 	private final double[][] waypoints = new double[][] {
 		{0, 0},
 		{0, 24},
-		{-24, 60},
-		{-36, 60},
-		{-60, 108},
-		{-60, 132}
+		{-24, 50},
+		{-36, 50},
+		{-60, 88},
+		{-60, 106}
 	};
 	
 	private final double time = 4.0;
 
 	public AutoEventSwitchLeft_Center() {
-		driveForward = new PathPlannerAutoEvent(waypoints, time);
+		driveForward = new PathPlannerAutoEvent(waypoints, time, false, 0.7, 0.1, 0.01, 0.9);
 	}
 
 	@Override

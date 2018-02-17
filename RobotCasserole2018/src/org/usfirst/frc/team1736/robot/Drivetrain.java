@@ -28,7 +28,7 @@ public class Drivetrain {
 
 	
 	public static final double SPROCKET_RATIO = 15.0/26.0; //15 tooth sprocket on gearbox, 26 tooth sprocket on wheels
-	public static final double WHEEL_ROLLING_RADIUS_FT = 0.26; //~6 inch pneumatic wheels with a bit of squish. Measured with a ruler.
+	public static final double WHEEL_ROLLING_RADIUS_FT = 0.24; //~6 inch pneumatic wheels with a bit of squish. Measured with a ruler.
 	
 	Calibration curLimitEnable;
 	Calibration headingGainCal;
@@ -56,7 +56,7 @@ public class Drivetrain {
 	
 	private Drivetrain() {
 		CrashTracker.logClassInitStart(this.getClass());
-		boolean useRealGearbox = false;
+		boolean useRealGearbox = true;
 		
 		if(useRealGearbox) {
 			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX, 

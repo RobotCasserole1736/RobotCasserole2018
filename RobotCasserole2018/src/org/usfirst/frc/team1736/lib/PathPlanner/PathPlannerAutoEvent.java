@@ -55,7 +55,7 @@ public class PathPlannerAutoEvent extends AutoEvent {
      */
     public PathPlannerAutoEvent(double[][] waypoints_in, double timeAllowed_in) { 
     	super();
-    	commonConstructor(waypoints_in, timeAllowed_in, false);
+    	commonConstructor(waypoints_in, timeAllowed_in, false, 0.2, 0.5, 0.01, 0.9);
     }
     
     /**
@@ -68,11 +68,26 @@ public class PathPlannerAutoEvent extends AutoEvent {
      */
     public PathPlannerAutoEvent(double[][] waypoints_in, double timeAllowed_in, boolean reversed_in) {        
     	super();
-    	commonConstructor(waypoints_in, timeAllowed_in, reversed_in);
+    	commonConstructor(waypoints_in, timeAllowed_in, reversed_in, 0.2, 0.5, 0.01, 0.9);
 
     }
     
-    private void commonConstructor(double[][] waypoints_in, double timeAllowed_in, boolean reversed_in) {
+    
+    /**
+     * Constructor. Set up the parameters of the planner here.
+     * 
+     * @param waypoints_in Set of x/y points which define the path the robot should take. Assumes Inches
+     * @param timeAllowed_in Number of seconds the path traversal should take. Must be long enough
+     *        to allow the path planner to output realistic speeds. 
+     * @param reversed set to True if you desire the robot to travel backward through the provided path        
+     */
+    public PathPlannerAutoEvent(double[][] waypoints_in, double timeAllowed_in, boolean reversed_in, double alpha, double beta, double valpha, double vbeta) {        
+    	super();
+    	commonConstructor(waypoints_in, timeAllowed_in, reversed_in, alpha, beta, valpha, vbeta);
+
+    }
+    
+    private void commonConstructor(double[][] waypoints_in, double timeAllowed_in, boolean reversed_in, double alpha, double beta, double valpha, double vbeta) {
         waypoints = waypoints_in;
         time_duration_s = timeAllowed_in;
         reversed = reversed_in;
@@ -100,10 +115,10 @@ public class PathPlannerAutoEvent extends AutoEvent {
         pathCalculated = false;
         
         //Default alpha/beta
-		path.setPathBeta(0.2);
-		path.setPathAlpha(0.5);
-		path.setVelocityAlpha(0.01);
-		path.setVelocityBeta(0.9);
+		path.setPathAlpha(alpha);
+		path.setPathBeta(beta);
+		path.setVelocityAlpha(valpha);
+		path.setVelocityBeta(vbeta);
 		
 		if (pathCalculated == false) {
             path.calculate(time_duration_s, taskRate, DT_TRACK_WIDTH_FT);

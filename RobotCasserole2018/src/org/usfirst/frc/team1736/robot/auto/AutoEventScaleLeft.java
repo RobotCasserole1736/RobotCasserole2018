@@ -12,17 +12,17 @@ public class AutoEventScaleLeft extends AutoEvent {
 
 	private final double[][] waypoints = new double[][] {
 		{0, 0},
+		{0, 100}, 
 		{0, 200}, 
-		{20, 220},
-		{41.5, 245}, 
-		{41.5, 266}
+		{10, 220},
+		{25.0, 245}, 
+		{25.0, 258}
 	};
 	
-	private final double time = 4.0;
+	private final double time = 6.0;
 
 	public AutoEventScaleLeft() {
-		driveForward = new PathPlannerAutoEvent(waypoints, time);
-		driveForward.path.setVelocityAlpha(0.001);
+		driveForward = new PathPlannerAutoEvent(waypoints, time, false, 0.5, 0.5, 0.001, 0.9);
 	}
 
 	@Override

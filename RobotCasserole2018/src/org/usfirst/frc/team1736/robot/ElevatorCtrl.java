@@ -152,7 +152,7 @@ public class ElevatorCtrl {
 				curMotorCmd = UpMotorCmdCal.get();
 			}else if(desiredHeight < actualHeight) {
 				//Too high, run motor down.
-				curMotorCmd = DownMotorCmdCal.get();
+				curMotorCmd = -1 * DownMotorCmdCal.get();
 			}
 		}
 		
