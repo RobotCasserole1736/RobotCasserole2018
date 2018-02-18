@@ -26,6 +26,9 @@ public class DriverController {
 	// assuming that positive is forward Cmd whereas negative is reverse
 	public double getDriverForwardReverseCommand() {
 		double driverLeftYValue = -1 * driveController.getY(Hand.kLeft);
+		if (driveController.getTriggerAxis(Hand.kRight) > 0.5) {
+			driverLeftYValue *= 0.25;
+		}
 		if (driverLeftYValue > -0.15 & driverLeftYValue < 0.15) {
 			driverLeftYValue = 0;
 		}
@@ -34,6 +37,9 @@ public class DriverController {
 	
 	public double getDriverLeftRightCommand() {
 		double driverRightXValue = -1 * driveController.getX(Hand.kRight);
+		if(driveController.getTriggerAxis(Hand.kRight) > 0.5) {
+			driverRightXValue *= 0.25;
+		}
 		if (driverRightXValue > -0.15 & driverRightXValue <0.15) {
 		    driverRightXValue = 0;
 		}
