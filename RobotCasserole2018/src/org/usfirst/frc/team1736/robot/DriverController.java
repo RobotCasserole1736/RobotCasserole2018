@@ -49,5 +49,12 @@ public class DriverController {
 		return driveController.getAButton();
 	}
 
+	public boolean getDriverThrowCmd() {
+		return driveController.getBumper(Hand.kRight) && getDriverElbowRaiseCmd();
+	}
+	
+	public boolean getDriverEjectCmd() {
+		return driveController.getBumper(Hand.kLeft) && getDriverElbowRaiseCmd();
+	}
 	
 }

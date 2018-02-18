@@ -356,9 +356,9 @@ public class Robot extends TimedRobot {
 			ElbowControl.getInstance().setLowerDesired(DriverController.getInstance().getDriverElbowLowerCmd());
 			ElbowControl.getInstance().setRaiseDesired(DriverController.getInstance().getDriverElbowRaiseCmd());
 			IntakeControl.getInstance().setIntakeDesired(OperatorController.getInstance().getIntakeCmd());
-			IntakeControl.getInstance().setEjectDesired(OperatorController.getInstance().getEjectCmd());
+			IntakeControl.getInstance().setEjectDesired(OperatorController.getInstance().getEjectCmd() || DriverController.getInstance().getDriverEjectCmd());
 			IntakeControl.getInstance().setIntakeOvrdDesired(OperatorController.getInstance().getIntakeOverideCmd());
-			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd());
+			IntakeControl.getInstance().setThrowDesired(OperatorController.getInstance().getThrowCmd() || DriverController.getInstance().getDriverThrowCmd());
 			ElevatorCtrl.getInstance().setContModeDesired(OperatorController.getInstance().getElevCntrlModeCmd());
 			ElevatorCtrl.getInstance().setContModeCmd(OperatorController.getInstance().getElevCntrlModeCmdSpeed());
 			Climb.getInstance().setClimbEnabledCmd(OperatorController.getInstance().getClimbEnabledCmd());
@@ -455,9 +455,11 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("Elbow_Motor_Command", "cmd", "getMotorCmd", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elbow_Upper_Limit_Reached", "bool", "isUpperLimitReached", ElbowControl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_Intake_Desired", "cmd", "getIntakeCmd", OperatorController.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Intake_Eject_Desired", "cmd", "getEjectCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Operator_Eject_Desired", "cmd", "getEjectCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Driver_Eject_Desired", "cmd", "getDriverEjectCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_IntakeOvrd_Desired", "cmd", "getIntakeOverideCmd", OperatorController.getInstance());
-		CsvLogger.addLoggingFieldBoolean("Intake_Throw_Desired", "cmd", "getThrowCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Operator_Throw_Desired", "cmd", "getThrowCmd", OperatorController.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Driver_Throw_Desired", "cmd", "getDriverThrowCmd", DriverController.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Intake_Current_Limit_Exceeded", "bool", "getCurrentLimitExceeded", IntakeControl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Intake_Right_Motor_Cmd", "cmd", "getRightMotorCmd", IntakeControl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Intake_Left_Motor_Cmd", "cmd", "getLeftMotorCmd", IntakeControl.getInstance());
