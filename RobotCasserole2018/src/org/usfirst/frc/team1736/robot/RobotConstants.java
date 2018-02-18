@@ -11,10 +11,10 @@ public class RobotConstants {
 	public static final int PWM_INTAKE_RIGHT = 1;
 	public static final int PWM_ELEVATOR_ONE = 2;
 	//public static final int PWM_UNUSED = 3;  UNUSED
-	public static final int PWM_CLIMBER_LEFT_ONE = 4;
-	public static final int PWM_CLIMBER_LEFT_TWO = 5;
-	public static final int PWM_CLIMBER_RIGHT_ONE = 6;
-	public static final int PWM_CLIMBER_RIGHT_TWO = 7;
+	public static final int PWM_CLIMBER_RIGHT_ONE = 4;
+	public static final int PWM_CLIMBER_RIGHT_TWO = 5;
+	public static final int PWM_CLIMBER_LEFT_ONE = 6;
+	public static final int PWM_CLIMBER_LEFT_TWO = 7;
 	public static final int PWM_ELBOW = 8;
 	public static final int PWM_RELEASE_LATCH = 9;
 	
@@ -53,10 +53,10 @@ public class RobotConstants {
 	public static final int PDP_ELEVATOR_ONE = 7;
 	public static final int PDP_INTAKE_LEFT = 3;
 	public static final int PDP_INTAKE_RIGHT = 12;
-	public static final int PDP_CLIMBER_LEFT_ONE = 4;
-	public static final int PDP_CLIMBER_LEFT_TWO = 5;
-	public static final int PDP_CLIMBER_RIGHT_ONE = 9;
-	public static final int PDP_CLIMBER_RIGHT_TWO = 8;
+	public static final int PDP_CLIMBER_LEFT_ONE = 9;
+	public static final int PDP_CLIMBER_LEFT_TWO = 8;
+	public static final int PDP_CLIMBER_RIGHT_ONE = 4;
+	public static final int PDP_CLIMBER_RIGHT_TWO = 5;
 	public static final int PDP_ELBOW = 6;
 
 
