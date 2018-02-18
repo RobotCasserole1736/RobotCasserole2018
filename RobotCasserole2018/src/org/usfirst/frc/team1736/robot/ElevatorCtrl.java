@@ -32,7 +32,8 @@ public class ElevatorCtrl {
 	
 	//Physical devices
 	private Spark motor1;
-	DigitalInput upperLimitSwitch = null;
+	DigitalInput upperLimitSwitchStage1 = null;
+	DigitalInput upperLimitSwitchStage2 = null;
 	DigitalInput lowerLimitSwitch = null;
 	private Encoder elevatorEncoder;
 	
@@ -71,10 +72,11 @@ public class ElevatorCtrl {
 		CrashTracker.logClassInitStart(this.getClass());
 
 		//Init physical devices
-		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
+		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATOR_ENCODER_A, RobotConstants.DI_ELEVATOR_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
-		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
-		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_LOWER_LIMIT_SW);	
+		upperLimitSwitchStage1 = new DigitalInput(RobotConstants.DI_ELEVATOR_UPPER_LIMIT_SW_STG1);
+		upperLimitSwitchStage2 = new DigitalInput(RobotConstants.DI_ELEVATOR_UPPER_LIMIT_SW_STG2);
+		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATOR_LOWER_LIMIT_SW);	
 		
 		//Init Calibrations for positions & speeds
 		BottomPosCal = new Calibration("Elev Floor position (in)", 0.0, 0.0, 84.0);
@@ -98,7 +100,7 @@ public class ElevatorCtrl {
 		prevLowerTravelLimitReached = lowerTravelLimitReached;
 		
 		//Check if we've hit the upper or lower limits of travel yet
-		if(upperLimitSwitch.get()) {
+		if(upperLimitSwitchStage1.get() && upperLimitSwitchStage2.get()) {
 			upperTravelLimitReached = true;
 		} else {
 			upperTravelLimitReached = false;
