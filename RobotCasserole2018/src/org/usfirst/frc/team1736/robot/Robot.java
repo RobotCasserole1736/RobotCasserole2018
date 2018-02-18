@@ -469,6 +469,8 @@ public class Robot extends TimedRobot {
 		CsvLogger.addLoggingFieldDouble("Elev_Motor_Cmd", "cmd", "getMotorCmd", ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Des_Height", "in", "getElevDesiredHeight_in", ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldDouble("Elev_Act_Height", "in", "getElevActualHeight_in",  ElevatorCtrl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_SW_1_State", "bit", "getUpperLimitSwitchStage1State",  ElevatorCtrl.getInstance());
+		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_SW_2_State", "bit", "getUpperLimitSwitchStage2State",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Upper_Limit_Reached", "bit", "getUpperTravelLimitReached",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Lower_Limit_Reached", "bit", "getLowerTravelLimitReached",  ElevatorCtrl.getInstance());
 		CsvLogger.addLoggingFieldBoolean("Elev_Zeroed", "bit", "getIsZeroed",  ElevatorCtrl.getInstance());
@@ -613,6 +615,8 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putDouble("Climber Left Motor Cmd", Climb.getInstance().getLeftWinchCmd());
 		CasseroleWebStates.putDouble("Climber Right Motor Cmd", Climb.getInstance().getRightWinchCmd());
 		CasseroleWebStates.putBoolean("Intake Sensor State", IntakeControl.getInstance().cubeInIntake());
+		CasseroleWebStates.putBoolean("Elevator Stage 1 Limit Sw State" , ElevatorCtrl.getInstance().getUpperLimitSwitchStage1State());
+		CasseroleWebStates.putBoolean("Elevator Stage 2 Limit Sw State" , ElevatorCtrl.getInstance().getUpperLimitSwitchStage2State());
 	}
 	
 	

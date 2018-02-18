@@ -28,6 +28,8 @@ public class ElevatorCtrl {
 	boolean lowerTravelLimitReached = false;
 	boolean prevLowerTravelLimitReached = false;
 	
+	boolean upperLimitSwitchStage1State = false;
+	boolean upperLimitSwitchStage2State = false;
 	
 	//Physical devices
 	private Spark motor1;
@@ -98,8 +100,12 @@ public class ElevatorCtrl {
 	public void sampleSensors() {
 		prevLowerTravelLimitReached = lowerTravelLimitReached;
 		
+		//Sample some of the switch states
+		upperLimitSwitchStage1State = upperLimitSwitchStage1.get();
+		upperLimitSwitchStage2State = upperLimitSwitchStage2.get();
+		
 		//Check if we've hit the upper or lower limits of travel yet
-		if(upperLimitSwitchStage1.get() && upperLimitSwitchStage2.get()) {
+		if(upperLimitSwitchStage1State && upperLimitSwitchStage2State) {
 			upperTravelLimitReached = true;
 		} else {
 			upperTravelLimitReached = false;
@@ -207,6 +213,14 @@ public class ElevatorCtrl {
 	
 	public double getMotorCmd() {
 		return curMotorCmd;
+	}
+	
+	public boolean getUpperLimitSwitchStage1State() {
+		return upperLimitSwitchStage1State;
+	}
+	
+	public boolean getUpperLimitSwitchStage2State() {
+		return upperLimitSwitchStage2State;
 	}
 	
 	
