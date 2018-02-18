@@ -19,7 +19,6 @@ public class ElevatorCtrl {
 	private double curMotorCmd;
 	
 	//State variables
-	public double currentHeightCmd = 0;
 	public double desiredHeight = 0;
 	public double actualHeight = 0;
 	public boolean isZeroed = false;
@@ -131,6 +130,8 @@ public class ElevatorCtrl {
 			//Open Loop control - Operator commands motor directly
 			curMotorCmd = continuousModeCmd;
 			
+			IndexDesired = ElevatorIndex.NON_INDEXED_POS;
+			
 		} else if (continuousModeDesired == true ) {
 			
 			//Continuous mode - used whenever the driver wants control, or the encoder has not yet been zeroed.
@@ -138,18 +139,19 @@ public class ElevatorCtrl {
 			//Open Loop control - Operator commands motor directly
 			curMotorCmd = continuousModeCmd;
 			
-			//Keep the closed loop command set to the nearest height
-			IndexDesired = desiredHightToEmun(getElevActualHeight_in());
-			desiredHeight = enumToDesiredHeight(IndexDesired);
+			//Keep the desired height at the actual height
+			IndexDesired = ElevatorIndex.NON_INDEXED_POS;
+			desiredHeight = getElevActualHeight_in();
 
 		} else {
 			
 			//Indexed mode - the default case where the driver just presses buttons.
 			if(opIndexDesired != ElevatorIndex.NO_NEW_SELECTION) {
 				IndexDesired = opIndexDesired;
+				desiredHeight = enumToDesiredHeight(IndexDesired);
 			}
 			
-			desiredHeight = enumToDesiredHeight(IndexDesired);
+			
 			
 			//Super-de-duper simple bang-bang control of elevator in closed loop
 
@@ -212,9 +214,11 @@ public class ElevatorCtrl {
 	 * Conversion between an elevator height (from an enum value) to the
 	 * presently configured height (in inches)
 	 * @param cmd enum height command
-	 * @return height, in inches.
+	 * @return height, in inches, or -1 if the previous command should be maintained.
 	 */
 	private double enumToDesiredHeight(ElevatorIndex cmd) {
+		double currentHeightCmd = 0;
+		
 		if(cmd == ElevatorIndex.BOTTOM) {
 			currentHeightCmd = BottomPosCal.get();
 		}
@@ -235,6 +239,11 @@ public class ElevatorCtrl {
 		}
 		else if(cmd == ElevatorIndex.NO_NEW_SELECTION){
 			//do nothing
+			currentHeightCmd = -1;
+		}
+		else if (cmd == ElevatorIndex.NON_INDEXED_POS) {
+			//also do nothing
+			currentHeightCmd = -1;
 		}
 		else {
 			currentHeightCmd = 0;
