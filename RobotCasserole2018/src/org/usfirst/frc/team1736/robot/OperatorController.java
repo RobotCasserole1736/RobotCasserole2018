@@ -93,7 +93,7 @@ public class OperatorController {
 		return operaterRightJoy;
 	}
 	
-	public ElevatorIndex getElevaterCmd() {
+	public ElevatorIndex getElevatorIndex() {
 		int operaterDownArrow = operatorController.getPOV();
 		ElevatorIndex ReturnValue;
 		ReturnValue = ElevatorIndex.NO_NEW_SELECTION;

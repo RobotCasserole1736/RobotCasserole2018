@@ -197,7 +197,6 @@ public class Robot extends TimedRobot {
 			Climb.getInstance().setClimbEnabledCmd(false);
 			Climb.getInstance().setLeftWinchCmd(0);
 			Climb.getInstance().setRightWinchCmd(0);
-			Climb.getInstance().setReleaseLatchCmd(false);
 			
 
 			//Update the right subset of subsystems - remember we're disabled!
@@ -364,8 +363,7 @@ public class Robot extends TimedRobot {
 			Climb.getInstance().setClimbEnabledCmd(OperatorController.getInstance().getClimbEnabledCmd());
 			Climb.getInstance().setLeftWinchCmd(OperatorController.getInstance().getPullLeftWinchCmd());
 			Climb.getInstance().setRightWinchCmd(OperatorController.getInstance().getPullRightWinchCmd());
-			Climb.getInstance().setReleaseLatchCmd(OperatorController.getInstance().getPlatformLatchReleaseCmd());
-			ElevatorCtrl.getInstance().setIndexDesired(OperatorController.getInstance().getElevaterCmd());
+			ElevatorCtrl.getInstance().setIndexDesired(OperatorController.getInstance().getElevatorIndex());
 			
 
 			//Update all subsystems
@@ -610,7 +608,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebStates.putBoolean("Elbow_Upper_Limit_Reached", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleWebStates.putDouble("Elbow_Motor_Command", ElbowControl.getInstance().getMotorCmd());
 		CasseroleWebStates.putString("Auto Mode", auto.mode.toString());
-		CasseroleWebStates.putDouble("Climber Latch Angle Cmd", Climb.getInstance().getLatchAngleCmd());
 		CasseroleWebStates.putBoolean("Climber Enabled", Climb.getInstance().getClimbEnabledCmd());
 		CasseroleWebStates.putDouble("Climber Left Motor Cmd", Climb.getInstance().getLeftWinchCmd());
 		CasseroleWebStates.putDouble("Climber Right Motor Cmd", Climb.getInstance().getRightWinchCmd());

@@ -16,7 +16,6 @@ public class RobotConstants {
 	public static final int PWM_CLIMBER_LEFT_ONE = 6;
 	public static final int PWM_CLIMBER_LEFT_TWO = 7;
 	public static final int PWM_ELBOW = 8;
-	public static final int PWM_RELEASE_LATCH = 9;
 	
 	
 	//CAN ID's
