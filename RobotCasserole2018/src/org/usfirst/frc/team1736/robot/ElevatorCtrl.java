@@ -198,6 +198,13 @@ public class ElevatorCtrl {
 		motor1.set(curMotorCmd);
 	}
 	
+	
+	//Returns true if we're too high to drive full speed.
+	//For now we're presuming that's basically any height above the switch
+	public boolean getHeightAboveDTLimit() {
+		return actualHeight > SwitchPosCal.get();
+	}
+	
 	public void initDesiredHeightCmd() {
 		IndexDesired = ElevatorIndex.NON_INDEXED_POS;
 		desiredHeight = actualHeight;
