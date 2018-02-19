@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
 	
 	// Software utilities
 	CasseroleWebServer webServer;
+    CasseroleVision testCam;
 	CasseroleRIOLoadMonitor ecuStats;
 	
 	
@@ -118,12 +119,14 @@ public class Robot extends TimedRobot {
 		
 		//Init Software Helper libraries
 		ecuStats = new CasseroleRIOLoadMonitor();
+        testCam = new CasseroleVision(true);
+
 
 		//Set up and start webcam stream
-		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
-		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
-		driverStream = new MjpegServer("DriverCamServer", 1180);
-		driverStream.setSource(driverAssistCam);
+		//driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
+		//driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
+		//driverStream = new MjpegServer("DriverCamServer", 1180);
+		//driverStream.setSource(driverAssistCam);
 		
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
@@ -503,7 +506,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Cube In Intake", "green");
 		
 		
-		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,0); //must use firefox. No idea why.
+		//CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,0); //must use firefox. No idea why.
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
 		CasseroleDriverView.newAutoSelector("Delay", Autonomous.DELAY_OPTIONS);
@@ -528,6 +531,9 @@ public class Robot extends TimedRobot {
 	private void initRTPlot() {
 		CasseroleWebPlots.addNewSignal("PDP_Voltage", "V");
 		CasseroleWebPlots.addNewSignal("PDP_Total_Current", "A");
+		CasseroleWebPlots.addNewSignal("Jevois_cube_angle","deg");
+		CasseroleWebPlots.addNewSignal("Jevois_cube_distance","ft");
+		CasseroleWebPlots.addNewSignal("Jevois_cube_percent","%");
 		CasseroleWebPlots.addNewSignal("Driver_FwdRev_Cmd","cmd");
 		CasseroleWebPlots.addNewSignal("Driver_Rotate_Cmd","cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Wheel_Speed_Act","RPM");
@@ -560,6 +566,9 @@ public class Robot extends TimedRobot {
 		double time = Timer.getFPGATimestamp();
 		CasseroleWebPlots.addSample("PDP_Voltage", time, pdp.getVoltage());
 		CasseroleWebPlots.addSample("PDP_Total_Current", time, pdp.getTotalCurrent());
+		CasseroleWebPlots.addSample("Jevois_cube_angle",time, testCam.getTgtAngle_Deg());
+		CasseroleWebPlots.addSample("Jevois_cube_distance",time, testCam.getTgtRange_in());
+		CasseroleWebPlots.addSample("Jevois_cube_percent",time, testCam.getTgtPercent_in());
 		CasseroleWebPlots.addSample("Driver_FwdRev_Cmd", time, DriverController.getInstance().getDriverForwardReverseCommand() );
 		CasseroleWebPlots.addSample("Driver_Rotate_Cmd", time, DriverController.getInstance().getDriverLeftRightCommand());
 		CasseroleWebPlots.addSample("DT_Right_Wheel_Speed_Act", time, Drivetrain.getInstance().getRightWheelSpeedAct_RPM());
@@ -590,6 +599,9 @@ public class Robot extends TimedRobot {
 	private void updateWebStates() {
 		CasseroleWebStates.putDouble("PDP Voltage (V)", pdp.getVoltage());
 		CasseroleWebStates.putDouble("PDP Current (A)", pdp.getTotalCurrent());
+		CasseroleWebStates.putDouble("Jevois_cube_angle", testCam.getTgtAngle_Deg());
+		CasseroleWebStates.putDouble("Jevois_cube_distance", testCam.getTgtRange_in());
+		CasseroleWebStates.putDouble("Jevois_cube_percent", testCam.getTgtPercent_in());
 		CasseroleWebStates.putDouble("RIO CPU Load (%)", getCpuLoad());
 		CasseroleWebStates.putDouble("RIO Mem Load (%)", getRAMUsage());
 		CasseroleWebStates.putDouble("RIO Main Loop Exec Time (ms)", getLoopExeTime_ms());
