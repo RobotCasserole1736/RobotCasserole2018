@@ -4,6 +4,7 @@ import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 
@@ -122,6 +123,8 @@ public class ElevatorCtrl {
 	}
 	
 	
+	
+	
 	public void update() {
 		//Check for zeroed condition
 		if(lowerTravelLimitReached != prevLowerTravelLimitReached) {
@@ -133,8 +136,19 @@ public class ElevatorCtrl {
 		if(isZeroed == false) {
 			//Uncalibrated mode - like continuous, but don't trust the encoder reading
 			
-			//Open Loop control - Operator commands motor directly
-			curMotorCmd = continuousModeCmd;
+			
+			if(DriverStation.getInstance().isAutonomous()) {
+				//We're in auto and uncalibrated. Attempt an autocal.
+				if(lowerTravelLimitReached == true) {
+					curMotorCmd = UpMotorCmdCal.get();
+				} else {
+					curMotorCmd = -1 * DownMotorCmdCal.get();
+				}
+				
+			} else {
+				//Open Loop control - Operator commands motor directly
+				curMotorCmd = continuousModeCmd;
+			}
 			
 			IndexDesired = ElevatorIndex.NON_INDEXED_POS;
 			

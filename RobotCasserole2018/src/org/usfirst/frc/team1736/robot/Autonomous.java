@@ -264,49 +264,49 @@ public class Autonomous {
 			
 			case LEFT_SWITCH_FROM_CENTER: //switch only if in center and own left
 				parent = new AutoEventSwitchLeft_Center();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.SWITCH));
+				parent.addChildEvent(new AutoEventLowerElbow());
+				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 				
 			case LEFT_SWITCH_FROM_LEFT: //switch only if on left and own left
 				parent =new AutoEventSwitchLeft();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.SWITCH));
+				parent.addChildEvent(new AutoEventLowerElbow());
+				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 				
 			case RIGHT_SWITCH_FROM_CENTER: //switch only if in center and own right
 				parent = new AutoEventSwitchRight_Center();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.SWITCH));
+				parent.addChildEvent(new AutoEventLowerElbow());
+				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 				
 			case RIGHT_SWITCH_FROM_RIGHT: //switch only if on right and own right
 				parent = new AutoEventSwitchRight();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.SWITCH));
+				parent.addChildEvent(new AutoEventLowerElbow());
+				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 				
 			case LEFT_SCALE_FROM_LEFT: // scale only left
 				parent = new AutoEventScaleLeft();
+				parent.addChildEvent(new AutoEventLowerElbow());
 				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventThrowCube());
 				break;
 				
 			case RIGHT_SCALE_FROM_RIGHT: // scale only right
 				parent = new AutoEventScaleRight();
+				parent.addChildEvent(new AutoEventLowerElbow());
 				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventThrowCube());
 				break;
 			
@@ -330,9 +330,9 @@ public class Autonomous {
 				
 			case TWO_CUBE_LEFT:
 				parent = new AutoEventScaleLeft();
+				parent.addChildEvent(new AutoEventLowerElbow());
 				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				parent = new AutoEventBackUp();
 				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
@@ -348,9 +348,9 @@ public class Autonomous {
 			
 			case TWO_CUBE_RIGHT:
 				parent = new AutoEventScaleRight();
+				parent.addChildEvent(new AutoEventLowerElbow());
 				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventLowerElbow());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				parent = new AutoEventBackUp();
 				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));

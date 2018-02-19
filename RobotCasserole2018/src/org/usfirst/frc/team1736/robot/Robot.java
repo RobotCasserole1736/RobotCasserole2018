@@ -542,6 +542,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("DT_Left_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Right_Motor_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("DT_Heading_des", "deg");
+		CasseroleWebPlots.addNewSignal("DT_Pose_Angle", "deg");
 		CasseroleWebPlots.addNewSignal("DT_Left_Current", "A");
 		CasseroleWebPlots.addNewSignal("DT_Right_Current", "A");
 		CasseroleWebPlots.addNewSignal("DT_Left_Current_Est", "A");
@@ -552,7 +553,6 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Elevator Motor Speed", "cmd");
 		CasseroleWebPlots.addNewSignal("Elevator_Height", "in");
 		CasseroleWebPlots.addNewSignal("Elevator_Desired_Height", "in");
-		CasseroleWebPlots.addNewSignal("Pose_Angle", "deg");
 		CasseroleWebPlots.addNewSignal("Brownout", "bit");
 		CasseroleWebPlots.addNewSignal("Intake_Left_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("Intake_Right_Cmd", "cmd");
@@ -584,7 +584,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Elevator Motor Speed", time, ElevatorCtrl.getInstance().getMotorCmd());
 		CasseroleWebPlots.addSample("Elevator_Height", time, ElevatorCtrl.getInstance().getElevActualHeight_in());
 		CasseroleWebPlots.addSample("Elevator_Desired_Height", time, ElevatorCtrl.getInstance().getElevDesiredHeight_in());
-		CasseroleWebPlots.addSample("Pose_Angle", time, Gyro.getInstance().getAngle());
+		CasseroleWebPlots.addSample("DT_Pose_Angle", time, Gyro.getInstance().getAngle());
 		CasseroleWebPlots.addSample("Brownout", time, RobotController.isBrownedOut()?1.0:0.0);
 		CasseroleWebPlots.addSample("Intake_Left_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
 		CasseroleWebPlots.addSample("Intake_Right_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
