@@ -32,6 +32,7 @@ public class AutoEventTurn180Degrees extends AutoEvent {
 		// gyro greater than target
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
+		Drivetrain.getInstance().disableHeadingCmd();
 		Drivetrain.getInstance().setLeftWheelSpeed(TURN_SPEED_RPM);
 		Drivetrain.getInstance().setRightWheelSpeed(-1 * TURN_SPEED_RPM);
 		if(Gyro.getInstance().getAngle() > targetAngle || elapsedTime > TIMEOUT_S) {

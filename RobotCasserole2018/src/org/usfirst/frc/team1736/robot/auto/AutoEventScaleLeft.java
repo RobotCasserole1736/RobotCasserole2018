@@ -19,7 +19,7 @@ public class AutoEventScaleLeft extends AutoEvent {
 		{25.0, 258}
 	};
 	
-	private final double time = 6.0;
+	private final double time = 10.0;
 
 	public AutoEventScaleLeft() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time, false, 0.5, 0.5, 0.001, 0.9);

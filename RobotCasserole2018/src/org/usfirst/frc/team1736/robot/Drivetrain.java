@@ -23,6 +23,8 @@ public class Drivetrain {
 	double leftWheelRPM = 0;
 	double rightWheelRPM = 0;
 	double perGearboxCurrentLimit = 1000;
+	
+	boolean useHeadingCommand = false;
 
 	
 
@@ -44,6 +46,7 @@ public class Drivetrain {
 	final static double REDUCTION_ITER_STEP = 0.1;
 	double leftCurrentEst_A = 0;
 	double rightCurrentEst_A = 0;
+	
 	
 
 	public static synchronized Drivetrain getInstance() {
@@ -113,6 +116,11 @@ public class Drivetrain {
 	public void setDesiredPose(double heading_deg) {
 		curHeadingCmd_deg = heading_deg;
 		isClosedLoop = true;
+		useHeadingCommand = true;
+	}
+	
+	public void disableHeadingCmd() {
+		useHeadingCommand = false;
 	}
 	
 	public void update() {
@@ -165,7 +173,7 @@ public class Drivetrain {
 			double headingCompVal = 0;
 			
 			//Calc heading compensation. Simple P controller. Sorta.
-			if(Gyro.getInstance().isOnline()) {
+			if(Gyro.getInstance().isOnline() && useHeadingCommand == true) {
 				//Switch-mode gains since the in-motion correction is more aggressive than stand still logic and causes instability
 				if(Math.abs(curLeftSpeedCmd_RPM) > 5 ||Math.abs(curRightSpeedCmd_RPM) > 5 ) {
 					headingCompVal = (Gyro.getInstance().getAngle() - curHeadingCmd_deg) * headingGainCal.get();

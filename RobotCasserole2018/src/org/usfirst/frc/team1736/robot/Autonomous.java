@@ -11,6 +11,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventIntakeCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLeftScaleToLeftSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLowerElbow;
 import org.usfirst.frc.team1736.robot.auto.AutoEventMoveElevator;
+import org.usfirst.frc.team1736.robot.auto.AutoEventRaiseElbow;
 import org.usfirst.frc.team1736.robot.auto.AutoEventRightScaleToRightSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleRight;
@@ -297,7 +298,7 @@ public class Autonomous {
 			case LEFT_SCALE_FROM_LEFT: // scale only left
 				parent = new AutoEventScaleLeft();
 				parent.addChildEvent(new AutoEventLowerElbow());
-				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_BALANCED));
+				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_UP));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventThrowCube());
 				break;
@@ -305,7 +306,7 @@ public class Autonomous {
 			case RIGHT_SCALE_FROM_RIGHT: // scale only right
 				parent = new AutoEventScaleRight();
 				parent.addChildEvent(new AutoEventLowerElbow());
-				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_BALANCED));
+				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_UP));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventThrowCube());
 				break;
@@ -319,13 +320,26 @@ public class Autonomous {
 				break;
 					
 			case TEST_MODE_1: //Test Mode 1
-				AutoSequencer.addEvent(new AutoEventTest1());
-				AutoSequencer.addEvent(new AutoEventWait(1.5));
-				AutoSequencer.addEvent(new AutoEventTest1Reversed());
+				
+				//Reversal test
+				//AutoSequencer.addEvent(new AutoEventTest1());
+				//AutoSequencer.addEvent(new AutoEventWait(1.5));
+				//AutoSequencer.addEvent(new AutoEventTest1Reversed());
+				
+				//Launch test
+				AutoSequencer.addEvent(new AutoEventLowerElbow());
+				AutoSequencer.addEvent(new AutoEventWait(0.25));
+				parent = new AutoEventRaiseElbow();
+				parent.addChildEvent(new AutoEventThrowCube(0.85));
+				AutoSequencer.addEvent(parent);
 				break;
 
 			case TEST_MODE_2: //Test Mode 2
-				AutoSequencer.addEvent(new AutoEventTest2());
+				//Sine-wave drivetrain test
+				//AutoSequencer.addEvent(new AutoEventTest2());
+				AutoSequencer.addEvent(new AutoEventTurn180Degrees());
+				
+				
 				break;
 				
 			case TWO_CUBE_LEFT:
