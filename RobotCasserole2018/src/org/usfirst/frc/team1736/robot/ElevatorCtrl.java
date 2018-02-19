@@ -81,13 +81,13 @@ public class ElevatorCtrl {
 		
 		//Init Calibrations for positions & speeds
 		BottomPosCal = new Calibration("Elev Floor position (in)", 0.0, 0.0, 84.0);
-		SwitchPosCal = new Calibration("Elev Switch position (in)", 20.0, 0.0,84.0);
+		SwitchPosCal = new Calibration("Elev Switch position (in)", 25.0, 0.0,84.0);
 		ScaleDownPosCal = new Calibration("Elev Scale down Position (in)", 58.0, 0.0, 84.0);
 		ScaleBalancedPosCal = new Calibration("Elev Scale balanced postion (in)", 69.0, 0.0, 84.0);
-		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 75.0, 0.0, 84.0);
+		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 77.0, 0.0, 84.0);
 		ExchangePosCal = new Calibration("Elev Exchange position (in)", 4.0, 0.0, 84.0);
 		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cmd)", 1.0, 0.0, 1.0);
-		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 1.0, 0.0, 1.0);
+		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 0.5, 0.0, 1.0);
 		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
 		HoldCmd = new Calibration("Elev Hold cmd ", 0.0, 0.0, 1.0);
 		
@@ -118,7 +118,7 @@ public class ElevatorCtrl {
 		}
 		
 		//Read in present elevator height
-		actualHeight = -1*elevatorEncoder.get()* (1.0/ELEV_ENC_PULSES_PER_REV) * ELEV_HEIGHT_IN_PER_WINCH_REV;;
+		actualHeight = -1*elevatorEncoder.get()* (1.0/ELEV_ENC_PULSES_PER_REV) * ELEV_HEIGHT_IN_PER_WINCH_REV;
 	}
 	
 	
@@ -147,7 +147,7 @@ public class ElevatorCtrl {
 			
 			//Keep the desired height at the actual height
 			IndexDesired = ElevatorIndex.NON_INDEXED_POS;
-			desiredHeight = getElevActualHeight_in();
+			desiredHeight = actualHeight;
 
 		} else {
 			
@@ -196,6 +196,11 @@ public class ElevatorCtrl {
 		
 		//Actually output command to motors
 		motor1.set(curMotorCmd);
+	}
+	
+	public void initDesiredHeightCmd() {
+		IndexDesired = ElevatorIndex.NON_INDEXED_POS;
+		desiredHeight = actualHeight;
 	}
 	
 	public void setIndexDesired (ElevatorIndex cmd) {

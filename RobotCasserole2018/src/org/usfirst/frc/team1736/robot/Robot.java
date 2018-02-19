@@ -312,9 +312,11 @@ public class Robot extends TimedRobot {
 			CrashTracker.logTeleopInit();	
 			CrashTracker.logMatchInfo();
 			
-			
 			//Ensure Auto is not running
 			auto.stop();
+			
+			//init elevator control so the the elevator won't move right away
+			ElevatorCtrl.getInstance().initDesiredHeightCmd();
 			
 			//Start up a new data log
 			CsvLogger.init();
