@@ -11,10 +11,10 @@ public class RobotConstants {
 	public static final int PWM_INTAKE_RIGHT = 1;
 	public static final int PWM_ELEVATOR_ONE = 2;
 	//public static final int PWM_UNUSED = 3;  UNUSED
-	public static final int PWM_CLIMBER_LEFT_ONE = 4;
-	public static final int PWM_CLIMBER_LEFT_TWO = 5;
-	public static final int PWM_CLIMBER_RIGHT_ONE = 6;
-	public static final int PWM_CLIMBER_RIGHT_TWO = 7;
+	public static final int PWM_CLIMBER_RIGHT_ONE = 4;
+	public static final int PWM_CLIMBER_RIGHT_TWO = 5;
+	public static final int PWM_CLIMBER_LEFT_ONE = 6;
+	public static final int PWM_CLIMBER_LEFT_TWO = 7;
 	public static final int PWM_ELBOW = 8;
 	public static final int PWM_RELEASE_LATCH = 9;
 	
@@ -26,9 +26,6 @@ public class RobotConstants {
 	public static final int CANID_DRIVETRAIN_RIGHT_MASTER_SRX = 15;
 	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE1_SRX = 13;
 	public static final int CANID_DRIVETRAIN_RIGHT_SLAVE2_SRX = 14; 
-	
-	//Relay
-	public static final int RELAY_HOOK_RELEASE = 0;
 
 	
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -40,10 +37,11 @@ public class RobotConstants {
 	//Digital Inputs
 	public static final int DI_INTAKE_CUBE_PRESENT_SENSOR = 3;
 	public static final int DI_ELBOW_UPPER_LIMIT_SW = 4;
-	public static final int DI_ELEVATER_ENCODER_A = 5;
-	public static final int DI_ELEVATER_ENCODER_B = 6;
-	public static final int DI_ELEVATER_LOWER_LIMIT_SW = 7;
-	public static final int DI_ELEVATER_UPPER_LIMIT_SW = 8;
+	public static final int DI_ELEVATOR_ENCODER_A = 5;
+	public static final int DI_ELEVATOR_ENCODER_B = 6;
+	public static final int DI_ELEVATOR_LOWER_LIMIT_SW = 7;
+	public static final int DI_ELEVATOR_UPPER_LIMIT_SW_STG1 = 8;
+	public static final int DI_ELEVATOR_UPPER_LIMIT_SW_STG2 = 9;
 
 	
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -55,10 +53,10 @@ public class RobotConstants {
 	public static final int PDP_ELEVATOR_ONE = 7;
 	public static final int PDP_INTAKE_LEFT = 3;
 	public static final int PDP_INTAKE_RIGHT = 12;
-	public static final int PDP_CLIMBER_LEFT_ONE = 4;
-	public static final int PDP_CLIMBER_LEFT_TWO = 5;
-	public static final int PDP_CLIMBER_RIGHT_ONE = 9;
-	public static final int PDP_CLIMBER_RIGHT_TWO = 8;
+	public static final int PDP_CLIMBER_LEFT_ONE = 9;
+	public static final int PDP_CLIMBER_LEFT_TWO = 8;
+	public static final int PDP_CLIMBER_RIGHT_ONE = 4;
+	public static final int PDP_CLIMBER_RIGHT_TWO = 5;
 	public static final int PDP_ELBOW = 6;
 
 

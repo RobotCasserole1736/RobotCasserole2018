@@ -19,7 +19,6 @@ public class ElevatorCtrl {
 	private double curMotorCmd;
 	
 	//State variables
-	public double currentHeightCmd = 0;
 	public double desiredHeight = 0;
 	public double actualHeight = 0;
 	public boolean isZeroed = false;
@@ -29,10 +28,13 @@ public class ElevatorCtrl {
 	boolean lowerTravelLimitReached = false;
 	boolean prevLowerTravelLimitReached = false;
 	
+	boolean upperLimitSwitchStage1State = false;
+	boolean upperLimitSwitchStage2State = false;
 	
 	//Physical devices
 	private Spark motor1;
-	DigitalInput upperLimitSwitch = null;
+	DigitalInput upperLimitSwitchStage1 = null;
+	DigitalInput upperLimitSwitchStage2 = null;
 	DigitalInput lowerLimitSwitch = null;
 	private Encoder elevatorEncoder;
 	
@@ -71,17 +73,18 @@ public class ElevatorCtrl {
 		CrashTracker.logClassInitStart(this.getClass());
 
 		//Init physical devices
-		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATER_ENCODER_A, RobotConstants.DI_ELEVATER_ENCODER_B );
+		elevatorEncoder = new Encoder(RobotConstants.DI_ELEVATOR_ENCODER_A, RobotConstants.DI_ELEVATOR_ENCODER_B );
 		motor1 = new Spark(RobotConstants.PWM_ELEVATOR_ONE);
-		upperLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_UPPER_LIMIT_SW);
-		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATER_LOWER_LIMIT_SW);	
+		upperLimitSwitchStage1 = new DigitalInput(RobotConstants.DI_ELEVATOR_UPPER_LIMIT_SW_STG1);
+		upperLimitSwitchStage2 = new DigitalInput(RobotConstants.DI_ELEVATOR_UPPER_LIMIT_SW_STG2);
+		lowerLimitSwitch = new DigitalInput(RobotConstants.DI_ELEVATOR_LOWER_LIMIT_SW);	
 		
 		//Init Calibrations for positions & speeds
 		BottomPosCal = new Calibration("Elev Floor position (in)", 0.0, 0.0, 84.0);
 		SwitchPosCal = new Calibration("Elev Switch position (in)", 20.0, 0.0,84.0);
-		ScaleDownPosCal = new Calibration("Elev Scale down Position (in)", 55.0, 0.0, 84.0);
-		ScaleBalancedPosCal = new Calibration("Elev Scale balanced postion (in)", 66.0, 0.0, 84.0);
-		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 77.0, 0.0, 84.0);
+		ScaleDownPosCal = new Calibration("Elev Scale down Position (in)", 58.0, 0.0, 84.0);
+		ScaleBalancedPosCal = new Calibration("Elev Scale balanced postion (in)", 69.0, 0.0, 84.0);
+		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 75.0, 0.0, 84.0);
 		ExchangePosCal = new Calibration("Elev Exchange position (in)", 4.0, 0.0, 84.0);
 		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cmd)", 1.0, 0.0, 1.0);
 		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 1.0, 0.0, 1.0);
@@ -97,8 +100,12 @@ public class ElevatorCtrl {
 	public void sampleSensors() {
 		prevLowerTravelLimitReached = lowerTravelLimitReached;
 		
+		//Sample some of the switch states
+		upperLimitSwitchStage1State = upperLimitSwitchStage1.get();
+		upperLimitSwitchStage2State = upperLimitSwitchStage2.get();
+		
 		//Check if we've hit the upper or lower limits of travel yet
-		if(upperLimitSwitch.get()) {
+		if(upperLimitSwitchStage1State && upperLimitSwitchStage2State) {
 			upperTravelLimitReached = true;
 		} else {
 			upperTravelLimitReached = false;
@@ -129,6 +136,8 @@ public class ElevatorCtrl {
 			//Open Loop control - Operator commands motor directly
 			curMotorCmd = continuousModeCmd;
 			
+			IndexDesired = ElevatorIndex.NON_INDEXED_POS;
+			
 		} else if (continuousModeDesired == true ) {
 			
 			//Continuous mode - used whenever the driver wants control, or the encoder has not yet been zeroed.
@@ -136,18 +145,19 @@ public class ElevatorCtrl {
 			//Open Loop control - Operator commands motor directly
 			curMotorCmd = continuousModeCmd;
 			
-			//Keep the closed loop command set to the nearest height
-			IndexDesired = desiredHightToEmun(getElevActualHeight_in());
-			desiredHeight = enumToDesiredHeight(IndexDesired);
+			//Keep the desired height at the actual height
+			IndexDesired = ElevatorIndex.NON_INDEXED_POS;
+			desiredHeight = getElevActualHeight_in();
 
 		} else {
 			
 			//Indexed mode - the default case where the driver just presses buttons.
 			if(opIndexDesired != ElevatorIndex.NO_NEW_SELECTION) {
 				IndexDesired = opIndexDesired;
+				desiredHeight = enumToDesiredHeight(IndexDesired);
 			}
 			
-			desiredHeight = enumToDesiredHeight(IndexDesired);
+			
 			
 			//Super-de-duper simple bang-bang control of elevator in closed loop
 
@@ -205,14 +215,24 @@ public class ElevatorCtrl {
 		return curMotorCmd;
 	}
 	
+	public boolean getUpperLimitSwitchStage1State() {
+		return upperLimitSwitchStage1State;
+	}
+	
+	public boolean getUpperLimitSwitchStage2State() {
+		return upperLimitSwitchStage2State;
+	}
+	
 	
 	/**
 	 * Conversion between an elevator height (from an enum value) to the
 	 * presently configured height (in inches)
 	 * @param cmd enum height command
-	 * @return height, in inches.
+	 * @return height, in inches, or -1 if the previous command should be maintained.
 	 */
 	private double enumToDesiredHeight(ElevatorIndex cmd) {
+		double currentHeightCmd = 0;
+		
 		if(cmd == ElevatorIndex.BOTTOM) {
 			currentHeightCmd = BottomPosCal.get();
 		}
@@ -233,6 +253,11 @@ public class ElevatorCtrl {
 		}
 		else if(cmd == ElevatorIndex.NO_NEW_SELECTION){
 			//do nothing
+			currentHeightCmd = -1;
+		}
+		else if (cmd == ElevatorIndex.NON_INDEXED_POS) {
+			//also do nothing
+			currentHeightCmd = -1;
 		}
 		else {
 			currentHeightCmd = 0;

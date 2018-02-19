@@ -13,6 +13,10 @@ public class AutoEventTurn180Degrees extends AutoEvent {
 	private double currentTime = 0.0;
 	private double startTime = 0.0;
 	private double elapsedTime = 0.0;
+	
+	final double TURN_SPEED_RPM = 100;
+	final double TIMEOUT_S = 5.0;
+	
 	@Override
 	public void userStart() {
 		// get gyro
@@ -28,9 +32,9 @@ public class AutoEventTurn180Degrees extends AutoEvent {
 		// gyro greater than target
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
-		Drivetrain.getInstance().setLeftWheelSpeed(100);
-		Drivetrain.getInstance().setRightWheelSpeed(-100);
-		if(Gyro.getInstance().getAngle() > targetAngle || elapsedTime > 5.0) {
+		Drivetrain.getInstance().setLeftWheelSpeed(TURN_SPEED_RPM);
+		Drivetrain.getInstance().setRightWheelSpeed(-1 * TURN_SPEED_RPM);
+		if(Gyro.getInstance().getAngle() > targetAngle || elapsedTime > TIMEOUT_S) {
 			weAreDone = true;
 			Drivetrain.getInstance().setLeftWheelSpeed(0);
 			Drivetrain.getInstance().setRightWheelSpeed(0);
