@@ -33,7 +33,16 @@ public class OperatorController {
 	 */
 	public boolean getElevCntrlModeCmd() {
 		boolean operaterBumper = operatorController.getBumper(Hand.kRight);
-		return operaterBumper;
+		boolean triggersPressed = false;
+		
+		if( 
+			operatorController.getTriggerAxis(Hand.kRight) > 0.05 ||
+			operatorController.getTriggerAxis(Hand.kLeft) > 0.05
+		  ) {
+			triggersPressed = true;
+		}
+		
+		return operaterBumper || triggersPressed;
 	}
 	
 	
