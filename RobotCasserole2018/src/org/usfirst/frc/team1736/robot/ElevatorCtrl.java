@@ -88,7 +88,7 @@ public class ElevatorCtrl {
 		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 77.0, 0.0, 84.0);
 		ExchangePosCal = new Calibration("Elev Exchange position (in)", 4.0, 0.0, 84.0);
 		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cmd)", 1.0, 0.0, 1.0);
-		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 0.5, 0.0, 1.0);
+		DownMotorCmdCal = new Calibration("Elev Closed-Loop down speed (cmd)", 1.0, 0.0, 1.0);
 		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
 		HoldCmd = new Calibration("Elev Hold cmd ", 0.05, 0.0, 1.0);
 		
@@ -173,7 +173,10 @@ public class ElevatorCtrl {
 			
 			
 			
-			//Super-de-duper simple bang-bang control of elevator in closed loop
+			//Somewhat simple bang-bang control of elevator in closed loop
+			//But, we also want to slow down as we get close to the desired height
+			// while descending because gravity and such.
+			//so maybe we'll call it a bang-batta-bang controller.
 
 			if(isAtDesiredHeight()) {
 				//Deadzone, don't run motor.
@@ -183,7 +186,14 @@ public class ElevatorCtrl {
 				curMotorCmd = UpMotorCmdCal.get();
 			}else if(desiredHeight < actualHeight) {
 				//Too high, run motor down.
-				curMotorCmd = -1 * DownMotorCmdCal.get();
+				if(actualHeight - desiredHeight < 5.0) {
+					//Close to done, go slow
+					curMotorCmd = -1 * DownMotorCmdCal.get() * 0.5;
+				} else {
+					//Not done, go fast
+					curMotorCmd = -1 * DownMotorCmdCal.get();
+				}
+				
 			}
 		}
 		
