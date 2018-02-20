@@ -2,7 +2,6 @@ package org.usfirst.frc.team1736.robot;
 
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
-import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 
@@ -22,7 +21,6 @@ public class Climb {
 	private double currRightWinchCmd = 0;
 	private boolean currClimbEnabledCmd = false;
 	private boolean currReleaseLatchCmd = false;
-	private boolean currHookReleaseCmd = false;
 	private double latchAngleCmd = 0;
 	
 	private final double LATCH_ANGLE_RELEASED = 90; 
@@ -89,10 +87,10 @@ public class Climb {
 		}
 		
 		//Assign outputs to motors
-		leftWinchMotor1.set(currLeftWinchCmd);
-		leftWinchMotor2.set(currLeftWinchCmd);
-		rightWinchMotor1.set(currRightWinchCmd);
-		rightWinchMotor2.set(currRightWinchCmd);
+		leftWinchMotor1.set(-currLeftWinchCmd);
+		leftWinchMotor2.set(-currLeftWinchCmd);
+		rightWinchMotor1.set(-currRightWinchCmd);
+		rightWinchMotor2.set(-currRightWinchCmd);
 		
 	}
 	
@@ -111,9 +109,6 @@ public class Climb {
 	}
 	public void setReleaseLatchCmd(boolean cmd) {
 		currReleaseLatchCmd = cmd;
-	}
-	public void setHookReleaseCmd(boolean cmd) {
-		currHookReleaseCmd = cmd;
 	}
 	public void setClimbEnabledCmd(boolean cmd) {
 		currClimbEnabledCmd = cmd;
