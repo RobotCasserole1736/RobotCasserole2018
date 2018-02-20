@@ -18,6 +18,7 @@ public class IntakeControl {
 	private boolean throwDesired;
 	
 	//State variables
+	private int sensorDbncCount;
 	private double leftCurrent;
 	private double rightCurrent;
 	private boolean currentLimitExceeded = false;
@@ -45,6 +46,8 @@ public class IntakeControl {
 	//constants
 	private final double INTAKE_MAX_MOTOR_CURRENT_A = 30;
 	private final double INTAKE_MOTOR_CURRENT_DEBOUNCE_S = 0.5;
+	private final int SENSOR_DEBOUNCE_TIME_LOOPS = 10;
+	private final double MAX_ELEV_HEIGHT_FOR_INTAKE_in = 12.0;
 	
 	//derived constants
 	private final double INTAKE_MOTOR_CURRENT_DEBOUNCE_LOOPS = INTAKE_MOTOR_CURRENT_DEBOUNCE_S/0.02;
@@ -116,7 +119,18 @@ public class IntakeControl {
 			
 		
 	public void sampleSensors() {
-		cubeInIntake = sensor.get();
+		
+		if(sensor.get() == true) {
+			cubeInIntake = true;
+			sensorDbncCount = SENSOR_DEBOUNCE_TIME_LOOPS;
+		} else {
+			if(sensorDbncCount > 0) {
+				sensorDbncCount--;
+			} else {
+				cubeInIntake = false;
+			}
+		}
+		
 		
 	}
 	
@@ -151,7 +165,7 @@ public class IntakeControl {
 		}
 		
 		//Calculate motor commands
-		if(intakeDesired && !dontIntake) {
+		if(intakeDesired && !dontIntake && (ElevatorCtrl.getInstance().getElevActualHeight_in() < MAX_ELEV_HEIGHT_FOR_INTAKE_in)) {
 			leftMotorCmd = leftIntakeMotorCal.get();
 			rightMotorCmd = rightIntakeMotorCal.get();
 		} else if(ejectDesired) {
