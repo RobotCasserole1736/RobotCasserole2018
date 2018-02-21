@@ -12,14 +12,17 @@ public class AutoEventSwitchLeft extends AutoEvent {
 
 	private final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 145}, 
-		{12, 150}, 
-		{24, 154}, 
-		{30, 154}, 
-		{35, 154}
+		{0, 24},
+		{-15, 100}, 
+		{-15, 125}, 
+		{0, 135}, 
+		{12, 140}, 
+		{24, 142}, 
+		{30, 140}, 
+		{35, 140}
 	};
 	
-	private final double time = 4.0;
+	private final double time = 5.0;
 
 	public AutoEventSwitchLeft() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time, false, 0.7, 0.1, 0.005, 0.9);
