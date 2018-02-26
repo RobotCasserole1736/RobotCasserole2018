@@ -246,6 +246,7 @@ function genSignalListTable(arr){
     
     //Close out the HTML and push it to the document for display.
     out +="</tr></tbody></table>";
+    out +="<br><br><br><br><br><br>"; //I'm bad at css
     document.getElementById("id02").innerHTML = out;
 
 }
