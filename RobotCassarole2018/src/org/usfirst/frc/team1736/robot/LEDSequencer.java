@@ -76,8 +76,21 @@ public class LEDSequencer {
 		timerThread.schedule(new LEDBackgroundUpdateTask(this), (long) (CasseroleLEDInterface.m_update_period_ms), (long) (CasseroleLEDInterface.m_update_period_ms));
 
 		for(int i = 0; i < particlesL1.length; i++) {
-			particlesL1 [i] = new Particle();
+			particlesL1 [i] = new Particle(1);
+		}
+		
+		for(int i = 0; i < particlesL2.length; i++) {
+			particlesL2 [i] = new Particle(2);
 		}		
+
+		for(int i = 0; i < particlesL3.length; i++) {
+			particlesL3 [i] = new Particle(3);
+		}		
+
+		for(int i = 0; i < particlesL4.length; i++) {
+			particlesL4 [i] = new Particle(4);
+		}		
+
 
 	}
 
@@ -461,9 +474,9 @@ public class LEDSequencer {
 			ledstrip.setLEDColor(led_idx, 0.1, 1, not_green_comp);
 		}
 	}
-	final int numL1Particles = 4;
-	Particle[] particlesL1 = new Particle[numL1Particles]; 
-	final int numL2Particles = 4;
+	final int numL1Particles = 5;
+	Particle[] particlesL1 = new Particle[numL1Particles];
+	final int numL2Particles = 5;
 	Particle[] particlesL2 = new Particle[numL2Particles];
 	final int numL3Particles = 4;
 	Particle[] particlesL3 = new Particle[numL3Particles];
@@ -480,29 +493,37 @@ public class LEDSequencer {
 			for(int i = 0; i < particlesL1.length; i++) {
 				particlesL1 [i].move();		
 			}
+			for(int i = 0; i < particlesL2.length; i++) {
+				particlesL2 [i].move();		
+			}
+			for(int i = 0; i < particlesL3.length; i++) {
+				particlesL3 [i].move();		
+			}
+			for(int i = 0; i < particlesL4.length; i++) {
+				particlesL4 [i].move();		
+			}
 		int n = 0;
 			for(int led_idx = 0; led_idx < RobotConstants.NUM_LEDS_TOTAL / 2; led_idx++) {
 				Color led_color = new Color();
 				led_color.setLevel(0);
 				
 				for(int i = 0; i < particlesL1.length; i ++) {
-					led_color.addToMe(particlesL1[i].ColorAt(led_idx));
+					led_color.addToMe(particlesL1[i].ColorAt(led_idx));				
+				}
+				for(int i = 0; i < particlesL2.length; i ++) {
+					led_color.addToMe(particlesL2[i].ColorAt(led_idx));				
+				}
+				for(int i = 0; i < particlesL3.length; i ++) {
+					led_color.addToMe(particlesL3[i].ColorAt(led_idx));				
+				}
+				for(int i = 0; i < particlesL4.length; i ++) {
+					led_color.addToMe(particlesL4[i].ColorAt(led_idx));				
 				}
 				
 				ledstrip.setLEDColorHSL(led_idx, led_color.getH_Value(), led_color.getS_Value(), led_color.getL_Value());
 				
 				
-				
-				
-				
-			}			
-		
-
-		
-		
-		
-		
-		
+			}					
 	}
 
 

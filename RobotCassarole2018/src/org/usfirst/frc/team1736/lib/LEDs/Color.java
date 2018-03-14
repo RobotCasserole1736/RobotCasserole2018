@@ -22,13 +22,21 @@ public class Color {
 			S_Value = 0;
 			L_Value = 0;
 		} else if (Level == 1) {
-		 	H_Value = .15;
+		 	H_Value = 0;
+		 	S_Value = 1;
+		 	L_Value = .5;
 		} else if (Level == 2) {
-			H_Value = .25;
+			H_Value = -0;
+			S_Value = 1;
+			L_Value = .5;
 		} else if (Level == 3) {
-			H_Value = .35;
+			H_Value = 0;
+			S_Value = 1;
+			L_Value = .5;
 		} else if (Level == 4) {
-			H_Value = .50;
+			H_Value = 0;
+			S_Value = 1;
+			L_Value = .5;
 		}
 	}
 	
@@ -44,19 +52,22 @@ public class Color {
 		return L_Value;
 	}
 	
-	public void setH_Value(int val) {
-		H_Value = val;
+	public void setL_Value(double in) {
+		L_Value = in;
 	}
 
 		
 	public void addToMe(Color in) {
-		double prevH = 0;
-		double newH = 0;
-		double temp = prevH + newH;
-		H_Value = (temp/2);
-		
-		
-		
+		double newH = in.getH_Value();
+		double heldH = H_Value;
+		double avrgpt1 = heldH + newH;
+		H_Value = (avrgpt1/2);
+		S_Value = 1;
+		L_Value += in.L_Value;
+		 if (L_Value > .52) {
+			 L_Value = .52;
+			 H_Value = H_Value + .072;
+		 }
 		
 	}
 	
