@@ -6,6 +6,7 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.robot.auto.AutoEventBackUp;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
+import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLineOpenLoop;
 import org.usfirst.frc.team1736.robot.auto.AutoEventEjectCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventIntakeCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLeftScaleToLeftSwitch;
@@ -316,7 +317,7 @@ public class Autonomous {
 				break;
 			
 			case CROSS_BASELINE: //drive forward
-				AutoSequencer.addEvent(new AutoEventCrossBaseLine());
+				AutoSequencer.addEvent(new AutoEventCrossBaseLineOpenLoop());
 				break;
 				
 			case CROSS_BASELINE_FROM_CENTER: //drive forward and to the right
