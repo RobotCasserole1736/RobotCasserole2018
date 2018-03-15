@@ -25,7 +25,6 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 	@Override
 	public void userUpdate() {
 		driveForward.userUpdate();
-		// shotCTRL.setDesiredShooterState(ShooterStates.PREP_TO_SHOOT);
 	}
 
 	@Override
@@ -47,6 +46,8 @@ public class AutoEventCrossBaseLine extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
+	
+	
     public static void main(String[] args) {
 		AutoEventCrossBaseLine autoEvent = new AutoEventCrossBaseLine();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);

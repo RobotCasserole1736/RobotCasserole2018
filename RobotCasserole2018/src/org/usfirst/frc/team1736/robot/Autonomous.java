@@ -304,7 +304,7 @@ public class Autonomous {
 				parent.addChildEvent(new AutoEventLowerElbow());
 				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_UP));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventThrowCube());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 				
 			case RIGHT_SCALE_FROM_RIGHT: // scale only right
@@ -312,7 +312,7 @@ public class Autonomous {
 				parent.addChildEvent(new AutoEventLowerElbow());
 				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_UP));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventThrowCube());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 			
 			case CROSS_BASELINE: //drive forward
