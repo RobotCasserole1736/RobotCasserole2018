@@ -51,5 +51,7 @@ public class AutoEventCrossBaseLine extends AutoEvent {
     public static void main(String[] args) {
 		AutoEventCrossBaseLine autoEvent = new AutoEventCrossBaseLine();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
+		autoEvent = new AutoEventCrossBaseLine();
+		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
 	}
 }

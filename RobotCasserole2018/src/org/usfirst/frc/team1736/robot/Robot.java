@@ -558,6 +558,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Intake_Right_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("Elbow_Cmd", "cmd");
 		CasseroleWebPlots.addNewSignal("Elbow_Pot_Val", "V");
+		CasseroleWebPlots.addNewSignal("Auto_Timestep", "step");
+		CasseroleWebPlots.addNewSignal("Auto_Left_Vel", "FtpSec");
+		CasseroleWebPlots.addNewSignal("Auto_Right_Vel", "FtpSec");
 	}
 	
 	
@@ -589,6 +592,9 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Intake_Left_Cmd", time, IntakeControl.getInstance().getLeftMotorCmd());
 		CasseroleWebPlots.addSample("Intake_Right_Cmd", time, IntakeControl.getInstance().getRightMotorCmd());
 		CasseroleWebPlots.addSample("Elbow_Cmd", time, ElbowControl.getInstance().getMotorCmd());
+		CasseroleWebPlots.addSample("Auto_Timestep", time, Drivetrain.getInstance().autoTimestamp);
+		CasseroleWebPlots.addSample("Auto_Left_Vel", time, Drivetrain.getInstance().leftAutoCmdFtPerSec);
+		CasseroleWebPlots.addSample("Auto_Right_Vel", time, Drivetrain.getInstance().rightAutoCmdFtPerSec);
 	}
 
 	

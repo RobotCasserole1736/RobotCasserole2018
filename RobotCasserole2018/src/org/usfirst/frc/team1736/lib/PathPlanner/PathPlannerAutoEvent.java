@@ -171,6 +171,10 @@ public class PathPlannerAutoEvent extends AutoEvent {
         Drivetrain.getInstance().setLeftWheelSpeed(leftCommand_RPM);
         Drivetrain.getInstance().setRightWheelSpeed(rightCommand_RPM);
         Drivetrain.getInstance().setDesiredPose(poseCommand_deg);
+    
+        Drivetrain.getInstance().autoTimestamp = timestep;
+        Drivetrain.getInstance().leftAutoCmdFtPerSec = path.smoothLeftVelocity[timestep][1];
+        Drivetrain.getInstance().rightAutoCmdFtPerSec = path.smoothRightVelocity[timestep][1];
     }
 
 

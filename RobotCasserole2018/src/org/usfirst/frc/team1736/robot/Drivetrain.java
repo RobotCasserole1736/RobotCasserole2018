@@ -47,6 +47,11 @@ public class Drivetrain {
 	double leftCurrentEst_A = 0;
 	double rightCurrentEst_A = 0;
 	
+	//Debug only
+	public double leftAutoCmdFtPerSec = 0;
+	public double rightAutoCmdFtPerSec = 0;
+	public double autoTimestamp = 0;
+	
 	
 
 	public static synchronized Drivetrain getInstance() {
