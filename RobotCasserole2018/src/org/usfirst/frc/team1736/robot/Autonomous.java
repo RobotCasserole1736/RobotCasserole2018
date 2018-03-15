@@ -317,7 +317,7 @@ public class Autonomous {
 				break;
 			
 			case CROSS_BASELINE: //drive forward
-				AutoSequencer.addEvent(new AutoEventCrossBaseLineOpenLoop());
+				AutoSequencer.addEvent(new AutoEventCrossBaseLine());
 				break;
 				
 			case CROSS_BASELINE_FROM_CENTER: //drive forward and to the right
