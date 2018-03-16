@@ -71,8 +71,8 @@ public class Robot extends TimedRobot {
 	Autonomous auto;
 	
 	//Camera stream objects
-	UsbCamera driverAssistCam;
-	MjpegServer driverStream;
+	//UsbCamera driverAssistCam; //Temp -  remove while it's not on the robot
+	//MjpegServer driverStream;
 	
 	//Loop execution time metrics
 	double loopStartTime_s = 0;
@@ -120,10 +120,11 @@ public class Robot extends TimedRobot {
 		ecuStats = new CasseroleRIOLoadMonitor();
 
 		//Set up and start webcam stream
-		driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
-		driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
-		driverStream = new MjpegServer("DriverCamServer", 1180);
-		driverStream.setSource(driverAssistCam);
+		//TEMP - remove while not on the robot
+		//driverAssistCam = new UsbCamera("CheapWideAngleCam", 0);
+		//driverAssistCam.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
+		//driverStream = new MjpegServer("DriverCamServer", 1180);
+		//driverStream.setSource(driverAssistCam);
 		
 		// Set up and start web server (must be after all other website init functions)
 		webServer = new CasseroleWebServer();
@@ -507,8 +508,8 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Elevator Not Zeroed", "yellow");
 		CasseroleDriverView.newBoolean("Cube In Intake", "green");
 		
-		
-		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,0); //must use firefox. No idea why.
+		//TEMP - take out while not on robot
+		//CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,0); //must use firefox. No idea why.
 		CasseroleDriverView.newAutoSelector("Start Position", Autonomous.START_POS_MODES);
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
 		CasseroleDriverView.newAutoSelector("Delay", Autonomous.DELAY_OPTIONS);
