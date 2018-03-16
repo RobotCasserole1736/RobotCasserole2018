@@ -348,40 +348,21 @@ public class Autonomous {
 				break;
 				
 			case TWO_CUBE_LEFT:
-				parent = new AutoEventScaleLeft();
-				parent.addChildEvent(new AutoEventLowerElbow());
-				parent.addChildEvent(new AutoEventMoveElevator(4.0, ElevatorIndex.SCALE_BALANCED));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventEjectCube());
-				parent = new AutoEventBackUp();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventTurn180Degrees());
-				parent = new AutoEventLeftScaleToLeftSwitch();
-				parent.addChildEvent(new AutoEventIntakeCube(AutoEventLeftScaleToLeftSwitch.time));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
-				AutoSequencer.addEvent(new AutoEventSixInchForward());
-				AutoSequencer.addEvent(new AutoEventEjectCube());
+
 				break;
 			
 			case TWO_CUBE_RIGHT:
-				parent = new AutoEventScaleRight();
+				parent = new AutoEventSwitchRight_Center();
 				parent.addChildEvent(new AutoEventLowerElbow());
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
-				parent = new AutoEventBackUp();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventTurn180Degrees());
-				parent = new AutoEventRightScaleToRightSwitch();
-				parent.addChildEvent(new AutoEventIntakeCube(AutoEventRightScaleToRightSwitch.time));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
-				AutoSequencer.addEvent(new AutoEventSixInchForward());
-				AutoSequencer.addEvent(new AutoEventEjectCube());
-				break;	
+				
+				
+				AutoSequencer.addEvent(new AutoEventBackUp());
+				
+				break;
+
 			case DO_NOTHING: //Do nothing
 				break;
 				
