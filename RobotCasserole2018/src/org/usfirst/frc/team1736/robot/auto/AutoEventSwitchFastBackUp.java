@@ -12,11 +12,14 @@ public class AutoEventSwitchFastBackUp extends AutoEvent {
 	
 	double startTime;
 	
-	private  double time = 2.0;
+	private final double[][] waypoints = new double[][] {
+		{0,0},
+		{-6,-12}
+	};
 	boolean weAreDone = false;
 
-	public AutoEventSwitchFastBackUp(double duration_in) {
-		time = duration_in;
+	public AutoEventSwitchFastBackUp() {
+		driveBackward = new PathPlannerAutoEvent(waypoints, time, true);
 		
 	}
 	
