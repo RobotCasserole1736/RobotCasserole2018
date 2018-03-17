@@ -506,6 +506,8 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newBoolean("Elevator Lower Limit", "yellow");
 		CasseroleDriverView.newBoolean("Elevator Not Zeroed", "yellow");
 		CasseroleDriverView.newBoolean("Cube In Intake", "green");
+		CasseroleDriverView.newBoolean("Gyro Offline", "red");
+		
 		
 		
 		CasseroleDriverView.newWebcam("Driver_cam", RobotConstants.DRIVER_CAMERA_URL,50,50,0); //must use firefox. No idea why.
@@ -527,6 +529,7 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.setBoolean("Elbow Upper Limit", ElbowControl.getInstance().isUpperLimitReached());
 		CasseroleDriverView.setBoolean("Cube In Intake", IntakeControl.getInstance().cubeInIntake());
 		CasseroleDriverView.setDialValue("Actual Elevator Height", ElevatorCtrl.getInstance().getElevActualHeight_in());
+		CasseroleDriverView.setBoolean("Gyro Offline", !Gyro.getInstance().isOnline());
 		
 	}
 	
