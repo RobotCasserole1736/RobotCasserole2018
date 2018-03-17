@@ -87,10 +87,10 @@ public class Climb {
 		}
 		
 		//Assign outputs to motors
-		leftWinchMotor1.set(-currLeftWinchCmd);
-		leftWinchMotor2.set(-currLeftWinchCmd);
-		rightWinchMotor1.set(-currRightWinchCmd);
-		rightWinchMotor2.set(-currRightWinchCmd);
+		leftWinchMotor1.set(currLeftWinchCmd);
+		leftWinchMotor2.set(currLeftWinchCmd);
+		rightWinchMotor1.set(currRightWinchCmd);
+		rightWinchMotor2.set(currRightWinchCmd);
 		
 	}
 	
