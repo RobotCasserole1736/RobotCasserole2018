@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1736.robot.auto;
+ package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
 import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
@@ -6,18 +6,18 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 
 /**
  * drive straight and stuff. Step response check (with typical smoothing)
- */s
-public class AutoEventBackupFromSwitch extends AutoEvent {
+ */
+public class AutoEventBackUpFromPyramid extends AutoEvent {
 	PathPlannerAutoEvent driveBackward;
 
 	private final double[][] waypoints = new double[][] {
 		{0,0},
-		{0,-50}
+		{0,-71}
 	};
 	
-	private final double time = 1.5;
+	private final double time = 2.0;
 
-	public AutoEventBackupFromSwitch() {
+	public AutoEventBackUpFromPyramid() {
 		driveBackward = new PathPlannerAutoEvent(waypoints, time, true, 0.2, 0.5, 0.001, 0.9);
 	}
 
@@ -47,7 +47,7 @@ public class AutoEventBackupFromSwitch extends AutoEvent {
 		driveBackward.userStart();
 	}
     public static void main(String[] args) {
-    	AutoEventBackupFromSwitch autoEvent = new AutoEventBackupFromSwitch();
+    	AutoEventBackUpFromPyramid autoEvent = new AutoEventBackUpFromPyramid();
 		FalconPathPlanner.plotPath(autoEvent.driveBackward.path);
 	}
 }
