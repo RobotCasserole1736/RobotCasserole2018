@@ -56,7 +56,7 @@ public class ElevatorCtrl {
 
 	//Constants
 	public final double ELEV_ENC_PULSES_PER_REV = 1024;
-	public final double ELEV_WINCH_DIAMETER_IN = 1.5;
+	public final double ELEV_WINCH_DIAMETER_IN = 1.6;
 	
 	//Derived Constants
 	public final double ELEV_HEIGHT_IN_PER_WINCH_REV = 2*Math.PI*(ELEV_WINCH_DIAMETER_IN/2.0); //Linear rope distance is 2*pi*r_winch
