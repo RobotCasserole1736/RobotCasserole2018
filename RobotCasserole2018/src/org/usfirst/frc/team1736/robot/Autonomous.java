@@ -5,8 +5,10 @@ import org.usfirst.frc.team1736.lib.AutoSequencer.AutoSequencer;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.robot.auto.AutoEventBackUp;
+import org.usfirst.frc.team1736.robot.auto.AutoEventBackupFromSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLineOpenLoop;
+import org.usfirst.frc.team1736.robot.auto.AutoEventDriveToCubePyramid;
 import org.usfirst.frc.team1736.robot.auto.AutoEventEjectCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventIntakeCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLeftScaleToLeftSwitch;
@@ -26,6 +28,10 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventTest1Reversed;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTest2;
 import org.usfirst.frc.team1736.robot.auto.AutoEventThrowCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTurn180Degrees;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTurn45DegreesLeft;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTurn45DegreesRight;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTurn90DegreesLeft;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTurn90DegreesRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventWait;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -141,8 +147,15 @@ public class Autonomous {
 				}
 			} else if(startPos.compareTo(START_POS_MODES[1])==0) { //Starting Center 
 				
-
-					mode = AutoModes.CROSS_BASELINE; //In center but no switch ownership detected and can't do two cube from center.
+				if(FieldSetupString.getInstance().left_Switch_Owned) {
+					mode = AutoModes.TWO_CUBE_LEFT_FROM_CENTER;
+					
+				}else if(FieldSetupString.getInstance().right_Switch_Owned) {
+					mode = AutoModes.TWO_CUBE_RIGHT_FROM_CENTER;
+					
+				}else{
+					mode = AutoModes.CROSS_BASELINE;
+				}
 				
 			} else if(startPos.compareTo(START_POS_MODES[2])==0) { //Starting from Right
 				
@@ -382,6 +395,40 @@ public class Autonomous {
 				AutoSequencer.addEvent(new AutoEventSixInchForward());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;	
+			case TWO_CUBE_LEFT_FROM_CENTER:	
+				parent = new AutoEventSwitchLeft_Center();
+				parent.addChildEvent(new AutoEventLowerElbow());
+				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parent = new AutoEventBackupFromSwitch();
+				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
+				parent = new AutoEventDriveToCubePyramid();
+				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(new AutoEventTurn90DegreesLeft());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				break;
+			case TWO_CUBE_RIGHT_FROM_CENTER:	
+				parent = new AutoEventSwitchRight_Center();
+				parent.addChildEvent(new AutoEventLowerElbow());
+				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parent = new AutoEventBackupFromSwitch();
+				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
+				parent = new AutoEventDriveToCubePyramid();
+				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(new AutoEventTurn90DegreesRight());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				break;
 			case DO_NOTHING: //Do nothing
 				break;
 				
