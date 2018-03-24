@@ -6,7 +6,7 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 
 /**
  * drive straight and stuff. Step response check (with typical smoothing)
- */s
+ */
 public class AutoEventBackupFromSwitch extends AutoEvent {
 	PathPlannerAutoEvent driveBackward;
 

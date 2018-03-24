@@ -20,7 +20,7 @@ public class AutoEventTurn45DegreesRight extends AutoEvent {
 	@Override
 	public void userStart() {
 		// get gyro
-		targetAngle = Gyro.getInstance().getAngle() - 45;
+		targetAngle = Gyro.getInstance().getAngle() + 45;
 		startTime = Timer.getFPGATimestamp();
 	}
 

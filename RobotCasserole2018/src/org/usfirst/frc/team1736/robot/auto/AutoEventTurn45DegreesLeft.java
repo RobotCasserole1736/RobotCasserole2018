@@ -33,8 +33,8 @@ public class AutoEventTurn45DegreesLeft extends AutoEvent {
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
 		Drivetrain.getInstance().disableHeadingCmd();
-		Drivetrain.getInstance().setLeftWheelSpeed(TURN_SPEED_RPM);
-		Drivetrain.getInstance().setRightWheelSpeed(-1 * TURN_SPEED_RPM);
+		Drivetrain.getInstance().setLeftWheelSpeed(-1 * TURN_SPEED_RPM);
+		Drivetrain.getInstance().setRightWheelSpeed(TURN_SPEED_RPM);
 		if(Gyro.getInstance().getAngle() > targetAngle || elapsedTime > TIMEOUT_S) {
 			weAreDone = true;
 			Drivetrain.getInstance().setLeftWheelSpeed(0);
