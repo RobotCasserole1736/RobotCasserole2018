@@ -3,6 +3,7 @@
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
 import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
+import org.usfirst.frc.team1736.robot.Gyro;
 
 /**
  * drive straight and stuff. Step response check (with typical smoothing)
@@ -45,6 +46,7 @@ public class AutoEventBackUpFromPyramid extends AutoEvent {
 	@Override
 	public void userStart() {
 		driveBackward.userStart();
+		driveBackward.setDesiredHeadingOverride(Gyro.getInstance().getAngle());
 	}
     public static void main(String[] args) {
     	AutoEventBackUpFromPyramid autoEvent = new AutoEventBackUpFromPyramid();

@@ -44,6 +44,11 @@ public class PathPlannerAutoEvent extends AutoEvent {
     private int timestep;
     private double taskRate = 0.02;
     private final double DT_TRACK_WIDTH_FT = 25.0 / 12.0; //Width in Feet
+    
+    //Special mode for supporting two-cube auto
+    // Will lock-in a given heading at the start of the path execution,
+    boolean useFixedHeadingMode = false;
+    double userManualHeadingDesired = 0;
 
     
     /**
@@ -170,8 +175,13 @@ public class PathPlannerAutoEvent extends AutoEvent {
         
         Drivetrain.getInstance().setLeftWheelSpeed(leftCommand_RPM);
         Drivetrain.getInstance().setRightWheelSpeed(rightCommand_RPM);
-        Drivetrain.getInstance().setDesiredPose(poseCommand_deg);
-    
+        
+        if(useFixedHeadingMode) {
+        	Drivetrain.getInstance().setDesiredPose(userManualHeadingDesired);
+        } else {
+        	Drivetrain.getInstance().setDesiredPose(poseCommand_deg);
+        }
+
         Drivetrain.getInstance().autoTimestamp = timestep;
         Drivetrain.getInstance().leftAutoCmdFtPerSec = path.smoothLeftVelocity[timestep][1];
         Drivetrain.getInstance().rightAutoCmdFtPerSec = path.smoothRightVelocity[timestep][1];
@@ -200,6 +210,15 @@ public class PathPlannerAutoEvent extends AutoEvent {
      */
     public boolean isDone() {
         return done;
+    }
+    
+    /**
+     * Manually set what the heading should be - useful if you moved the robot
+     * without the pathplanner's knowledge.
+     */
+    public void setDesiredHeadingOverride(double heading) {
+    	userManualHeadingDesired = heading;
+    	useFixedHeadingMode = true;
     }
 
 
