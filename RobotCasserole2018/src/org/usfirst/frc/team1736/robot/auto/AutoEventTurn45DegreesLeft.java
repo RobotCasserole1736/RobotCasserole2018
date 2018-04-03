@@ -20,7 +20,7 @@ public class AutoEventTurn45DegreesLeft extends AutoEvent {
 	@Override
 	public void userStart() {
 		// get gyro
-		targetAngle = Gyro.getInstance().getAngle() + 45;
+		targetAngle = Gyro.getInstance().getAngle() - 45;
 		startTime = Timer.getFPGATimestamp();
 	}
 
@@ -35,7 +35,7 @@ public class AutoEventTurn45DegreesLeft extends AutoEvent {
 		Drivetrain.getInstance().disableHeadingCmd();
 		Drivetrain.getInstance().setLeftWheelSpeed(-1 * TURN_SPEED_RPM);
 		Drivetrain.getInstance().setRightWheelSpeed(TURN_SPEED_RPM);
-		if(Gyro.getInstance().getAngle() > targetAngle || elapsedTime > TIMEOUT_S) {
+		if(Gyro.getInstance().getAngle() < targetAngle || elapsedTime > TIMEOUT_S) {
 			weAreDone = true;
 			Drivetrain.getInstance().setLeftWheelSpeed(0);
 			Drivetrain.getInstance().setRightWheelSpeed(0);
