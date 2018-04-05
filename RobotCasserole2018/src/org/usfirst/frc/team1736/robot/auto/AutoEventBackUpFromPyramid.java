@@ -13,7 +13,7 @@ public class AutoEventBackUpFromPyramid extends AutoEvent {
 
 	private final double[][] waypoints = new double[][] {
 		{0,0},
-		{0,-65}
+		{0,-60}
 	};
 	
 	private final double time = 2.0;
