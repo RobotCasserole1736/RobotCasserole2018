@@ -86,7 +86,7 @@ public class ElevatorCtrl {
 		SwitchPosCal = new Calibration("Elev Switch position (in)", 25.0, 0.0,84.0);
 		ScaleDownPosCal = new Calibration("Elev Scale down Position (in)", 58.0, 0.0, 84.0);
 		ScaleBalancedPosCal = new Calibration("Elev Scale balanced postion (in)", 64.0, 0.0, 84.0);
-		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 64.0, 0.0, 84.0);
+		ScaleUpPosCal = new Calibration ("Elev Scale up position (in)", 66.0, 0.0, 84.0);
 		ExchangePosCal = new Calibration("Elev Exchange position (in)", 4.0, 0.0, 84.0);
 		AutoPilePosCal = new Calibration("Elev Auton Pile  position (in)", 10.0, 0.0, 84.0);
 		UpMotorCmdCal = new Calibration("Elev Closed-Loop up speed (cmd)", 1.0, 0.0, 1.0);
