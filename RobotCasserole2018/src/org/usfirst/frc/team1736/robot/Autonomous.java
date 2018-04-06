@@ -405,7 +405,7 @@ public class Autonomous {
 				
 				//Reapeating events
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
 				parent = new AutoEventDriveToCubePyramid();
@@ -421,7 +421,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				break;
 				
@@ -435,7 +435,7 @@ public class Autonomous {
 				
 				//Reapeating events
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
 				parent = new AutoEventDriveToCubePyramid();
@@ -451,7 +451,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				break;
 			case DO_NOTHING: //Do nothing
