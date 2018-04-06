@@ -402,53 +402,36 @@ public class Autonomous {
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				
-				//Repeating events
+				
+				//Reapeating events
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.BOTTOM));
+				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
 				parent = new AutoEventDriveToCubePyramid();
 				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
+				parent = new AutoEventTurn45DegreesLeft();
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.EXCHANGE));
+				AutoSequencer.addEvent(parent);
 				parent = new AutoEventDrive50Inches();
 				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
+				
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.BOTTOM));
+				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
-				parent = new AutoEventDriveToCubePyramid();
-				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
-				parent = new AutoEventDrive50Inches();
-				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventEjectCube());
-				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.BOTTOM));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
-				parent = new AutoEventDriveToCubePyramid();
-				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
-				parent = new AutoEventDrive50Inches();
-				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
+				
 			case TWO_CUBE_RIGHT_FROM_CENTER:	
 				parent = new AutoEventSwitchRight_Center();
 				parent.addChildEvent(new AutoEventLowerElbow());
 				parent.addChildEvent(new AutoEventMoveElevator(0.25, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
+				
 				
 				//Reapeating events
 				parent = new AutoEventBackupFromSwitch();
@@ -459,37 +442,17 @@ public class Autonomous {
 				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
+				parent = new AutoEventTurn45DegreesRight();
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.EXCHANGE));
+				AutoSequencer.addEvent(parent);
 				parent = new AutoEventDrive50Inches();
 				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
+				
 				parent = new AutoEventBackupFromSwitch();
 				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
-				parent = new AutoEventDriveToCubePyramid();
-				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
-				parent = new AutoEventDrive50Inches();
-				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventEjectCube());
-				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(1.0, ElevatorIndex.BOTTOM));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
-				parent = new AutoEventDriveToCubePyramid();
-				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
-				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
-				parent = new AutoEventDrive50Inches();
-				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
-				AutoSequencer.addEvent(parent);
-				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 			case DO_NOTHING: //Do nothing
 				break;

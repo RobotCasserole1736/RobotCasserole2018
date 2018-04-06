@@ -15,7 +15,7 @@ public class AutoEventDriveToCubePyramid extends AutoEvent {
 
 	private final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 85}
+		{0, 65}
 	};
 	
 	public static final double time = 3.0;
