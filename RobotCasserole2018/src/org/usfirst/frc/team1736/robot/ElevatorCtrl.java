@@ -159,11 +159,20 @@ public class ElevatorCtrl {
 			//Continuous mode - used whenever the driver wants control, or the encoder has not yet been zeroed.
 			
 			//Open Loop control - Operator commands motor directly
-			curMotorCmd = continuousModeCmd;
+			if(actualHeight <= 5.0 && continuousModeCmd < 0.0) {
+				//If we're close to the bottom, slow down to prevent overshoot
+				curMotorCmd = 0.5*continuousModeCmd;
+			} else {
+				curMotorCmd = continuousModeCmd;
+			}
 			
-			//Keep the desired height at the actual height
+			//Keep the desired height at the actual height, but not below 0.
 			IndexDesired = ElevatorIndex.NON_INDEXED_POS;
-			desiredHeight = actualHeight;
+			if(actualHeight >= 0.0) {
+				desiredHeight = actualHeight;
+			} else {
+				desiredHeight = 0;
+			}
 
 		} else {
 			
