@@ -16,7 +16,7 @@ public class AutoEventBackUpFromPyramid extends AutoEvent {
 		{0,-55}
 	};
 	
-	private final double time = 2.0;
+	private final double time = 1.0;
 
 	public AutoEventBackUpFromPyramid() {
 		driveBackward = new PathPlannerAutoEvent(waypoints, time, true, 0.2, 0.5, 0.001, 0.9);

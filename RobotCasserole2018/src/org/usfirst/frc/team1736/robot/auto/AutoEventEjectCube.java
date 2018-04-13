@@ -13,7 +13,7 @@ public class AutoEventEjectCube extends AutoEvent {
 	private double elapsedTime = 0.0;
 	boolean weAreDone = false;
 	
-	final double DURATION_S = 1.0;
+	final double DURATION_S = 0.75;
 	
 
 	@Override

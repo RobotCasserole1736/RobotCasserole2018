@@ -79,6 +79,8 @@ public class Robot extends TimedRobot {
 	double loopPrevStartTime_s = 0;
 	double loopExecTime_ms = 20; //starting guess
 	double loopPeriod_ms = 20; //starting guess
+	
+	CasseroleAutoTimer autoTimer;
 
 
 	//Hook the constructor to catch the overall class construction event.
@@ -136,6 +138,8 @@ public class Robot extends TimedRobot {
 		initDriverView();
 		initRTPlot();
 		initLoggingChannels();
+		
+		autoTimer = new CasseroleAutoTimer();
 
 	}
 	
@@ -227,6 +231,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		autoTimer.timeStart();		
 		try {
 			CrashTracker.logAutoInit();	
 			CrashTracker.logMatchInfo();
@@ -262,6 +267,7 @@ public class Robot extends TimedRobot {
 		loopPrevStartTime_s = loopStartTime_s;
 		loopStartTime_s = Timer.getFPGATimestamp();
 		loopPeriod_ms = (loopStartTime_s - loopPrevStartTime_s)*1000;
+		
 		
 		try {
 			//Log a new periodic loop
@@ -564,6 +570,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addNewSignal("Auto_Timestep", "step");
 		CasseroleWebPlots.addNewSignal("Auto_Left_Vel", "FtpSec");
 		CasseroleWebPlots.addNewSignal("Auto_Right_Vel", "FtpSec");
+		CasseroleWebPlots.addNewSignal("Time", "sec");
 	}
 	
 	
@@ -598,6 +605,7 @@ public class Robot extends TimedRobot {
 		CasseroleWebPlots.addSample("Auto_Timestep", time, Drivetrain.getInstance().autoTimestamp);
 		CasseroleWebPlots.addSample("Auto_Left_Vel", time, Drivetrain.getInstance().leftAutoCmdFtPerSec);
 		CasseroleWebPlots.addSample("Auto_Right_Vel", time, Drivetrain.getInstance().rightAutoCmdFtPerSec);
+		CasseroleWebPlots.addSample("Time", time, autoTimer.elapsedTime());
 	}
 
 	

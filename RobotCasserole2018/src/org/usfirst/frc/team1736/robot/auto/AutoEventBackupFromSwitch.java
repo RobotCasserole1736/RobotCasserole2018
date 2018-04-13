@@ -15,7 +15,7 @@ public class AutoEventBackupFromSwitch extends AutoEvent {
 		{0,-50}
 	};
 	
-	private final double time = 1.5;
+	private final double time = 1.0;
 
 	public AutoEventBackupFromSwitch() {
 		driveBackward = new PathPlannerAutoEvent(waypoints, time, true, 0.2, 0.5, 0.001, 0.9);

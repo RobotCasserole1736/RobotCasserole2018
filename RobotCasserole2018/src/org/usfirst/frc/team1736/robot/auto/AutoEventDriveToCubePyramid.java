@@ -18,7 +18,7 @@ public class AutoEventDriveToCubePyramid extends AutoEvent {
 		{0, 50}
 	};
 	
-	public static final double time = 2.25;
+	public static final double time = 1.0;
 
 	public AutoEventDriveToCubePyramid() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);

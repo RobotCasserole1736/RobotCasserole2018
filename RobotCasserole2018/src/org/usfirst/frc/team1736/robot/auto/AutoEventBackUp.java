@@ -21,7 +21,7 @@ public class AutoEventBackUp extends AutoEvent {
 	}
 	
 	public AutoEventBackUp() {
-		time = 2.0; //default
+		time = 0.4; //default
 	}
 
 	@Override

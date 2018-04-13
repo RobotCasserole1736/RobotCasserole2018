@@ -419,8 +419,24 @@ public class Autonomous {
 				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
-				
+				// 2nd
 				parent = new AutoEventBackupFromSwitch();
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.AUTO_PILE));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
+				parent = new AutoEventDriveToCubePyramid();
+				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
+				parent = new AutoEventTurn45DegreesLeft();
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.AUTO_PILE));
+				AutoSequencer.addEvent(parent);
+				parent = new AutoEventDrive50Inches();
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				parent = new AutoEventBackupFromSwitch();
+				
 				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				break;
@@ -434,6 +450,22 @@ public class Autonomous {
 				
 				
 				//Reapeating events
+				parent = new AutoEventBackupFromSwitch();
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.AUTO_PILE));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
+				parent = new AutoEventDriveToCubePyramid();
+				parent.addChildEvent(new AutoEventIntakeCube(AutoEventDriveToCubePyramid.time));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
+				parent = new AutoEventTurn45DegreesRight();
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.AUTO_PILE));
+				AutoSequencer.addEvent(parent);
+				parent = new AutoEventDrive50Inches();
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
+				AutoSequencer.addEvent(parent);
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				//2nd
 				parent = new AutoEventBackupFromSwitch();
 				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.AUTO_PILE));
 				AutoSequencer.addEvent(parent);

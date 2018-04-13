@@ -15,7 +15,7 @@ public class AutoEventTurn45DegreesLeft extends AutoEvent {
 	private double elapsedTime = 0.0;
 	
 	final double TURN_SPEED_RPM = 100;
-	final double TIMEOUT_S = 5.0;
+	final double TIMEOUT_S = 0.5;
 	
 	@Override
 	public void userStart() {

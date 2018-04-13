@@ -16,7 +16,7 @@ public class AutoEventDrive50Inches extends AutoEvent {
 		{0, 50}
 	};
 	
-	private final double time = 2.5;
+	private final double time = 1.0;
 
 	public AutoEventDrive50Inches() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);
