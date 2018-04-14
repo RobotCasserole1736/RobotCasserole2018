@@ -15,6 +15,9 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventIntakeCube;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLeftScaleToLeftSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventLowerElbow;
 import org.usfirst.frc.team1736.robot.auto.AutoEventMoveElevator;
+import org.usfirst.frc.team1736.robot.auto.AutoEventMoveForward20;
+import org.usfirst.frc.team1736.robot.auto.AutoEventMoveForward228;
+import org.usfirst.frc.team1736.robot.auto.AutoEventMoveForward240;
 import org.usfirst.frc.team1736.robot.auto.AutoEventRightScaleToRightSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventScaleRight;
@@ -46,7 +49,8 @@ public class Autonomous {
 			                                                  "Do Nothing", 
 			                                                  "TEST MODE 1", 
 			                                                  "TEST MODE 2",
-			                                                  "Two Cube"};
+			                                                  "Two Cube",
+			                                                  "Crossover"};
 	
 	public static final String[] START_POS_MODES = new String[]{"Left", 
 			                                                    "Center", 
@@ -101,6 +105,8 @@ public class Autonomous {
 				
 				if(FieldSetupString.getInstance().left_Scale_Owned) {
 					mode = AutoModes.LEFT_SCALE_FROM_LEFT;
+				} else if (FieldSetupString.getInstance().right_Scale_Owned) {	
+					mode = AutoModes.SCALE_CROSSOVER_LEFT;					
 				} else if (FieldSetupString.getInstance().left_Switch_Owned) {
 					mode = AutoModes.LEFT_SWITCH_FROM_LEFT;
 				} else {
@@ -121,6 +127,8 @@ public class Autonomous {
 				
 				if(FieldSetupString.getInstance().right_Scale_Owned) {
 					mode = AutoModes.RIGHT_SCALE_FROM_RIGHT;
+				} else if(FieldSetupString.getInstance().left_Scale_Owned) {
+					mode = AutoModes.SCALE_CROSSOVER_RIGHT;
 				} else if (FieldSetupString.getInstance().right_Switch_Owned) {
 					mode = AutoModes.RIGHT_SWITCH_FROM_RIGHT;
 				} else {
@@ -142,6 +150,9 @@ public class Autonomous {
 				} else if(FieldSetupString.getInstance().left_Scale_Owned) {
 					mode = AutoModes.LEFT_SCALE_FROM_LEFT;
 				
+				} else if (FieldSetupString.getInstance().right_Scale_Owned) {	
+					mode = AutoModes.SCALE_CROSSOVER_LEFT;
+					
 				} else {
 					mode = AutoModes.CROSS_BASELINE; 
 				}
@@ -212,6 +223,8 @@ public class Autonomous {
 				
 				if(FieldSetupString.getInstance().left_Scale_Owned) {
 					mode = AutoModes.LEFT_SCALE_FROM_LEFT;
+				} else if (FieldSetupString.getInstance().right_Scale_Owned) {	
+					mode = AutoModes.SCALE_CROSSOVER_LEFT;					
 				} else {
 					mode = AutoModes.CROSS_BASELINE; //On left but do not own scale
 				}
@@ -224,12 +237,21 @@ public class Autonomous {
 				
 				if(FieldSetupString.getInstance().right_Scale_Owned) {
 					mode = AutoModes.RIGHT_SCALE_FROM_RIGHT;
+				} else if (FieldSetupString.getInstance().right_Switch_Owned) {
+					mode = AutoModes.RIGHT_SWITCH_FROM_RIGHT;
 				} else {
 					mode = AutoModes.CROSS_BASELINE; //On right but do not own scale
 				}
 			
 			}
-
+		// crossover modes only	
+		}else if(action.compareTo(ACTION_MODES[8])==0) {
+			if(FieldSetupString.getInstance().right_Scale_Owned) {
+				mode = AutoModes.SCALE_CROSSOVER_LEFT;
+			} else if (FieldSetupString.getInstance().left_Scale_Owned) {
+				mode = AutoModes.SCALE_CROSSOVER_RIGHT;
+			}
+			
 		//Drive Forward Only Modes
 		}else if(action.compareTo(ACTION_MODES[3])==0) { 
 			if(startPos.compareTo(START_POS_MODES[1])==0) {
@@ -485,6 +507,31 @@ public class Autonomous {
 				parent = new AutoEventBackupFromSwitch();
 				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
+				break;
+				
+			case SCALE_CROSSOVER_LEFT:
+				parent = new AutoEventMoveForward228();
+				parent.addChildEvent(new AutoEventLowerElbow());
+				AutoSequencer.addEvent(new AutoEventTurn90DegreesLeft());
+				AutoSequencer.addEvent(new AutoEventMoveForward240());
+				AutoSequencer.addEvent(new AutoEventTurn90DegreesRight());
+				parent = new AutoEventDrive50Inches();
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
+				AutoSequencer.addEvent(new AutoEventMoveForward20());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
+				break;
+			case SCALE_CROSSOVER_RIGHT:
+				parent = new AutoEventMoveForward228();
+				parent.addChildEvent(new AutoEventLowerElbow());
+				AutoSequencer.addEvent(new AutoEventTurn90DegreesRight());
+				AutoSequencer.addEvent(new AutoEventMoveForward240());
+				AutoSequencer.addEvent(new AutoEventTurn90DegreesLeft());
+				parent = new AutoEventDrive50Inches();
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
+				AutoSequencer.addEvent(new AutoEventMoveForward20());
+				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
 			case DO_NOTHING: //Do nothing
 				break;
