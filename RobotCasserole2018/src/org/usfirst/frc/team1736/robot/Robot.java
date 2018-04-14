@@ -36,6 +36,7 @@ import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
+import org.usfirst.frc.team1736.robot.LEDSequencer.LEDSwitchCase;
 
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
@@ -107,7 +108,7 @@ public class Robot extends TimedRobot {
 		IntakeControl.getInstance();
 		GravityIndicator.getInstance();
 		Gyro.getInstance();
-		
+		//LEDSequencer.getInstance();
 		
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
@@ -150,7 +151,7 @@ public class Robot extends TimedRobot {
 			//Ensure Auto is not running
 			auto.stop();
 			
-			
+			LEDSequencer.(LEDSwitchCase.FIRE);	
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
