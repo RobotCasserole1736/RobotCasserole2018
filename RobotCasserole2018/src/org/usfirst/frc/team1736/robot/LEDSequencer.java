@@ -58,7 +58,7 @@ public class LEDSequencer {
 
 	private LEDSequencer() {
 		CrashTracker.logClassInitStart(this.getClass());
-		//Easy peasy check to see if weshould be running an actual strip or a fake strip
+		//Easy peasy check to see if we should be running an actual strip or a fake strip
 		desktop_sim = System.getProperty("os.name").contains("Windows");
 		
 		if(desktop_sim) {
