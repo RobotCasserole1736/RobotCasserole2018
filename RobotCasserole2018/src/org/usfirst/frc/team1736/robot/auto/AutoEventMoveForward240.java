@@ -12,7 +12,7 @@ PathPlannerAutoEvent driveForward;
 		{0, 240}
 	};
 	
-	private final double time = 2.5;
+	private final double time = 3.0;
 	
 	public AutoEventMoveForward240() {
 		driveForward = new PathPlannerAutoEvent(waypoints, time);

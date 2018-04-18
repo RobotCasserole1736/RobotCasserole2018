@@ -512,11 +512,13 @@ public class Autonomous {
 			case SCALE_CROSSOVER_LEFT:
 				parent = new AutoEventMoveForward228();
 				parent.addChildEvent(new AutoEventLowerElbow());
+				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventTurn90DegreesLeft());
 				AutoSequencer.addEvent(new AutoEventMoveForward240());
 				AutoSequencer.addEvent(new AutoEventTurn90DegreesRight());
 				parent = new AutoEventDrive50Inches();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				AutoSequencer.addEvent(parent);
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_UP));
 				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
 				AutoSequencer.addEvent(new AutoEventMoveForward20());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
@@ -524,11 +526,13 @@ public class Autonomous {
 			case SCALE_CROSSOVER_RIGHT:
 				parent = new AutoEventMoveForward228();
 				parent.addChildEvent(new AutoEventLowerElbow());
+				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventTurn90DegreesRight());
 				AutoSequencer.addEvent(new AutoEventMoveForward240());
 				AutoSequencer.addEvent(new AutoEventTurn90DegreesLeft());
 				parent = new AutoEventDrive50Inches();
-				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_BALANCED));
+				AutoSequencer.addEvent(parent);
+				parent.addChildEvent(new AutoEventMoveElevator(3.0, ElevatorIndex.SCALE_UP));
 				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
 				AutoSequencer.addEvent(new AutoEventMoveForward20());
 				AutoSequencer.addEvent(new AutoEventEjectCube());

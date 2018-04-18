@@ -9,7 +9,7 @@ PathPlannerAutoEvent driveForward;
 	
 	private final double[][] waypoints = new double[][] {
 		{0, 0},
-		{0, 240}
+		{0, 20}
 	};
 	
 	private final double time = 1.0;
