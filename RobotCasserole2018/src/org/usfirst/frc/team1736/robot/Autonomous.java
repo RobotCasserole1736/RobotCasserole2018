@@ -443,7 +443,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				// 2nd
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.AUTO_PILE));
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventTurn45DegreesRight());
 				parent = new AutoEventDriveToCubePyramid();
@@ -451,7 +451,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
 				parent = new AutoEventTurn45DegreesLeft();
-				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.AUTO_PILE));
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				parent = new AutoEventDrive50Inches();
 				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
@@ -489,7 +489,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				//2nd
 				parent = new AutoEventBackupFromSwitch();
-				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.AUTO_PILE));
+				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventTurn45DegreesLeft());
 				parent = new AutoEventDriveToCubePyramid();
@@ -497,7 +497,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventBackUpFromPyramid());
 				parent = new AutoEventTurn45DegreesRight();
-				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.AUTO_PILE));
+				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				parent = new AutoEventDrive50Inches();
 				parent.addChildEvent(new AutoEventMoveElevator(0.0, ElevatorIndex.SWITCH));
