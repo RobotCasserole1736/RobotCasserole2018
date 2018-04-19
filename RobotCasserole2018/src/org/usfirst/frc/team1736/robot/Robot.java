@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
 			//Ensure Auto is not running
 			auto.stop();
 			
-			LEDSequencer.(LEDSwitchCase.FIRE);	
+			LEDSequencer.particle();	
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -326,6 +326,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		LEDSequencer.getInstance().pickFirePattern();
 	}
 	
 
