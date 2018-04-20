@@ -27,10 +27,10 @@ import java.util.TimerTask;
 import javax.swing.JFrame;
 
 import org.usfirst.frc.team1736.lib.LEDs.CasseroleLEDInterface;
+import org.usfirst.frc.team1736.lib.LEDs.Color;
 import org.usfirst.frc.team1736.lib.LEDs.DesktopTestLEDs;
 import org.usfirst.frc.team1736.lib.LEDs.DotStarsLEDStrip;
 import org.usfirst.frc.team1736.lib.LEDs.Particle;
-import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 
 public class LEDSequencer {
@@ -57,8 +57,7 @@ public class LEDSequencer {
 	}
 
 	private LEDSequencer() {
-		CrashTracker.logClassInitStart(this.getClass());
-		//Easy peasy check to see if we should be running an actual strip or a fake strip
+		//Easy peasy check to see if weshould be running an actual strip or a fake strip
 		desktop_sim = System.getProperty("os.name").contains("Windows");
 		
 		if(desktop_sim) {
@@ -76,11 +75,22 @@ public class LEDSequencer {
 		timerThread = new java.util.Timer("LED Sequencer Update");
 		timerThread.schedule(new LEDBackgroundUpdateTask(this), (long) (CasseroleLEDInterface.m_update_period_ms), (long) (CasseroleLEDInterface.m_update_period_ms));
 
-		for(int i = 0; i < particles.length; i++) {
-			particles [i] = new Particle();
-		}		
+		for(int i = 0; i < particlesL1.length; i++) {
+			particlesL1 [i] = new Particle(1);
+		}
 		
-		CrashTracker.logClassInitEnd(this.getClass());
+		for(int i = 0; i < particlesL2.length; i++) {
+			particlesL2 [i] = new Particle(2);
+		}		
+
+		for(int i = 0; i < particlesL3.length; i++) {
+			particlesL3 [i] = new Particle(3);
+		}		
+
+		for(int i = 0; i < particlesL4.length; i++) {
+			particlesL4 [i] = new Particle(4);
+		}		
+
 
 	}
 
@@ -464,32 +474,56 @@ public class LEDSequencer {
 			ledstrip.setLEDColor(led_idx, 0.1, 1, not_green_comp);
 		}
 	}
-
-	Particle[] particles = new Particle[4]; 
-	private void fire() {
-		
+	final int numL1Particles = 5;
+	Particle[] particlesL1 = new Particle[numL1Particles];
+	final int numL2Particles = 5;
+	Particle[] particlesL2 = new Particle[numL2Particles];
+	final int numL3Particles = 4;
+	Particle[] particlesL3 = new Particle[numL3Particles];
+	final int numL4Particles = 4;
+	Particle[] particlesL4 = new Particle[numL4Particles];
 	
-			for(int i = 0; i < particles.length; i++) {
-				particles [i].move();		
+	private void fire() {
+		int H_Value = 0;
+		int S_Value = 1;
+		int Brightness = 0;
+		double bright = 0;
+		
+		
+			for(int i = 0; i < particlesL1.length; i++) {
+				particlesL1 [i].move();		
 			}
+			for(int i = 0; i < particlesL2.length; i++) {
+				particlesL2 [i].move();		
+			}
+			for(int i = 0; i < particlesL3.length; i++) {
+				particlesL3 [i].move();		
+			}
+			for(int i = 0; i < particlesL4.length; i++) {
+				particlesL4 [i].move();		
+			}
+		int n = 0;
 			for(int led_idx = 0; led_idx < RobotConstants.NUM_LEDS_TOTAL / 2; led_idx++) {
-				double bright = 0;
+				Color led_color = new Color();
+				led_color.setLevel(0);
 				
-				for(int part_idx = 0; part_idx < particles.length; part_idx++) {
-					bright += particles[part_idx].colorAt(led_idx);
+				for(int i = 0; i < particlesL1.length; i ++) {
+					led_color.addToMe(particlesL1[i].ColorAt(led_idx));				
+				}
+				for(int i = 0; i < particlesL2.length; i ++) {
+					led_color.addToMe(particlesL2[i].ColorAt(led_idx));				
+				}
+				for(int i = 0; i < particlesL3.length; i ++) {
+					led_color.addToMe(particlesL3[i].ColorAt(led_idx));				
+				}
+				for(int i = 0; i < particlesL4.length; i ++) {
+					led_color.addToMe(particlesL4[i].ColorAt(led_idx));				
 				}
 				
-				ledstrip.setLEDColor(led_idx, bright, bright, bright);
+				ledstrip.setLEDColorHSL(led_idx, led_color.getH_Value(), led_color.getS_Value(), led_color.getL_Value());
 				
 				
-			}			
-		
-
-		
-		
-		
-		
-		
+			}					
 	}
 
 
@@ -525,12 +559,6 @@ public class LEDSequencer {
 	public void pickRandomPattern() {
 		// cur_pattern = LEDSwitchCase.values()[(int)(Math.random()*((double)(LEDSwitchCase.values().length)))];
 		cur_pattern = LEDSwitchCase.SMOOTH_SWEEP;
-	}
-	public void pickFirePattern() {
-		cur_pattern = LEDSwitchCase.FIRE;
-	}
-	public void getOFF () {
-		cur_pattern = LEDSwitchCase.OFF;
 	}
 
 	// Java multithreading magic. Do not touch.
