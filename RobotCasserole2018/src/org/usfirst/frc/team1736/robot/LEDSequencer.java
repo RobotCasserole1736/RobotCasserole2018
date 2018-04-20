@@ -560,7 +560,13 @@ public class LEDSequencer {
 		// cur_pattern = LEDSwitchCase.values()[(int)(Math.random()*((double)(LEDSwitchCase.values().length)))];
 		cur_pattern = LEDSwitchCase.SMOOTH_SWEEP;
 	}
+	public void getOff () {
+		cur_pattern = LEDSwitchCase.OFF;
+	}
 
+	public void pickFire () {
+		cur_pattern = LEDSwitchCase.FIRE;
+	}
 	// Java multithreading magic. Do not touch.
 	// Touching will incour the wrath of Cthulhu, god of java and LED Strips.
 	// May the oceans of 1's and 0's rise to praise him.

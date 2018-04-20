@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
 			//Ensure Auto is not running
 			auto.stop();
 			
-			LEDSequencer.getInstance().getOFF();	
+			LEDSequencer.getInstance().getOff();	
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -244,7 +244,7 @@ public class Robot extends TimedRobot {
 			auto.start();
 			
 			//Start the LEDS
-			LEDSequencer.getInstance().pickFirePattern();
+			LEDSequencer.getInstance().pickFire();
 			
 			//Start up a new data log
 			CsvLogger.init();
@@ -329,7 +329,7 @@ public class Robot extends TimedRobot {
 			CsvLogger.init();
 			
 			//Start some LEDS
-			LEDSequencer.getInstance().pickFirePattern();
+			LEDSequencer.getInstance().pickFire();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
