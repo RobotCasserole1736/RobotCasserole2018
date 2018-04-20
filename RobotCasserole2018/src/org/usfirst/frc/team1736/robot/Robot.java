@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
 		IntakeControl.getInstance();
 		GravityIndicator.getInstance();
 		Gyro.getInstance();
-		//LEDSequencer.getInstance();
+		LEDSequencer.getInstance();
 		
 		//Init physical robot devices
 		pdp = new PowerDistributionPanel(0);
@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
 			//Ensure Auto is not running
 			auto.stop();
 			
-			LEDSequencer.particle();	
+			LEDSequencer.getInstance().getOFF();	
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -243,6 +243,8 @@ public class Robot extends TimedRobot {
 			auto.calculatePaths();
 			auto.start();
 			
+			//Start the LEDS
+			LEDSequencer.getInstance().pickFirePattern();
 			
 			//Start up a new data log
 			CsvLogger.init();
@@ -251,6 +253,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		
 	}
 
 	/**
@@ -293,6 +296,9 @@ public class Robot extends TimedRobot {
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
+			
+			//Update LEDS
+			LEDSequencer.getInstance().update();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -321,12 +327,15 @@ public class Robot extends TimedRobot {
 			
 			//Start up a new data log
 			CsvLogger.init();
+			
+			//Start some LEDS
+			LEDSequencer.getInstance().pickFirePattern();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
-		LEDSequencer.getInstance().pickFirePattern();
+		
 	}
 	
 
@@ -385,6 +394,9 @@ public class Robot extends TimedRobot {
 			updateWebStates();
 			updateRTPlot();
 			CsvLogger.logData(true);
+			
+			//update LEDS
+			LEDSequencer.getInstance().update();
 		}
 		catch(Throwable t) {
 			CrashTracker.logThrowableCrash(t);
