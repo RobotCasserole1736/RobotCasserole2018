@@ -7,16 +7,16 @@ import org.usfirst.frc.team1736.robot.Gyro;
 import edu.wpi.first.wpilibj.Timer;
 
 public class AutoEventTurn90DegreesRight extends AutoEvent {
-	
+
 	private double targetAngle;
 	private boolean weAreDone;
 	private double currentTime = 0.0;
 	private double startTime = 0.0;
 	private double elapsedTime = 0.0;
-	
+
 	final double TURN_SPEED_RPM = 100;
 	final double TIMEOUT_S = 1.0;
-	
+
 	@Override
 	public void userStart() {
 		// get gyro
@@ -26,20 +26,20 @@ public class AutoEventTurn90DegreesRight extends AutoEvent {
 
 	@Override
 	public void userUpdate() {
-		//100 rpm to left
-		//-110 rpm to right
-		//is done = gyro read
+		// 100 rpm to left
+		// -110 rpm to right
+		// is done = gyro read
 		// gyro greater than target
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
 		Drivetrain.getInstance().disableHeadingCmd();
 		Drivetrain.getInstance().setLeftWheelSpeed(TURN_SPEED_RPM);
 		Drivetrain.getInstance().setRightWheelSpeed(-1 * TURN_SPEED_RPM);
-		if(Gyro.getInstance().getAngle() < targetAngle || elapsedTime > TIMEOUT_S) {
+		if (Gyro.getInstance().getAngle() < targetAngle || elapsedTime > TIMEOUT_S) {
 			weAreDone = true;
 			Drivetrain.getInstance().setLeftWheelSpeed(0);
 			Drivetrain.getInstance().setRightWheelSpeed(0);
-		}else {
+		} else {
 			weAreDone = false;
 		}
 	}
@@ -47,7 +47,6 @@ public class AutoEventTurn90DegreesRight extends AutoEvent {
 	@Override
 	public void userForceStop() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -61,5 +60,4 @@ public class AutoEventTurn90DegreesRight extends AutoEvent {
 		// TODO Auto-generated method stub
 		return weAreDone;
 	}
-
 }

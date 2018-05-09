@@ -9,24 +9,23 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class AutoEventBackUp extends AutoEvent {
 	PathPlannerAutoEvent driveBackward;
-	
+
 	double startTime;
-	
-	private  double time = 2.0;
+
+	private double time = 2.0;
 	boolean weAreDone = false;
 
 	public AutoEventBackUp(double duration_in) {
 		time = duration_in;
-		
 	}
-	
+
 	public AutoEventBackUp() {
-		time = 0.4; //default
+		time = 0.4; // default
 	}
 
 	@Override
 	public void userUpdate() {
-		if(Timer.getFPGATimestamp() - startTime < time) {
+		if (Timer.getFPGATimestamp() - startTime < time) {
 			Drivetrain.getInstance().setLeftWheelSpeed(-50);
 			Drivetrain.getInstance().setRightWheelSpeed(-50);
 			Drivetrain.getInstance().disableHeadingCmd();
@@ -36,15 +35,12 @@ public class AutoEventBackUp extends AutoEvent {
 			Drivetrain.getInstance().setRotateCommand(0);
 			weAreDone = true;
 		}
-		
-		
 	}
 
 	@Override
 	public void userForceStop() {
 		Drivetrain.getInstance().setForwardReverseCommand(0);
 		Drivetrain.getInstance().setRotateCommand(0);
-		
 	}
 
 	@Override
@@ -56,13 +52,10 @@ public class AutoEventBackUp extends AutoEvent {
 	public boolean isDone() {
 		return weAreDone;
 	}
-	
 
 	@Override
 	public void userStart() {
 		startTime = Timer.getFPGATimestamp();
 		weAreDone = false;
-		
 	}
-
 }

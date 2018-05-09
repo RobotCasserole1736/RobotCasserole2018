@@ -10,14 +10,9 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 public class AutoEventTest1Reversed extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private final double[][] waypoints = new double[][] {
-		{0,0},
-		{-6,-12},
-		{-18,-36},
-		{-18,-276}
-
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { -6, -12 }, { -18, -36 }, { -18, -276 }
 	};
-	
+
 	private final double time = 5.0;
 
 	public AutoEventTest1Reversed() {
@@ -49,7 +44,8 @@ public class AutoEventTest1Reversed extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-    public static void main(String[] args) {
+
+	public static void main(String[] args) {
 		AutoEventTest1Reversed autoEvent = new AutoEventTest1Reversed();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
 	}

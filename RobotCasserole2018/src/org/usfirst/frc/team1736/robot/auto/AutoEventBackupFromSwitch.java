@@ -10,11 +10,8 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 public class AutoEventBackupFromSwitch extends AutoEvent {
 	PathPlannerAutoEvent driveBackward;
 
-	private final double[][] waypoints = new double[][] {
-		{0,0},
-		{0,-50}
-	};
-	
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { 0, -50 } };
+
 	private final double time = 1.0;
 
 	public AutoEventBackupFromSwitch() {
@@ -46,8 +43,9 @@ public class AutoEventBackupFromSwitch extends AutoEvent {
 	public void userStart() {
 		driveBackward.userStart();
 	}
-    public static void main(String[] args) {
-    	AutoEventBackupFromSwitch autoEvent = new AutoEventBackupFromSwitch();
+
+	public static void main(String[] args) {
+		AutoEventBackupFromSwitch autoEvent = new AutoEventBackupFromSwitch();
 		FalconPathPlanner.plotPath(autoEvent.driveBackward.path);
 	}
 }

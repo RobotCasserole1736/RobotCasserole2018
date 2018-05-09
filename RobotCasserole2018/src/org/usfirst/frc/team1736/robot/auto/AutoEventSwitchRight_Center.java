@@ -10,15 +10,9 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 public class AutoEventSwitchRight_Center extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private final double[][] waypoints = new double[][] {
-		{0, 0},
-		{0, 24},
-		{24, 50},
-		{36, 50},
-		{50, 88},
-		{50, 106}
-	};
-	
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { 0, 24 }, { 24, 50 }, { 36, 50 }, { 50, 88 },
+			{ 50, 106 } };
+
 	private final double time = 2.0;
 
 	public AutoEventSwitchRight_Center() {
@@ -50,7 +44,8 @@ public class AutoEventSwitchRight_Center extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-    public static void main(String[] args) {
+
+	public static void main(String[] args) {
 		AutoEventSwitchRight_Center autoEvent = new AutoEventSwitchRight_Center();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
 	}

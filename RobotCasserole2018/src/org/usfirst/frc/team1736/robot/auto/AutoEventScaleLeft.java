@@ -10,15 +10,9 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 public class AutoEventScaleLeft extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private final double[][] waypoints = new double[][] {
-		{0, 0},
-		{0, 100}, 
-		{0, 200}, 
-		{10, 220},
-		{25.0, 245}, 
-		{25.0, 258}
-	};
-	
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { 0, 100 }, { 0, 200 }, { 10, 220 }, { 25.0, 245 },
+			{ 25.0, 258 } };
+
 	private final double time = 10.0;
 
 	public AutoEventScaleLeft() {
@@ -30,6 +24,7 @@ public class AutoEventScaleLeft extends AutoEvent {
 		driveForward.userUpdate();
 		// shotCTRL.setDesiredShooterState(ShooterStates.PREP_TO_SHOOT);
 	}
+
 	@Override
 	public void userForceStop() {
 		driveForward.userForceStop();
@@ -49,7 +44,8 @@ public class AutoEventScaleLeft extends AutoEvent {
 	public void userStart() {
 		driveForward.userStart();
 	}
-    public static void main(String[] args) {
+
+	public static void main(String[] args) {
 		AutoEventScaleLeft autoEvent = new AutoEventScaleLeft();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
 	}

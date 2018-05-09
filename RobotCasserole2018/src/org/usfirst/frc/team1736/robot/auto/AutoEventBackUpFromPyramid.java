@@ -1,4 +1,4 @@
- package org.usfirst.frc.team1736.robot.auto;
+package org.usfirst.frc.team1736.robot.auto;
 
 import org.usfirst.frc.team1736.lib.AutoSequencer.AutoEvent;
 import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
@@ -11,11 +11,8 @@ import org.usfirst.frc.team1736.robot.Gyro;
 public class AutoEventBackUpFromPyramid extends AutoEvent {
 	PathPlannerAutoEvent driveBackward;
 
-	private final double[][] waypoints = new double[][] {
-		{0,0},
-		{0,-55}
-	};
-	
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { 0, -55 } };
+
 	private final double time = 1.0;
 
 	public AutoEventBackUpFromPyramid() {
@@ -48,8 +45,9 @@ public class AutoEventBackUpFromPyramid extends AutoEvent {
 		driveBackward.userStart();
 		driveBackward.setDesiredHeadingOverride(Gyro.getInstance().getAngle());
 	}
-    public static void main(String[] args) {
-    	AutoEventBackUpFromPyramid autoEvent = new AutoEventBackUpFromPyramid();
+
+	public static void main(String[] args) {
+		AutoEventBackUpFromPyramid autoEvent = new AutoEventBackUpFromPyramid();
 		FalconPathPlanner.plotPath(autoEvent.driveBackward.path);
 	}
 }

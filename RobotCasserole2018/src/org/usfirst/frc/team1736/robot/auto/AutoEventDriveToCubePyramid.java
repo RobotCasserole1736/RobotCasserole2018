@@ -5,19 +5,14 @@ import org.usfirst.frc.team1736.lib.PathPlanner.FalconPathPlanner;
 import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 import org.usfirst.frc.team1736.robot.Gyro;
 
-
-
 /**
  * drive straight and stuff.
  */
 public class AutoEventDriveToCubePyramid extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private final double[][] waypoints = new double[][] {
-		{0, 0},
-		{0, 50}
-	};
-	
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { 0, 50 } };
+
 	public static final double time = 1.0;
 
 	public AutoEventDriveToCubePyramid() {
@@ -49,10 +44,9 @@ public class AutoEventDriveToCubePyramid extends AutoEvent {
 		driveForward.userStart();
 		driveForward.setDesiredHeadingOverride(Gyro.getInstance().getAngle());
 	}
-	
-	
-    public static void main(String[] args) {
-    	AutoEventDriveToCubePyramid autoEvent = new AutoEventDriveToCubePyramid();
+
+	public static void main(String[] args) {
+		AutoEventDriveToCubePyramid autoEvent = new AutoEventDriveToCubePyramid();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
 		autoEvent = new AutoEventDriveToCubePyramid();
 		FalconPathPlanner.plotPath(autoEvent.driveForward.path);
