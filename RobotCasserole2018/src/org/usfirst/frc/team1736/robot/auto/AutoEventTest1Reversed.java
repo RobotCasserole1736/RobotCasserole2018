@@ -10,8 +10,7 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 public class AutoEventTest1Reversed extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private final double[][] waypoints = new double[][] { { 0, 0 }, { -6, -12 }, { -18, -36 }, { -18, -276 }
-	};
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { -6, -12 }, { -18, -36 }, { -18, -276 } };
 
 	private final double time = 5.0;
 

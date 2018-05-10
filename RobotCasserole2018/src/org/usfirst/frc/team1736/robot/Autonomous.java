@@ -40,7 +40,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventWait;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class Autonomous {
-	
+
 	public static final String[] ACTION_MODES = new String[] { "Anything", "Switch Only", "Scale Only",
 			"Drive Fwd Only", "Do Nothing", "TEST MODE 1", "TEST MODE 2", "Two Cube", "Crossover" };
 	public static final String[] START_POS_MODES = new String[] { "Left", "Center", "Right" };
@@ -58,7 +58,7 @@ public class Autonomous {
 		CrashTracker.logClassInitStart(this.getClass());
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
-	
+
 	public void updateAutoSelection() {
 		String startPos = CasseroleDriverView.getAutoSelectorVal("Start Position");
 		String action = CasseroleDriverView.getAutoSelectorVal("Action");
@@ -203,7 +203,7 @@ public class Autonomous {
 			} else {
 				mode = AutoModes.CROSS_BASELINE;
 			}
-			
+
 			// Do Nothing Mode
 		} else if (action.compareTo(ACTION_MODES[4]) == 0) {
 			mode = AutoModes.DO_NOTHING;
@@ -227,7 +227,7 @@ public class Autonomous {
 			CrashTracker.logGenericMessage(msg);
 			System.out.println(msg);
 			AutoSequencer.clearAllEvents();
-			
+
 			// Add wait event if needed
 			if (delayTime_s != 0.0) {
 				AutoSequencer.addEvent(new AutoEventWait(delayTime_s));
