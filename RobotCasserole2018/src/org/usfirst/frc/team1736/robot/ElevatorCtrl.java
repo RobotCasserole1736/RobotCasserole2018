@@ -52,7 +52,6 @@ public class ElevatorCtrl {
 	Calibration UpMotorCmdCal = null;
 	Calibration DownMotorCmdCal = null;
 	Calibration ElevCtrlDeadzoneCal = null;
-	
 	Calibration HoldCmd = null;
 
 	//Constants
@@ -62,9 +61,6 @@ public class ElevatorCtrl {
 	//Derived Constants
 	public final double ELEV_HEIGHT_IN_PER_WINCH_REV = 2*Math.PI*(ELEV_WINCH_DIAMETER_IN/2.0); //Linear rope distance is 2*pi*r_winch
 
-
-	
-	
 	public static synchronized ElevatorCtrl getInstance() {
 		if ( singularInstance == null)
 			singularInstance = new ElevatorCtrl();
@@ -94,9 +90,7 @@ public class ElevatorCtrl {
 		ElevCtrlDeadzoneCal = new Calibration("Elev Closed-Loop deadzone (in)", 1.0, 0.0, 20.0);
 		HoldCmd = new Calibration("Elev Hold cmd ", 0.05, 0.0, 1.0);
 		
-
 		CrashTracker.logClassInitEnd(this.getClass());
-
 		
 	}
 	
@@ -124,9 +118,6 @@ public class ElevatorCtrl {
 		actualHeight = -1*elevatorEncoder.get()* (1.0/ELEV_ENC_PULSES_PER_REV) * ELEV_HEIGHT_IN_PER_WINCH_REV;
 	}
 	
-	
-	
-	
 	public void update() {
 		//Check for zeroed condition
 		if(lowerTravelLimitReached != prevLowerTravelLimitReached) {
@@ -134,11 +125,9 @@ public class ElevatorCtrl {
 			elevatorEncoder.reset();
 			isZeroed = true;
 		}
-
 		if(isZeroed == false) {
 			//Uncalibrated mode - like continuous, but don't trust the encoder reading
-			
-			
+				
 			if(DriverStation.getInstance().isAutonomous()) {
 				//We're in auto and uncalibrated. Attempt an autocal.
 				if(lowerTravelLimitReached == true) {
@@ -166,14 +155,11 @@ public class ElevatorCtrl {
 			desiredHeight = actualHeight;
 
 		} else {
-			
 			//Indexed mode - the default case where the driver just presses buttons.
 			if(opIndexDesired != ElevatorIndex.NO_NEW_SELECTION) {
 				IndexDesired = opIndexDesired;
 				desiredHeight = enumToDesiredHeight(IndexDesired);
 			}
-			
-			
 			
 			//Somewhat simple bang-bang control of elevator in closed loop
 			//But, we also want to slow down as we get close to the desired height
@@ -194,8 +180,7 @@ public class ElevatorCtrl {
 				} else {
 					//Not done, go fast
 					curMotorCmd = -1 * DownMotorCmdCal.get();
-				}
-				
+				}	
 			}
 		}
 		
@@ -213,7 +198,6 @@ public class ElevatorCtrl {
 			}
 		}
 
-		
 		if(lowerTravelLimitReached == true){
 			if(curMotorCmd <= 0) {
 				curMotorCmd = 0;
@@ -223,8 +207,7 @@ public class ElevatorCtrl {
 		//Actually output command to motors
 		motor1.set(curMotorCmd);
 	}
-	
-	
+		
 	//Returns true if we're too high to drive full speed.
 	//For now we're presuming that's basically any height above the switch
 	public boolean getHeightAboveDTLimit() {
@@ -248,7 +231,6 @@ public class ElevatorCtrl {
 		continuousModeCmd = cmd;
 	}
 
-	
 	public double getMotorCmd() {
 		return curMotorCmd;
 	}
@@ -353,12 +335,9 @@ public class ElevatorCtrl {
 			 mindist = tmp;
 			 returnValue =  ElevatorIndex.SCALE_UP;
 		}
-		 
-		 
+		 		 
 		return returnValue;
 	}
-	
-	
 	
 	// Public getters and setters
 	
@@ -386,6 +365,3 @@ public class ElevatorCtrl {
 		return (Math.abs(desiredHeight - actualHeight) < ElevCtrlDeadzoneCal.get());
 	}
 }
-
-	
-

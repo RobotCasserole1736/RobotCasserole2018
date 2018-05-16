@@ -60,10 +60,9 @@ public class Drivetrain {
 		return singularInstance;
 	}
 
-	
-	
 	private Drivetrain() {
 		CrashTracker.logClassInitStart(this.getClass());
+		// makes sure that we want to use real robot and not a sim robot
 		boolean useRealGearbox = true;
 		
 		if(useRealGearbox) {
@@ -87,7 +86,6 @@ public class Drivetrain {
 		leftCurrentEst = new MotorCurrentEstimator(2,  1, 1.0, 1.0);
 		rightCurrentEst = new MotorCurrentEstimator(2, 1, 1.0,  0.95);
 		
-		
 		bpe = new BatteryParamEstimator(BPE_length); 
 		bpe.setConfidenceThresh(BPE_confidenceThresh_A);
 		minAllowableVoltageCal = new Calibration("Min allowable system voltage", 8.0, 5.0, 12.0);
@@ -107,7 +105,7 @@ public class Drivetrain {
 		curRotCmd = command;
 		isClosedLoop = false;
 	}
-	
+	//setting speeds for wheels
 	public void setLeftWheelSpeed(double speed_RPM) {
 		curLeftSpeedCmd_RPM = speed_RPM/SPROCKET_RATIO;
 		isClosedLoop = true;
@@ -354,5 +352,4 @@ public class Drivetrain {
 		else
 			return false;
 	}
-	
 }

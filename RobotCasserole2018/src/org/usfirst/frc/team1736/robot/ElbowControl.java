@@ -57,30 +57,24 @@ public class ElbowControl {
 		
 	public void sampleSensors() {
 		//Read Potentiometer
-
 		if(upperLimitSwitch.get() == true) {
 			upperLimitReached = true;
 		} else {
 			upperLimitReached = false;
-		}
-		
-		
+		}		
 	}
 	
 	public void update() {
 		//Default to off
 		curMotorCmd = 0;
-
+		
 		//calculate motor command
 		if(upperLimitReached == false && curRaiseCmd == true) {
-			curMotorCmd = raiseSpeedCal.get(); 
-			
+			curMotorCmd = raiseSpeedCal.get(); 	
 		} else {
-		
 			if(curLowerCmd == true && prevLowerCmd == false) {
 				startTime = Timer.getFPGATimestamp();
 			}
-			
 			if(curLowerCmd == true) {
 				elapsedTime = Timer.getFPGATimestamp() - startTime;
 				if(elapsedTime < 0.25) {
@@ -90,15 +84,12 @@ public class ElbowControl {
 				}
 			} else {
 				curMotorCmd = 0;
-			}
-				
+			}			
 		}
 		
 		//Set the motor command to the motor
 		elbowMotor.set(curMotorCmd);
-		
 	}
-	
 	
 	//Public Getters and Setters
 	public void setRaiseDesired(boolean cmd) {
@@ -118,5 +109,4 @@ public class ElbowControl {
 		return curMotorCmd;
 		
 	}
-
 }

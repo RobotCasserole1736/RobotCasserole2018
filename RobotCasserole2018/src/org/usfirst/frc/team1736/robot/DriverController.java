@@ -34,7 +34,7 @@ public class DriverController {
 		}
 		return (Math.pow(driverLeftYValue,3));
 	}
-	
+	// getting command from Xbox
 	public double getDriverLeftRightCommand() {
 		double driverRightXValue = -1 * driveController.getX(Hand.kRight);
 		if(driveController.getTriggerAxis(Hand.kRight) > 0.5 || ElevatorCtrl.getInstance().getHeightAboveDTLimit()) {
@@ -62,5 +62,4 @@ public class DriverController {
 	public boolean getDriverEjectCmd() {
 		return driveController.getBumper(Hand.kLeft) && getDriverElbowRaiseCmd();
 	}
-	
 }

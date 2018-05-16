@@ -2,9 +2,7 @@ package org.usfirst.frc.team1736.robot;
 
 public interface Gearbox {
 	
-	
 	public abstract void updateCalibrations();
-	
 	
 	public abstract void setMotorSpeed(double speed_RPM);
 	
@@ -25,5 +23,4 @@ public interface Gearbox {
 	public abstract double getMotorCommand();
 	
 	public abstract void sampleSensors();
-
 }

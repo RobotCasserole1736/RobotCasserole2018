@@ -58,7 +58,7 @@ public class Autonomous {
 		CrashTracker.logClassInitStart(this.getClass());
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
-
+	
 	public void updateAutoSelection() {
 		String startPos = CasseroleDriverView.getAutoSelectorVal("Start Position");
 		String action = CasseroleDriverView.getAutoSelectorVal("Action");
@@ -218,7 +218,7 @@ public class Autonomous {
 		}
 
 	}
-
+	
 	public void calculatePaths() {
 		AutoEvent parent;
 		if ((mode != prevMode) || (delayTime_s != prevDelayTime_s)) {
