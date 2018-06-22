@@ -8,6 +8,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 
+// Top-level class for controlling the elevator height
+//  in an open-loop or closed-loop fashion. Arbitrates measurements from
+//  height encoder and two limit switches, allowing for travel past the lower 
+//  switch and using its trip point as a "calibration" of zero-height.
+//  Operators may provide inputs of an "indexed" or preset height, 
+//  or run the motor continuously to adjust the height manually.
+
 public class ElevatorCtrl {
 	private static ElevatorCtrl singularInstance = null;
 

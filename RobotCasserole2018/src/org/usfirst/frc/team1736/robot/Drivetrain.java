@@ -3,6 +3,11 @@ package org.usfirst.frc.team1736.robot;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
+// Top-level drivetrain class. 
+//  Contains all logic to control the motion of the drivetrain
+//  in an open-loop or closed-loop fashion. Includes current estimation & limiting,
+//  and gyro compensation logic.
+
 public class Drivetrain {
 	private static Drivetrain singularInstance = null;
 

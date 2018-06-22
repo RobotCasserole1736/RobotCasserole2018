@@ -30,6 +30,11 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventWait;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
+// Top-level class for autonomous
+// Contains functionality to define the available autonomous configurations,
+//  select an appropriate mode based on starting location and field setup,
+//  and init the scheduler with the proper set of routines 
+
 public class Autonomous {
 
 	public static final String[] ACTION_MODES = new String[] { "Anything", "Switch Only", "Scale Only",

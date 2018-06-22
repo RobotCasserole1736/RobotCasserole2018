@@ -6,6 +6,10 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
+// Wrapper class to interperet the xbox controller
+//  state into meaningful commands from the driver.
+// This is a great example of "abstraction"
+
 public class DriverController {
 	private static DriverController driveCtrl = null;
 
