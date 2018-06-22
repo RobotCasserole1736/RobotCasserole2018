@@ -6,34 +6,32 @@ import org.usfirst.frc.team1736.robot.IntakeControl;
 import edu.wpi.first.wpilibj.Timer;
 
 public class AutoEventEjectCube extends AutoEvent {
-	
-	
+
 	private double currentTime = 0.0;
 	private double startTime = 0.0;
 	private double elapsedTime = 0.0;
 	boolean weAreDone = false;
-	
+
 	final double DURATION_S = 1.0;
-	
 
 	@Override
 	public void userStart() {
 		startTime = Timer.getFPGATimestamp();
-		
+
 	}
 
 	@Override
 	public void userUpdate() {
 		currentTime = Timer.getFPGATimestamp();
 		elapsedTime = currentTime - startTime;
-		if(elapsedTime > DURATION_S) {
+		if (elapsedTime > DURATION_S) {
 			IntakeControl.getInstance().setEjectDesired(false);
 			weAreDone = true;
 		} else {
 			IntakeControl.getInstance().setEjectDesired(true);
 			weAreDone = false;
 		}
-		
+
 	}
 
 	@Override

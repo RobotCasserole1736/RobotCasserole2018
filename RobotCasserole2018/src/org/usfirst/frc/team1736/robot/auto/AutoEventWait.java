@@ -6,10 +6,10 @@ import org.usfirst.frc.team1736.robot.Drivetrain;
 import edu.wpi.first.wpilibj.Timer;
 
 public class AutoEventWait extends AutoEvent {
-	
+
 	double duration_s;
 	double endTime;
-	
+
 	public AutoEventWait(double duration_s_in) {
 		duration_s = duration_s_in;
 	}
@@ -17,21 +17,21 @@ public class AutoEventWait extends AutoEvent {
 	@Override
 	public void userStart() {
 		endTime = Timer.getFPGATimestamp() + duration_s;
-		
+
 	}
 
 	@Override
 	public void userUpdate() {
-    	Drivetrain.getInstance().setForwardReverseCommand(0);
-    	Drivetrain.getInstance().setRotateCommand(0);
-		
+		Drivetrain.getInstance().setForwardReverseCommand(0);
+		Drivetrain.getInstance().setRotateCommand(0);
+
 	}
 
 	@Override
 	public void userForceStop() {
-    	Drivetrain.getInstance().setForwardReverseCommand(0);
-    	Drivetrain.getInstance().setRotateCommand(0);
-		
+		Drivetrain.getInstance().setForwardReverseCommand(0);
+		Drivetrain.getInstance().setRotateCommand(0);
+
 	}
 
 	@Override

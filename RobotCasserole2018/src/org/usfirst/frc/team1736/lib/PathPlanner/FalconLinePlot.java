@@ -833,11 +833,6 @@ class FalconLinePlot extends JPanel implements ClipboardOwner {
 
         double[] data2 = {-4, 124, 128, 33, -1, 1, 74, 87, 54, 77, 61, 55, 48, 60, 40, 36, 38, 27, 20, 18, 5};
 
-        double[] test = {0.1, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8,
-                4.0, 4.2};
-
-
-
         FalconLinePlot fig2 = new FalconLinePlot(data, Color.red, Color.blue);
 
         fig2.yGridOn();

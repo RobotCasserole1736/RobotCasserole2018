@@ -7,19 +7,13 @@ public class Particle {
 	private int speed;
 //# of LEDs taken up by the particle
 	private int width;
-//Sort of a multiplier,1 but also not
-	private int level;
-//# of times called
-	private int callNum;
+
  
 //Age is # of cycles the particle has existed for.
 
 	
 	
 	public Particle() {
-		double time = (callNum * 50);
-		
-		int Color = level;
 		speed = 1;
 		width = 4;
 			

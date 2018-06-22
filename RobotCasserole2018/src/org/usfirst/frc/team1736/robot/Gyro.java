@@ -24,10 +24,9 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import org.usfirst.frc.team1736.lib.sensors.ADXRS453_Gyro;
 
-
-
 /**
- * This class is intended to just be a simple singleton wrapper around our gyro. It can implement methods specific to our gyro (such as inverting the angle)
+ * This class is intended to just be a simple singleton wrapper around our gyro.
+ * It can implement methods specific to our gyro (such as inverting the angle)
  *
  */
 public class Gyro {
@@ -36,7 +35,7 @@ public class Gyro {
 	private static int angleOffset;
 
 	public static synchronized Gyro getInstance() {
-		if(gyro == null)
+		if (gyro == null)
 			gyro = new Gyro();
 		return gyro;
 	}
@@ -66,6 +65,6 @@ public class Gyro {
 
 	public boolean isOnline() {
 		return adxrs453.isOnline();
-		//return true; // Temp, for bench debugging
+		// return true; // Temp, for bench debugging
 	}
 }

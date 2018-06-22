@@ -3,20 +3,19 @@ package org.usfirst.frc.team1736.robot;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
-
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * Class to control the elbow motor, which raises and lowers the intake arms
+ * 
  * @author Chris Gerth
  *
  */
 public class ElbowControl {
 	private static ElbowControl singularInstance = null;
-	
+
 	boolean curRaiseCmd = false;
 	boolean curLowerCmd = false;
 	boolean prevLowerCmd = false;
@@ -24,27 +23,23 @@ public class ElbowControl {
 	boolean lowerLimitReached = false;
 	DigitalInput upperLimitSwitch;
 	private double startTime = 0.0;
-	private double currentTime = 0.0;
 	private double elapsedTime = 0.0;
-	
-	//Cutoffs
-	
-	
-	//Present value passed to motor. Positive means raise, negative means lower.
+
+	// Cutoffs
+
+	// Present value passed to motor. Positive means raise, negative means lower.
 	double curMotorCmd = 0;
-	
+
 	Spark elbowMotor = null;
 	Calibration raiseSpeedCal = null;
 	Calibration lowerSpeedCal = null;
-	
-	
-	
+
 	public static synchronized ElbowControl getInstance() {
-		if ( singularInstance == null)
+		if (singularInstance == null)
 			singularInstance = new ElbowControl();
 		return singularInstance;
 	}
-	
+
 	private ElbowControl() {
 		CrashTracker.logClassInitStart(this.getClass());
 		elbowMotor = new Spark(RobotConstants.PWM_ELBOW);
@@ -53,70 +48,67 @@ public class ElbowControl {
 		lowerSpeedCal = new Calibration("Elbow Lower Speed", 0.25, 0.0, 1.0);
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
-	
-		
-	public void sampleSensors() {
-		//Read Potentiometer
 
-		if(upperLimitSwitch.get() == true) {
+	public void sampleSensors() {
+		// Read Potentiometer
+
+		if (upperLimitSwitch.get() == true) {
 			upperLimitReached = true;
 		} else {
 			upperLimitReached = false;
 		}
-		
-		
+
 	}
-	
+
 	public void update() {
-		//Default to off
+		// Default to off
 		curMotorCmd = 0;
 
-		//calculate motor command
-		if(upperLimitReached == false && curRaiseCmd == true) {
-			curMotorCmd = raiseSpeedCal.get(); 
-			
+		// calculate motor command
+		if (upperLimitReached == false && curRaiseCmd == true) {
+			curMotorCmd = raiseSpeedCal.get();
+
 		} else {
-		
-			if(curLowerCmd == true && prevLowerCmd == false) {
+
+			if (curLowerCmd == true && prevLowerCmd == false) {
 				startTime = Timer.getFPGATimestamp();
 			}
-			
-			if(curLowerCmd == true) {
+
+			if (curLowerCmd == true) {
 				elapsedTime = Timer.getFPGATimestamp() - startTime;
-				if(elapsedTime < 0.25) {
-					curMotorCmd = -1*raiseSpeedCal.get();
+				if (elapsedTime < 0.25) {
+					curMotorCmd = -1 * raiseSpeedCal.get();
 				} else {
 					curMotorCmd = 0;
 				}
 			} else {
 				curMotorCmd = 0;
 			}
-				
+
 		}
-		
-		//Set the motor command to the motor
+
+		// Set the motor command to the motor
 		elbowMotor.set(curMotorCmd);
-		
+
 	}
-	
-	
-	//Public Getters and Setters
+
+	// Public Getters and Setters
 	public void setRaiseDesired(boolean cmd) {
 		curRaiseCmd = cmd;
 	}
-	
+
 	public void setLowerDesired(boolean cmd) {
 		prevLowerCmd = curLowerCmd;
 		curLowerCmd = cmd;
 	}
-	
+
 	public boolean isUpperLimitReached() {
 		return upperLimitReached;
 	}
-	
+
 	public double getMotorCmd() {
 		return curMotorCmd;
-		
+
 	}
 
 }
