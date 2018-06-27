@@ -5,6 +5,11 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
+//Wrapper class to interpret the xbox controller
+//state into meaningful commands from the driver.
+//This is a great example of "abstraction"
+
+
 public class OperatorController {
 	private static OperatorController clank = null;
 

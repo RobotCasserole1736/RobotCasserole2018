@@ -4,6 +4,9 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
+// This class receives game-specific data to let the drivers know which sides of the scale and switches we own
+// Also is used in autonomous to select the proper auto mode based on location
+
 public class FieldSetupString {
 	private static FieldSetupString singularInstance = null;
 	boolean left_Switch_Owned;
@@ -26,6 +29,7 @@ public class FieldSetupString {
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
 
+	//Sets ownership values based on the values given
 	public void update() {
 		String gameData = "";
 		try {

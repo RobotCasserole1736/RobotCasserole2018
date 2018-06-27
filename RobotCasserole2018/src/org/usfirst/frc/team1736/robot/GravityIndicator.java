@@ -4,6 +4,8 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 
+// Uses accelerometers on the robot and trigonometry to figure out which direction gravity is pulling
+
 public class GravityIndicator {
 	private static GravityIndicator acelCtrl = null;
 

@@ -78,6 +78,9 @@ public class Autonomous {
 		} else if (delayTimeStr.compareTo(DELAY_OPTIONS[4]) == 0) { // Fourth delay time
 			delayTime_s = 12.0;
 		}
+		
+		// A mode is set based off of the selected action mode, the robot's starting position, and scale/switch ownership
+		// If no auto mode can be used based off of these, mode is set to AutoModes.CROSS_BASELINE
 
 		// Anything modes
 		if (action.compareTo(ACTION_MODES[0]) == 0) { // Attempt anything mode
@@ -242,7 +245,9 @@ public class Autonomous {
 		}
 
 	}
-
+	
+	// Sets up autonomous paths. It is called before running the autonomous sequence.
+	
 	public void calculatePaths() {
 
 		AutoEvent parent;
@@ -382,6 +387,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(new AutoEventSixInchForward());
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 				break;
+				
 			case TWO_CUBE_LEFT_FROM_CENTER:
 				parent = new AutoEventSwitchLeft_Center();
 				parent.addChildEvent(new AutoEventLowerElbow());
@@ -389,7 +395,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 
-				// Reapeating events
+				// Events that repeat until time expires
 				parent = new AutoEventBackupFromSwitch();
 				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.AUTO_PILE));
 				AutoSequencer.addEvent(parent);
@@ -418,7 +424,7 @@ public class Autonomous {
 				AutoSequencer.addEvent(parent);
 				AutoSequencer.addEvent(new AutoEventEjectCube());
 
-				// Reapeating events
+				// Events that repeat until time expires
 				parent = new AutoEventBackupFromSwitch();
 				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.AUTO_PILE));
 				AutoSequencer.addEvent(parent);
@@ -439,6 +445,7 @@ public class Autonomous {
 				parent.addChildEvent(new AutoEventMoveElevator(0.75, ElevatorIndex.BOTTOM));
 				AutoSequencer.addEvent(parent);
 				break;
+				
 			case DO_NOTHING: // Do nothing
 				break;
 

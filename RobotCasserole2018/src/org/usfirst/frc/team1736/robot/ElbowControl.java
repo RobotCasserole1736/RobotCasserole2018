@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class ElbowControl {
 	private static ElbowControl singularInstance = null;
 
-	boolean curRaiseCmd = false;
+	boolean curRaiseCmd = false; //false indicates that this has not been commanded
 	boolean curLowerCmd = false;
 	boolean prevLowerCmd = false;
 	boolean upperLimitReached = false;

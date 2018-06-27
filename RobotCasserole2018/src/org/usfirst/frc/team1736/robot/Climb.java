@@ -40,7 +40,7 @@ public class Climb {
 		CrashTracker.logClassInitStart(this.getClass());
 		releaseLatch = new Servo(RobotConstants.PWM_RELEASE_LATCH);
 
-		// Init latches and hook release to unreleased
+		// Initialize latches and hook release to unreleased
 		latchAngleCmd = LATCH_ANGLE_CLOSED;
 		releaseLatch.set(latchAngleCmd);
 
@@ -49,7 +49,7 @@ public class Climb {
 		rightWinchMotor1 = new Spark(RobotConstants.PWM_CLIMBER_RIGHT_ONE);
 		rightWinchMotor2 = new Spark(RobotConstants.PWM_CLIMBER_RIGHT_TWO);
 
-		// Init motors to off.
+		// Initialize motors to off.
 		leftWinchMotor1.set(0);
 		leftWinchMotor2.set(0);
 		rightWinchMotor1.set(0);

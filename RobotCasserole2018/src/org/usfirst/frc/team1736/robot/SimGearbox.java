@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1736.robot;
 
+// A simulation gearbox for testing and tweaking purposes
+
 public class SimGearbox implements Gearbox {
 
 	double presentCommand = 0;

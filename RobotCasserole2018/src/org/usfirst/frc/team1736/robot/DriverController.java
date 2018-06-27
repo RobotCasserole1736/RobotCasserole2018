@@ -6,7 +6,7 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-// Wrapper class to interperet the xbox controller
+// Wrapper class to interpret the xbox controller
 //  state into meaningful commands from the driver.
 // This is a great example of "abstraction"
 
@@ -27,7 +27,7 @@ public class DriverController {
 		CrashTracker.logClassInitEnd(this.getClass());
 	}
 
-	// assuming that positive is forward Cmd whereas negative is reverse
+	// Assumes that positive is forward Cmd whereas negative is reverse
 	public double getDriverForwardReverseCommand() {
 		double driverLeftYValue = -1 * driveController.getY(Hand.kLeft);
 		if (driveController.getTriggerAxis(Hand.kRight) > 0.5 || ElevatorCtrl.getInstance().getHeightAboveDTLimit()) {

@@ -7,6 +7,9 @@ import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 import edu.wpi.first.wpilibj.Spark;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 
+// Top-level class for controlling the intake mechanism
+// Intake consists of two motors and a sensor to indicate whether a cube is secured
+
 public class IntakeControl {
 	private static IntakeControl singularInstance = null;
 

@@ -20,6 +20,9 @@ package org.usfirst.frc.team1736.robot;
  *   if you would consider donating to our club to help further STEM education.
  */
 
+// Class to control which LED sequence to run
+//  and codes for our programmed LED sequences
+
 import java.awt.Component;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,6 +42,7 @@ public class LEDSequencer {
 
 	private static boolean desktop_sim = true;
 
+	//Enumeration that describes all the programmed LED sequences
 	public enum LEDSwitchCase {
 		OFF, SMOOTH_SWEEP, SMOOTH_RAINBOW, SMOOTH_RED_WHITE, SPARKLE_WHITE, SPARKLE_RED_WHITE, SPARKLE_RAIN, CYLON, COMET_RED, COMET_RAIN, BOUNCE, GEAR, FUEL, CAPN, TEST, SMOOTH_GREEN, SMOOTH_BLUE, BLUE_GREEN_SWEEP, FIRE
 	}
@@ -84,6 +88,7 @@ public class LEDSequencer {
 
 	}
 
+	//Calls LED sequences to run based off of the selected desired sequence
 	public void update() {
 		switch (cur_pattern) {
 		case OFF:
@@ -344,6 +349,7 @@ public class LEDSequencer {
 		}
 	}
 
+	// Fades through shades of green
 	private void smoothGreenCycle() {
 		final double period = 54; // Bigger makes it change color slower
 
@@ -353,6 +359,7 @@ public class LEDSequencer {
 		}
 	}
 
+	// Fades through shades of blue
 	private void smoothBlueCycle() {
 		final double period = 54; // Bigger makes it change color slower
 
@@ -409,6 +416,7 @@ public class LEDSequencer {
 		}
 	}
 
+	// Used to signal that gears are desired in the 2017 game
 	private void gearSignal() {
 		for (int led_idx = 0; led_idx < (RobotConstants.NUM_LEDS_TOTAL); led_idx++) {
 			if ((led_idx % 2 * 5) < 5) {
@@ -421,6 +429,7 @@ public class LEDSequencer {
 		}
 	}
 
+	// Used to signal that fuel is desired in the 2017 game
 	private void fuelSignal() {
 		for (int led_idx = 0; led_idx < RobotConstants.NUM_LEDS_TOTAL; led_idx++) {
 			if ((led_idx % (2 * 7)) < 7) {
@@ -449,6 +458,7 @@ public class LEDSequencer {
 		}
 	}
 
+	// Blue and green stripes
 	private void smoothBlueGreenSweep() {
 		final double width = 1.0; // bigger means wider color strips
 		final double period = 4.0; // bigger means slower cycle
