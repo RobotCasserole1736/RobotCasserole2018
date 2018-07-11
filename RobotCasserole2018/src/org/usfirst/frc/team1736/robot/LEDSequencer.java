@@ -38,7 +38,7 @@ public class LEDSequencer {
 
 	private volatile LEDSwitchCase cur_pattern;
 
-	private static boolean desktop_sim = true;
+	private static boolean desktop_sim = false;
 
 	public enum LEDSwitchCase {
 		OFF, SMOOTH_SWEEP, SMOOTH_RAINBOW, SMOOTH_RED_WHITE, SPARKLE_WHITE, SPARKLE_RED_WHITE, SPARKLE_RAIN, CYLON, COMET_RED, COMET_RAIN, BOUNCE, GEAR, FUEL, CAPN, TEST, SMOOTH_GREEN, SMOOTH_BLUE, BLUE_GREEN_SWEEP, FIRE
@@ -508,16 +508,17 @@ public class LEDSequencer {
 				led_color.setLevel(0);
 				
 				for(int i = 0; i < particlesL1.length; i ++) {
-					led_color.addToMe(particlesL1[i].ColorAt(led_idx));				
+					led_color.addToMe(particlesL1[i].ColorAt(led_idx));	
 				}
 				for(int i = 0; i < particlesL2.length; i ++) {
-					led_color.addToMe(particlesL2[i].ColorAt(led_idx));				
+					led_color.addToMe(particlesL2[i].ColorAt(led_idx));
 				}
 				for(int i = 0; i < particlesL3.length; i ++) {
 					led_color.addToMe(particlesL3[i].ColorAt(led_idx));				
 				}
 				for(int i = 0; i < particlesL4.length; i ++) {
-					led_color.addToMe(particlesL4[i].ColorAt(led_idx));				
+					led_color.addToMe(particlesL4[i].ColorAt(led_idx));	
+					System.out.println(led_color.getH_Value());
 				}
 				
 				ledstrip.setLEDColorHSL(led_idx, led_color.getH_Value(), led_color.getS_Value(), led_color.getL_Value());

@@ -26,7 +26,7 @@ public class Color {
 		 	S_Value = 1;
 		 	L_Value = .5;
 		} else if (Level == 2) {
-			H_Value = -0;
+			H_Value = 0;
 			S_Value = 1;
 			L_Value = .5;
 		} else if (Level == 3) {
@@ -66,7 +66,8 @@ public class Color {
 		L_Value += in.L_Value;
 		 if (L_Value > .52) {
 			 L_Value = .52;
-			 H_Value = H_Value + .072;
+			 H_Value = H_Value + .4; //original: .072 
+			 //System.out.println(H_Value);
 		 }
 		
 	}
