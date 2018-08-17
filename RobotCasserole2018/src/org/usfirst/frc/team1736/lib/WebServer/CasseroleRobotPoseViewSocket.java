@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1736.lib.WebServer;
 
+import java.awt.geom.Point2D;
+
 /*
  *******************************************************************************************
  * Copyright (C) 2017 FRC Team 1736 Robot Casserole - www.robotcasserole.org
@@ -30,17 +32,17 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 /**
  * DESCRIPTION: <br>
  * Private socket definition class that Jetty wants me to make public even though it doesn't
- * actually have to be. Don't use this for anything unless you know preciisely what you are doing.
+ * actually have to be. Don't use this for anything unless you know precisely what you are doing.
  */
 
-public class CasseroleStateStreamerSocket extends WebSocketAdapter {
+public class CasseroleRobotPoseViewSocket extends WebSocketAdapter {
     private java.util.Timer updater = new java.util.Timer("State Webpage Update");
-    private int updatePeriodMS = 250; // default update rate of 0.25s
+    private int updatePeriodMS = 20; 
     volatile int test_data;
 
 
     /**
-     * Set the time between server broadcasts of current state. Default is 1 second. Faster update
+     * Set the time between server broadcasts of current state. Faster update
      * rates bog down both server and network.
      * 
      * @param in_period_ms Broadcast period in milliseconds.
@@ -62,8 +64,8 @@ public class CasseroleStateStreamerSocket extends WebSocketAdapter {
     public void onWebSocketConnect(Session sess) {
 
         super.onWebSocketConnect(sess);
-        // On client connect, begin new task to braodcast data at 1 second intervals
-        test_data = 0;
+        // On client connect, begin new task to broadcast data at 1 second intervals
+        broadcastInitData();
         updater.scheduleAtFixedRate(new dataBroadcastTask(), 0, updatePeriodMS);
     }
 
@@ -76,26 +78,61 @@ public class CasseroleStateStreamerSocket extends WebSocketAdapter {
         updater.cancel();
     }
 
+    /**
+     * send socket data out to client
+     */
+    @SuppressWarnings("unchecked")
+	public void broadcastInitData() {
+        if (isConnected()) {
+            try {
+                JSONObject full_obj = new JSONObject();
+                JSONArray field_point_array = new JSONArray();
+
+                // Package all data array elements into a JSON array
+                
+                //Package field polygon
+                for (Point2D.Double point : CasseroleRobotPoseView.fieldPolygon) {
+                	JSONObject point_obj = new JSONObject();
+                	point_obj.put("x", point.getX());
+                	point_obj.put("y", point.getY());
+                	field_point_array.add(point_obj);
+                }
+                
+                //Package bot dimensions
+            	JSONObject robot_dims = new JSONObject();
+            	robot_dims.put("w", CasseroleRobotPoseView.bot_w);
+            	robot_dims.put("h", CasseroleRobotPoseView.bot_h);
+
+                // package all things into object
+            	full_obj.put("step", "init");
+                full_obj.put("field_polygon", field_point_array);
+                full_obj.put("bot_dims", robot_dims);
+                getRemote().sendString(full_obj.toJSONString());
+
+            } catch (IOException e) {
+                e.printStackTrace(System.err);
+            }
+        }
+    }
 
     /**
      * send socket data out to client
      */
     @SuppressWarnings("unchecked")
-	public void broadcastData() {
+	public void broadcastPose() {
         if (isConnected()) {
             try {
                 JSONObject full_obj = new JSONObject();
-                JSONArray data_array = new JSONArray();
 
-                // Package all data array elements into a JSON array
-                for (String name : CassesroleWebStates.ordered_state_name_list) {
-                    data_array.add(CassesroleWebStates.data_array_elements.get(name));
-                }
-
-                // package array into object
-                full_obj.put("state_array", data_array);
+                // package all fields into object
+                JSONObject robot_pose = new JSONObject();
+                robot_pose.put("x", CasseroleRobotPoseView.x);
+                robot_pose.put("y", CasseroleRobotPoseView.y);
+                robot_pose.put("theta", CasseroleRobotPoseView.theta);
+                
+                full_obj.put("step", "updt");
+                full_obj.put("robot_pose", robot_pose);
                 getRemote().sendString(full_obj.toJSONString());
-                test_data += 1;
 
             } catch (IOException e) {
                 e.printStackTrace(System.err);
@@ -113,7 +150,7 @@ public class CasseroleStateStreamerSocket extends WebSocketAdapter {
      */
     private class dataBroadcastTask extends TimerTask {
         public void run() {
-            broadcastData();
+            broadcastPose();
         }
     }
 

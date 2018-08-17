@@ -21,7 +21,10 @@ public class DriverViewStringBox extends DriverViewObject {
 		
         // Create new object
         sbJsonInitObj = new JSONObject();
-        
+        sbJsonInitObj.put("type", "stringbox");
+        sbJsonInitObj.put("name", name);
+        sbJsonInitObj.put("displayName", name_in);
+        sbJsonInitObj.put("value", value);
         
         // Create new object
         sbJsonUpdateObj = new JSONObject();

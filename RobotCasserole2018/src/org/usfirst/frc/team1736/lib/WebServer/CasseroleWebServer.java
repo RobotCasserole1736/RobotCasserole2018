@@ -52,7 +52,7 @@ public class CasseroleWebServer {
      */
     public void startServer() {
 
-        final boolean LOCAL_PC_DEBUG_PATHS = false;
+        final boolean LOCAL_PC_DEBUG_PATHS = true;
 
         // New server will be on the robot's address plus port 5805
         server = new Server(5805);
@@ -98,6 +98,11 @@ public class CasseroleWebServer {
         // RT Plot Streamer - broadcasts things which can be plotted in real-time
         ServletHolder rtPlotHolder = new ServletHolder("rtplotstream", new CasseroleRTPlotStreamerServlet());
         context.addServlet(rtPlotHolder, "/rtplot");
+        
+        // PoseView - Displays a representation of the robot on the field
+        ServletHolder robotPoseHolder = new ServletHolder("poseview", new CasseroleRobotPoseViewServlet());
+        context.addServlet(robotPoseHolder, "/poseview");
+
 
         // Kick off server in brand new thread.
         // Thanks to Team 254 for an example of how to do this!
@@ -115,7 +120,6 @@ public class CasseroleWebServer {
         });
         serverThread.setName("CasseroleWebServerThread");
         serverThread.setPriority(Thread.MIN_PRIORITY);
-        serverThread.setDaemon(true);
         serverThread.start();
 
     }

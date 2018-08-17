@@ -2,7 +2,6 @@ package org.usfirst.frc.team1736.lib.WebServer;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.Semaphore;
 
 public class PlotSignal {
 
@@ -12,8 +11,7 @@ public class PlotSignal {
 	
 	boolean acq_active;
 	
-	Queue<PlotSample> sample_queue; 
-	Semaphore queueMutex; //Used to ensure operations on sample_queue are atomic
+	Queue<PlotSample> sample_queue;
 	
 	/**
 	 * Class which describes one line on a plot
@@ -27,8 +25,6 @@ public class PlotSignal {
 		
 		acq_active = false;
 		
-		queueMutex = new Semaphore(1); //Mutex = Semaphore with 1 resource
-		
 		sample_queue = new LinkedList<PlotSample>();
 	}
 	
@@ -41,13 +37,7 @@ public class PlotSignal {
 	 */
 	public void addSample(double time_in, double value_in){
 		if(acq_active){
-			try {
-				queueMutex.acquire();
-				sample_queue.add(new PlotSample(time_in, value_in));
-				queueMutex.release();
-			} catch (InterruptedException e) {
-				//Execution interrupted while waiting for acquisition. Nothing to do besides release.
-			}
+			sample_queue.add(new PlotSample(time_in, value_in));
 		}
 	}
 	
@@ -71,18 +61,14 @@ public class PlotSignal {
 	 * has no new data.
 	 */
 	public PlotSample[] getAllSamples(){
-		PlotSample[] retval = null;
-		try {
-			queueMutex.acquire();
-			int size = sample_queue.size();
-			if(size > 0){
-				retval = new PlotSample[size];
-				sample_queue.toArray(retval);
-				sample_queue.clear();
-			} 
-			queueMutex.release();
-		} catch (InterruptedException e) {
-			//Execution interrupted while waiting for acquisition. Nothing to do besides release.
+		int size = sample_queue.size();
+		PlotSample[] retval;
+		if(size > 0){
+			retval = new PlotSample[size];
+			sample_queue.toArray(retval);
+			sample_queue.clear();
+		} else {
+			retval = null;
 		}
 		return retval;
 	}
@@ -91,13 +77,7 @@ public class PlotSignal {
 	 * Discards all samples from the buffer
 	 */
 	public void clearBuffer(){
-		try {
-			queueMutex.acquire();
-			sample_queue.clear();
-			queueMutex.release();
-		} catch (InterruptedException e) {
-			//Execution interrupted while waiting for acquisition. Nothing to do besides release.
-		}
+		sample_queue.clear();
 	}
 	
 	/**
