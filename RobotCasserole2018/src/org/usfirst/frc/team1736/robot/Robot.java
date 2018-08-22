@@ -27,11 +27,13 @@
 
 package org.usfirst.frc.team1736.robot;
 
+import java.awt.geom.Point2D;
 import java.util.Date;
 
 import org.usfirst.frc.team1736.lib.Calibration.CalWrangler;
 import org.usfirst.frc.team1736.lib.LoadMon.CasseroleRIOLoadMonitor;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleDriverView;
+import org.usfirst.frc.team1736.lib.WebServer.CasseroleRobotPoseView;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebPlots;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebServer;
 import org.usfirst.frc.team1736.lib.WebServer.CasseroleWebStates;
@@ -529,6 +531,19 @@ public class Robot extends TimedRobot {
 		CasseroleDriverView.newAutoSelector("Action", Autonomous.ACTION_MODES);
 		CasseroleDriverView.newAutoSelector("Delay", Autonomous.DELAY_OPTIONS);
 
+		Point2D.Double[] fieldpoly = {new Point2D.Double(0,0),
+                new Point2D.Double(11,0),
+                new Point2D.Double(13.47,3),
+                new Point2D.Double(13.47,51),
+                new Point2D.Double(11,54),
+                new Point2D.Double(-11,54),
+                new Point2D.Double(-13.47,51),
+                new Point2D.Double(-13.47,3),
+                new Point2D.Double(-11,0),
+                new Point2D.Double(0,0)
+                };
+		CasseroleRobotPoseView.setFieldPolygon(fieldpoly);
+		CasseroleRobotPoseView.setRobotSize(2.0, 2.5);
 	}
 
 	private void updateDriverView() {

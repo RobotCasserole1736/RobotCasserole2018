@@ -3,6 +3,8 @@ package org.usfirst.frc.team1736.robot;
 import org.usfirst.frc.team1736.lib.Calibration.Calibration;
 import org.usfirst.frc.team1736.lib.Util.CrashTracker;
 
+
+
 // Top-level drivetrain class. 
 //  Contains all logic to control the motion of the drivetrain
 //  in an open-loop or closed-loop fashion. Includes current estimation & limiting,
@@ -54,6 +56,7 @@ public class Drivetrain {
 	public double leftAutoCmdFtPerSec = 0;
 	public double rightAutoCmdFtPerSec = 0;
 	public double autoTimestamp = 0;
+	RobotPose current_pose = new RobotPose();
 
 	public static synchronized Drivetrain getInstance() {
 		if (singularInstance == null)
@@ -63,7 +66,7 @@ public class Drivetrain {
 
 	private Drivetrain() {
 		CrashTracker.logClassInitStart(this.getClass());
-		boolean useRealGearbox = true;
+		boolean useRealGearbox = false;
 
 		if (useRealGearbox) {
 			leftGearbox = new RealGearbox(RobotConstants.CANID_DRIVETRAIN_LEFT_MASTER_SRX,
@@ -191,6 +194,10 @@ public class Drivetrain {
 			// Set values to gearboxes
 			leftGearbox.setMotorSpeed(curLeftSpeedCmd_RPM);
 			rightGearbox.setMotorSpeed(curRightSpeedCmd_RPM);
+			current_pose.setLeftMotorSpeed(curLeftSpeedCmd_RPM * SPROCKET_RATIO);
+			current_pose.setRightMotorSpeed(curRightSpeedCmd_RPM * SPROCKET_RATIO);
+			current_pose.update();
+		
 		}
 
 		// Update present wheel speeds
