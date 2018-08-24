@@ -211,6 +211,10 @@ public class Drivetrain {
 		speedFtpS = Math.abs((leftSpeedFtpS + rightSpeedFtpS) / 2.0);
 
 	}
+	
+	public void reset() {
+		current_pose.reset();
+	}
 
 	public void updatePIDGains() {
 		leftGearbox.updateCalibrations();

@@ -151,6 +151,7 @@ public class Robot extends TimedRobot {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
 		}
+		Drivetrain.getInstance().reset();
 	}
 
 	/**
