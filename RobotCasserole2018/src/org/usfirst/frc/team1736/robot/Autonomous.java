@@ -23,6 +23,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchLeft_Center;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight;
 import org.usfirst.frc.team1736.robot.auto.AutoEventSwitchRight_Center;
+import org.usfirst.frc.team1736.robot.auto.AutoEventTest2;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTurn180Degrees;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTurn45DegreesLeft;
 import org.usfirst.frc.team1736.robot.auto.AutoEventTurn45DegreesRight;
@@ -347,8 +348,8 @@ public class Autonomous {
 
 			case TEST_MODE_2: // Test Mode 2
 				// Sine-wave drivetrain test
-				// AutoSequencer.addEvent(new AutoEventTest2());
-				AutoSequencer.addEvent(new AutoEventTurn180Degrees());
+				 AutoSequencer.addEvent(new AutoEventTest2());
+				//AutoSequencer.addEvent(new AutoEventTurn180Degrees());
 
 				break;
 

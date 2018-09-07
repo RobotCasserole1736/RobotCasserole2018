@@ -13,6 +13,8 @@ public class RobotPose {
 	public double poseX = 0;
 	public double poseY = 0;
 	public double poseTheta = 90;
+	public double velosityX = 0;
+	public double velosityY = 0;
 	
 	public void setLeftMotorSpeed(double speed) {
 		leftVelosity_RPM = speed;
@@ -28,20 +30,25 @@ public class RobotPose {
 		double robotAngle_DPS = ((rightVelosity_FPS-leftVelosity_FPS)/(2*robotRadius_Ft) * 180/3.14);
 		double X_dot = (rightVelosity_FPS+leftVelosity_FPS)/2; 
 		
-		poseX += 0.02 * (X_dot*Math.cos(poseTheta*(3.14/180)));
-		poseY += 0.02 * (X_dot*Math.sin(poseTheta*(3.14/180)));
+		velosityX = 0.02 * (X_dot*Math.cos(poseTheta*(3.14/180)));
+		velosityY = 0.02 * (X_dot*Math.sin(poseTheta*(3.14/180)));
+		poseX += velosityX;
+		poseY += velosityY;
 		poseTheta += 0.02 * robotAngle_DPS;
 		CasseroleRobotPoseView.setRobotPose(poseX, poseY, poseTheta - 90);
-		if(poseX || poseY > (11,0) ||
-					        (13.47,3) ||
-					        (13.47,51) ||
-					        (11,54) ||
-					        (-11,54) ||
-					        (-13.47,51) ||
-					        (-13.47,3) ||
-					        (-11,0) ||
-					        (0,0)) { 
-		
+		if(poseY < 0) { 
+			velosityY = 0;
+			
+		}
+		if(poseY > 54){
+			velosityY = 0;
+			
+		}
+		if(poseX < -13.47){
+			velosityX = 0;
+		}
+		if(poseX > 13.47){
+			velosityX = 0;
 		}
 		System.out.println("x");
 		System.out.println(poseX);

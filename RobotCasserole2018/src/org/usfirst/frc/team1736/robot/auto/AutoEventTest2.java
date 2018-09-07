@@ -26,7 +26,7 @@ public class AutoEventTest2 extends AutoEvent {
 	public void userUpdate() {
 
 		// Generate sine wave commands
-		double rpmCmd = AMP_RPM * Math.sin(2 * Math.PI * FREQ_HZ * (Timer.getFPGATimestamp() - startTime));
+		double rpmCmd = AMP_RPM * Math.cos(2 * Math.PI * FREQ_HZ * (Timer.getFPGATimestamp() - startTime));
 
 		Drivetrain.getInstance().setLeftWheelSpeed(rpmCmd);
 		Drivetrain.getInstance().setRightWheelSpeed(rpmCmd);
