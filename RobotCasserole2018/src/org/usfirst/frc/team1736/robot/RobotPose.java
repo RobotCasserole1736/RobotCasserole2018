@@ -32,24 +32,31 @@ public class RobotPose {
 		
 		velosityX = 0.02 * (X_dot*Math.cos(poseTheta*(3.14/180)));
 		velosityY = 0.02 * (X_dot*Math.sin(poseTheta*(3.14/180)));
-		poseX += velosityX;
-		poseY += velosityY;
-		poseTheta += 0.02 * robotAngle_DPS;
-		CasseroleRobotPoseView.setRobotPose(poseX, poseY, poseTheta - 90);
+		
 		if(poseY < 0) { 
 			velosityY = 0;
+			velosityX = 0;
 			
 		}
 		if(poseY > 54){
 			velosityY = 0;
+			velosityX = 0;
 			
 		}
 		if(poseX < -13.47){
 			velosityX = 0;
+			velosityY = 0;
 		}
 		if(poseX > 13.47){
 			velosityX = 0;
+			velosityY = 0;
 		}
+		
+		poseX += velosityX;
+		poseY += velosityY;
+		poseTheta += 0.02 * robotAngle_DPS;
+		CasseroleRobotPoseView.setRobotPose(poseX, poseY, poseTheta - 90);
+	
 		System.out.println("x");
 		System.out.println(poseX);
 		System.out.println("y");

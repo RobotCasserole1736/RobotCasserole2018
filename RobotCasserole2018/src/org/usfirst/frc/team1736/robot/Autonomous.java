@@ -8,6 +8,7 @@ import org.usfirst.frc.team1736.robot.auto.AutoEventBackUp;
 import org.usfirst.frc.team1736.robot.auto.AutoEventBackUpFromPyramid;
 import org.usfirst.frc.team1736.robot.auto.AutoEventBackupFromSwitch;
 import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLine;
+import org.usfirst.frc.team1736.robot.auto.AutoEventCrossBaseLineOpenLoop;
 import org.usfirst.frc.team1736.robot.auto.AutoEventDrive50Inches;
 import org.usfirst.frc.team1736.robot.auto.AutoEventDriveToCubePyramid;
 import org.usfirst.frc.team1736.robot.auto.AutoEventEjectCube;
@@ -323,7 +324,7 @@ public class Autonomous {
 				break;
 
 			case CROSS_BASELINE: // drive forward
-				AutoSequencer.addEvent(new AutoEventCrossBaseLine());
+				AutoSequencer.addEvent(new AutoEventCrossBaseLineOpenLoop());
 				break;
 
 			case CROSS_BASELINE_FROM_CENTER: // drive forward and to the right

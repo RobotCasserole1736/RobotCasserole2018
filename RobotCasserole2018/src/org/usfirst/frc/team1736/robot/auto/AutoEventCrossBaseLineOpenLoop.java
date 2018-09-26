@@ -32,6 +32,7 @@ public class AutoEventCrossBaseLineOpenLoop extends AutoEvent {
 			Drivetrain.getInstance().setForwardReverseCommand(0.0);
 		} else {
 			Drivetrain.getInstance().setForwardReverseCommand(drive_speed);
+			Drivetrain.getInstance().setRotateCommand(0.1);
 		}
 	}
 

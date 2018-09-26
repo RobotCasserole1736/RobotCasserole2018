@@ -10,7 +10,7 @@ import org.usfirst.frc.team1736.lib.PathPlanner.PathPlannerAutoEvent;
 public class AutoEventCrossBaseLine extends AutoEvent {
 	PathPlannerAutoEvent driveForward;
 
-	private final double[][] waypoints = new double[][] { { 0, 0 }, { 0, 120 } };
+	private final double[][] waypoints = new double[][] { { 0, 0 }, { 580, 567 } };
 
 	private final double time = 4.0;
 
